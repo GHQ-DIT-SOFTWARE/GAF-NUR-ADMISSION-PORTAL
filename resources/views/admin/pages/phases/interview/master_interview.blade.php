@@ -43,7 +43,7 @@
                                 <div class="col-sm-12 col-md-12">
                                     <div class="form-group form-focus">
                                         <label for="search_query" style="font-size: 14px; color: #f80404;">
-                                            You can search by GAF NUMBER, name, branch, commission type, etc.
+                                        search 
                                         </label>
                                         <input type="text" class="form-control floating" name="search_query"
                                             placeholder="Search..."
@@ -73,13 +73,11 @@
                                         <th>SURNAME</th>
                                         <th>OTHERNAMES</th>
                                         <th>GENDER</th>
-                                        <th>COMMISSION TYPE</th>
-                                        <th>ARM OF SERVICE</th>
+                                       
                                         <th>MOBILE</th>
-                                        <th>REGION</th>
-                                        <th>BRANCH</th>
+                                        
                                         <th>SERIAL NUMBER</th>
-                                        <th>SCORED</th>
+                                        <th>COURSE</th>
                                         <th>STATUS</th>
                                         <th>ACTION</th>
                                     </tr>
