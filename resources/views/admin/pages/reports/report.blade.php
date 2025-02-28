@@ -1,6 +1,6 @@
 @extends('admin.layout.master')
 @section('title')
-    Report Generation
+    Results Verification
 @endsection
 @section('content')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" />
@@ -47,7 +47,7 @@
                             <div class="row filter-row">
                                 <div class="col-sm-6 col-md-3">
                                     <div class="form-group form-focus">
-                                        <select class="form-control" name="rank_name">
+                                        <select class="form-control" name="cause_offers">
                                             <option value>SELECT COURSE</option>
                                             @foreach ($data->unique('cause_offers') as $arm)
                                                 <option value="{{ $arm->cause_offers }}">
@@ -92,19 +92,6 @@
                                     </div>
                                 </div>
 
-                                <div class="col-sm-6 col-md-3">
-                                    <div class="form-group form-focus">
-                                        <select class="form-control select2" name="region">
-                                            <option value>SELECT REGIONS</option>
-                                            @foreach ($data->unique('region') as $applicant)
-                                                @if ($applicant->regions)
-                                                    <option value="{{ $applicant->regions->id }}">
-                                                        {{ $applicant->regions->region_name }}</option>
-                                                @endif
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
                                 <div class="col-sm-6 col-md-3">
                                     <div class="form-group form-focus">
                                         <select class="form-control select2" name="qualification">

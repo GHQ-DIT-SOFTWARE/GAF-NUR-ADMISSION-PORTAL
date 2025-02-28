@@ -16,9 +16,7 @@
                         <li class="breadcrumb-item"><a href="#"><i class="feather icon-home"></i></a>
                         </li>
                         <li class="breadcrumb-item"><a href="#!">SELECTED COURSE:
-                                {{ $applied_applicant->arm_of_service }}</a></li>
-                        {{-- <li class="breadcrumb-item"><a href="#!">COMMISSION TYPE:
-                                {{ $applied_applicant->commission_type }}</a></li> --}}
+                                {{ $applied_applicant->cause_offers}}</a></li>
                     </ul>
                 </div>
             </div>

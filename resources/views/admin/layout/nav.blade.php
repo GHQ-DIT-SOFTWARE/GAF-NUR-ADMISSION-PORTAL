@@ -33,7 +33,7 @@
                 <li class="nav-item pcoded-menu-caption">
                     <label>Admin</label>
                 </li>
-                @hasanyrole('superadmin|admin')
+                {{-- @hasanyrole('superadmin|admin')
                     <li class="nav-item pcoded-hasmenu">
                         <a href="#!" class="nav-link "><span class="pcoded-micon"><i
                                     class="feather icon-bookmark"></i></span><span class="pcoded-mtext">Report
@@ -42,7 +42,7 @@
                             <li><a href="{{ route('report.report-generation') }}">Generate</a></li>
                         </ul>
                     </li>
-                @endhasanyrole
+                @endhasanyrole --}}
 
 
                 <li class="nav-item pcoded-hasmenu">
@@ -51,12 +51,17 @@
                     <ul class="pcoded-submenu">
                         @hasanyrole('superadmin|documentation|user-documentation')
                             <li
-                                class="nav-item pcoded-hasmenu {{ Route::is('document.applicant-documentation', 'document.master-filter-documentation') ? 'active' : '' }}">
+                                class="nav-item pcoded-hasmenu {{ Route::is('report.report-generation', 'document.master-filter-documentation') ? 'active' : '' }}">
                                 <a href="#!" class="nav-link has-ripple">
                                     <span class="pcoded-mtext">Results Verification</span>
                                     <span class="ripple ripple-animate"></span>
                                 </a>
                                 <ul class="pcoded-submenu">
+                                    @can('view.documentation')
+                                        <li class="{{ Route::is('report.report-generation') ? 'active' : '' }}">
+                                            <a href="{{ route('report.report-generation') }}">Verify Results</a>
+                                        </li>
+                                    @endcan
                                     @can('documentation.edit')
                                         <li class="{{ Route::is('document.master-filter-documentation') ? 'active' : '' }}">
                                             <a href="{{ route('document.master-filter-documentation') }}">Master
