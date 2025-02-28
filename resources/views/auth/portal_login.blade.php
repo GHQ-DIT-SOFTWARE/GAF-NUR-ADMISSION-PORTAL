@@ -24,15 +24,17 @@
 </div>
 @endif
         <div class="auth-side-form">
+           
+
             <form method="post" action="{{ route('portal.apply') }}">
                 @csrf
-                <div class=" auth-content">
-                    <div style="text-align: center;">
-                        <h3 class="mb-4 f-w-400">Sign in with your serial number and Pincode</h3>
-                        <img src="{{ asset('37 school flag.png') }}" alt=""
-                             style="border-radius: 50%; width: 150px; height: 150px; object-fit: cover;">
+                 <div style="text-align: center;">
+                        {{-- <h3 class="mb-4 f-w-400">Sign in with your serial number and Pincode</h3> --}}
+                        <img src="{{ asset('03.png') }}" alt=""
+                             style=" width: 150px; height: 150px; object-fit: cover;">
                     </div>
-
+                <div class=" auth-content">
+                
                     <div class="form-group mb-3">
                         <label class="floating-label" for="serial_number">Serial Number</label>
                         <input type="text" class="form-control @error('serial_number') is-invalid @enderror"
