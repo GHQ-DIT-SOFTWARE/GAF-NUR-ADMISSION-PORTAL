@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="description" content="" />
+    <meta name="description" content=""/>
     <title>PORTAL | {{ config('app.name') }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="{{ config('app.name') }}" name="description" />
@@ -15,21 +14,15 @@
 </head>
 <div class="auth-wrapper align-items-stretch aut-bg-img">
     <div class="flex-grow-1">
-        {{-- <div class="h-100 d-md-flex align-items-center auth-side-img">
-            <div class="col-sm-10 auth-content w-auto" style="background-color:#02855dab;">
-                <h1 class="text-white my-4">Welcome 37 Military Hospital Nursing and Midwifery Training College (NMTC) Portal !</h1>
-                <ul class="text-white">
-                    <li>Kindly <b><a href="https://apply.mil.gh/"><u>read</u></a></b> the general eligibility before
-                        applying.</li>
-                    <li>Once <b>Submitted</b>, the information provided <b>cannot</b> be changed</li>
-                    <li>If at any point during the application process, an applicant decides not to continue , simply
-                        close the page to discontinue without submitting. Applications are only saved when the submit
-                        button is clicked.
-                    </li>
-                    <li>Once a scratch card is used for application, it cannot be reused.</li>
-                </ul>
-            </div>
-        </div> --}}
+        @if($errors->any())
+<div class="alert alert-danger">
+    <ul>
+        @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
+@endif
         <div class="auth-side-form">
             <form method="post" action="{{ route('portal.apply') }}">
                 @csrf

@@ -19,23 +19,63 @@ class DashboardController extends Controller
         return view('admin.pages.homedash');
     }
 
+    
     public function index()
     {
-        $applicants = Applicant::count();
-        $applicants_qualified = Applicant::where('qualification', 'QUALIFIED')->count();
-        $applicants_disqualified = Applicant::where('qualification', 'DISQUALIFIED')->count();
-        $applicants_bsc_nursing = Applicant::where('cause_offers', 'BSC NURSING')->count();
-        $applicants_bcs_midwifery = Applicant::where('cause_offers', 'BSC MIDWIFERY')->count();
+        // Count qualified applicants per course
+        $qualified_bsc_nursing = Applicant::where('qualification', 'QUALIFIED')
+            ->where('cause_offers', 'BSC NURSING')
+            ->count();
+    
+        $qualified_bsc_midwifery = Applicant::where('qualification', 'QUALIFIED')
+            ->where('cause_offers', 'BSC MIDWIFERY')
+            ->count();
+    
+        // Total sum of qualified for both courses
+        $total_qualified_courses = $qualified_bsc_nursing + $qualified_bsc_midwifery;
+    
+        // Count disqualified applicants per course
+        $disqualified_bsc_nursing = Applicant::where('qualification', 'DISQUALIFIED')
+            ->where('cause_offers', 'BSC NURSING')
+            ->count();
+    
+        $disqualified_bsc_midwifery = Applicant::where('qualification', 'DISQUALIFIED')
+            ->where('cause_offers', 'BSC MIDWIFERY')
+            ->count();
+    
+        // Total sum of disqualified for both courses
+        $total_disqualified_courses = $disqualified_bsc_nursing + $disqualified_bsc_midwifery;
+    
+        // Count applicants who have not finished their application (qualification is NULL or empty)
+        $incomplete_applications = Applicant::whereNull('qualification')
+            ->orWhere('qualification', '')
+            ->count();
+    
+        // Total sum of all qualified + disqualified + incomplete applications
+        $total_applicants = $total_qualified_courses + $total_disqualified_courses + $incomplete_applications;
+    
+        // Chart Data
         $chartData = [
             'labels' => ['BSC MIDWIFERY', 'BSC NURSING'],
             'datasets' => [
                 [
-                    'data' => [$applicants_bsc_nursing, $applicants_bcs_midwifery],
+                    'data' => [$qualified_bsc_midwifery, $qualified_bsc_nursing],
                     'backgroundColor' => ['#FF6384', '#36A2EB'],
                 ],
             ],
         ];
-        return view('admin.layout.index', compact('applicants', 'applicants_bsc_nursing', 'applicants_bcs_midwifery', 'chartData', 'applicants_qualified', 'applicants_disqualified'));
+    
+        return view('admin.layout.index', compact(
+            'qualified_bsc_nursing', 
+            'qualified_bsc_midwifery', 
+            'total_qualified_courses', 
+            'disqualified_bsc_nursing', 
+            'disqualified_bsc_midwifery', 
+            'total_disqualified_courses', 
+            'total_applicants', 
+            'incomplete_applications', 
+            'chartData'
+        ));
     }
     
 }

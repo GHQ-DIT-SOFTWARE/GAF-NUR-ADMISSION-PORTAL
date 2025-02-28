@@ -124,6 +124,11 @@ class Applicant extends Model implements Auditable
     {
         return $this->belongsTo(Course::class, 'course', 'id');
     }
+    public function resultVerification()
+{
+    return $this->hasOne(ResultVerification::class, 'applicant_id', 'id');
+}
+
     protected $appends = [
 
     ];

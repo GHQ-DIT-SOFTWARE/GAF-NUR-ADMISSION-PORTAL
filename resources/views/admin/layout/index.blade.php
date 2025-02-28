@@ -23,12 +23,12 @@
     </div>
 
     <div class="row">
-        <div class="col-lg-4 col-md-6">
+        <div class="col-lg-3 col-md-6">
             <div class="card">
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col-8">
-                            <h4 class="text-c-yellow">{{ $applicants }}</h4>
+                            <h4 class="text-c-yellow">{{ $total_applicants }}</h4>
                             <h6 class="text-muted m-b-0">TOTAL APPLICANTS</h6>
                         </div>
                         <div class="col-4 text-right">
@@ -45,13 +45,38 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-4 col-md-6">
+        <div class="col-lg-3 col-md-6">
             <div class="card">
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col-8">
-                            <h4 class="text-c-green">{{ $applicants_bsc_nursing }}</h4>
-                            <h6 class="text-muted m-b-0">TOTAL BSC NURSING</h6>
+                            <h4 class="text-c-green">{{ $qualified_bsc_midwifery}}</h4>
+                            <h6 class="text-muted m-b-0">BSC MIDWIFERY</h6>
+                        </div>
+                        <div class="col-4 text-right">
+                            <i class="feather icon-file-text f-28"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-c-green">
+                    <div class="row align-items-center">
+                        <div class="col-9">
+                            <p class="text-white m-b-0">TOTAL BSC MIDWIFERY</p>
+                        </div>
+                        <div class="col-3 text-right">
+                            <i class="feather icon-trending-up text-white f-16"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h4 class="text-c-green">{{ $qualified_bsc_nursing }}</h4>
+                            <h6 class="text-muted m-b-0">BSC NURSING</h6>
                         </div>
                         <div class="col-4 text-right">
                             <i class="feather icon-file-text f-28"></i>
@@ -70,13 +95,14 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-4 col-md-6">
+
+        <div class="col-lg-3 col-md-6">
             <div class="card">
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col-8">
-                            <h4 class="text-c-black">{{ $applicants_bcs_midwifery }}</h4>
-                            <h6 class="text-muted m-b-0">TOTAL BSC MIDWIFERY</h6>
+                            <h4 class="text-c-black">{{ $incomplete_applications }}</h4>
+                            <h6 class="text-muted m-b-0">INCOMPLETE APP</h6>
                         </div>
                         <div class="col-4 text-right">
                             <i class="feather icon-calendar f-28"></i>
@@ -86,7 +112,7 @@
                 <div class="card-footer bg-dark">
                     <div class="row align-items-center">
                         <div class="col-9">
-                            <p class="text-white m-b-0">TOTAL BSC MIDWIFERY</p>
+                            <p class="text-white m-b-0">INCOMPLETE APP</p>
                         </div>
                     </div>
                 </div>
@@ -107,7 +133,7 @@
         <div class="col-xl-4 col-md-12">
             <div class="card bg-c-yellow text-white widget-visitor-card">
                 <div class="card-body text-center">
-                    <h2 class="text-white">{{ $applicants_qualified }}</h2>
+                    <h2 class="text-white">{{ $total_qualified_courses }}</h2>
                     <h6 class="text-white">TOTAL QUALIFIED APPLICANTS</h6>
                     <i class="feather icon-file-text"></i>
                 </div>
@@ -115,7 +141,7 @@
 
             <div class="card bg-c-red text-white widget-visitor-card">
                 <div class="card-body text-center">
-                    <h2 class="text-white">{{ $applicants_disqualified }}</h2>
+                    <h2 class="text-white">{{ $total_disqualified_courses }}</h2>
                     <h6 class="text-white">TOTAL DISQUALIFIED APPICANTS</h6>
                     <i class="feather icon-award"></i>
                 </div>

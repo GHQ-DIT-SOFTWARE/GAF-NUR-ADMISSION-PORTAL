@@ -19,6 +19,42 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" />
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css" />
+    <style>
+        /* Style for the dropdown menu */
+        .dropdown-menu.notification {
+            width: 350px; /* Adjust width as needed */
+        }
+    
+        /* Ensure the list itself is scrollable when items exceed limit */
+        .pro-body {
+            max-height: 400px; /* Adjust to fit more notifications */
+            overflow-y: auto; /* Enable vertical scrolling */
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+    
+        /* Ensure text wraps and is fully visible */
+        .dropdown-item a {
+            display: block;
+            white-space: normal; /* Allow text wrapping */
+            word-wrap: break-word; /* Break long words */
+            overflow: hidden;
+        }
+    
+        /* Improve readability */
+        .dropdown-item {
+            padding: 10px;
+            border-bottom: 1px solid #ddd; /* Separate each notification */
+        }
+    
+        /* Remove border for the last item */
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+    </style>
+    
 </head>
 
 <body class="">

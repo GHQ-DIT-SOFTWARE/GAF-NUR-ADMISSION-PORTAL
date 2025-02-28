@@ -18,29 +18,10 @@ class CorrectApplicantController extends Controller
 {
     public function applicant_corrections($uuid)
     {
-        $ghanaian_languages = [
-            'ENGLISH', 'FRENCH', 'RUSSIA', 'CHINESE', 'AKUAPEM TWI', 'DAGBANI', 'EWE', 'GA', 'DAGOMBA', 'DANGME', 'FANTE', 'KASEM',
-            'NZEMA', 'KUSAAL', 'ASANTE TWI', 'FRAFRA', 'BULI', 'KROBO', 'GRUSI', 'GUANG',
-            'HAUSA', 'KUSAAL', 'SISAALA', 'NCHUMBURUNG', 'DAGAARE', 'DANGME', 'DWABENG',
-            'FANTE', 'GONJA', 'KASEM', 'NZEMA', 'SAFALIBA', 'SISALA', 'TWI', 'UNGANA',
-            'WALI', 'BOMU', 'GURENNE', 'JWIRA-PEPESA', 'KANTOSI', 'KONKOMBA', 'KUSASI',
-            'MOORE', 'NABA', 'WASA',
-        ];
-
-        $sports_interests = [
-            'FOOTBALL', 'BASKETBALL', 'TENNIS', 'SWIMMING', 'ATHLETICS', 'BADMINTON', 'GOLF',
-            'CRICKET', 'TABLE TENNIS', 'VOLLEYBALL', 'BOXING', 'CYCLING', 'MARTIAL ARTS',
-            'HIKING', 'SKIING', 'SNOWBOARDING', 'SURFING', 'SKATEBOARDING', 'DANCING',
-        ];
-        $districts = District::all();
-        $regions = Region::all();
-        $bece_results = BECERESULTS::all();
-        $bece_subject = BECESUBJECT::all();
-        $wassce_results = WASSCERESULTS::all();
-        $wassce_subject = WASSCESUBJECT::all();
-        $applied_applicant = Applicant::with(['regions', 'branches'])->where('uuid', $uuid)->firstOrFail();
-        return view('admin.pages.correctapplicantdata.previewapplicant', compact('applied_applicant', 'wassce_subject', 'wassce_results', 'bece_subject', 'bece_results', 'districts', 'regions', 'ghanaian_languages', 'sports_interests'));
+        $applied_applicant = Applicant::where('uuid', $uuid)->firstOrFail();
+        return view('admin.pages.resultsverfication.preview', compact('applied_applicant'));
     }
+
     public function updateApplicantCorrections(Request $request, $uuid)
     {
         // Retrieve the applicant using the UUID

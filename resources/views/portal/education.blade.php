@@ -56,7 +56,7 @@
                                                     <form method="POST" action="{{ route('logout') }}">
                                                         @csrf
                                                         <button type="submit" class="btn btn-link"
-                                                            style="color: white;">Cancel Application</button>
+                                                            style="color: white;">Save & Logout</button>
                                                     </form>
                                                 </div>
                                             </div>
@@ -88,6 +88,23 @@
                                     PLEASE COMPLETE THE VARIOUS FORMS BY CLICKING "NEXT" TO COMPLETE YOUR APPLICATION.
                                 </marquee>
                                 @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            <!-- Display a specific message if duplicate subjects are selected -->
+            @if ($errors->has('bece_subject_three') || $errors->has('bece_subject_four') || $errors->has('bece_subject_five') || $errors->has('bece_subject_six') ||
+                $errors->has('wassce_subject_three') || $errors->has('wassce_subject_four') || $errors->has('wassce_subject_five') || $errors->has('wassce_subject_six'))
+                <li>Do not choose a subject more than once</li>
+            @endif
+
+            <!-- Display all other errors -->
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
+                                {{-- @if ($errors->any())
                                 <div class="alert alert-danger">
                                     <ul>
                                         <!-- Display the global error message at the top -->
@@ -98,7 +115,9 @@
 
                                     </ul>
                                 </div>
-                            @endif
+                                @elseif ($errors->any())
+                                s
+                            @endif --}}
                             </div>
                         </div>
                     </div>
@@ -132,7 +151,7 @@
                                                                 <label for="b-t-name" class="col-sm-3 col-form-label">BECE
                                                                     Index Number</label>
                                                                 <div class="col-sm-3">
-                                                                    <input type="text" class="form-control required"
+                                                                    <input type="text" class="form-control "
                                                                         id="bece_index_number" name="bece_index_number"
                                                                         value="{{ old('bece_index_number', $applied_applicant->bece_index_number) }}" maxlength="10">
                                                                     @error('bece_index_number')
@@ -143,7 +162,7 @@
                                                                     Completion Year</label>
                                                                 <div class="col-sm-3">
                                                                     <div class="form-group fill">
-                                                                        <input type="date" class="form-control"
+                                                                        <input type="date" class="form-control date-picker"
                                                                             id="bece_year_completion"
                                                                             name="bece_year_completion"
                                                                             value="{{ old('bece_year_completion', $applied_applicant->bece_year_completion) }}">
@@ -206,7 +225,7 @@
                                                                 <label for="b-t-name" class="col-sm-3 col-form-label">SHS
                                                                     Completion Year</label>
                                                                 <div class="col-sm-3">
-                                                                    <input class="form-control datepicker required"
+                                                                    <input class="form-control date-picker required"
                                                                         id="wassce_year_completion"
                                                                         name="wassce_year_completion" type="date"
                                                                         value="{{ old('wassce_year_completion', $applied_applicant->wassce_year_completion) }}" >
@@ -918,8 +937,70 @@
     <script src="{{ asset('frontend/assets/js/plugins/select2.full.min.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/pages/form-select-custom.js') }}"></script>
 
-
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkSame = document.getElementById('check_same');
+            const wassceSerialNumber = document.getElementById('wassce_serial_number');
+            const examTypeOne = document.getElementById('exam_type_one');
+    
+            function updateFields() {
+                if (checkSame.checked) {
+                    const serialNumberValue = wassceSerialNumber.value;
+                    const examTypeValue = examTypeOne.value;
+    
+                    // Populate WASSCE Serial Number fields
+                    document.getElementById('results_slip_one').value = serialNumberValue;
+                    document.getElementById('results_slip_two').value = serialNumberValue;
+                    document.getElementById('results_slip_three').value = serialNumberValue;
+                    document.getElementById('results_slip_four').value = serialNumberValue;
+                    document.getElementById('results_slip_five').value = serialNumberValue;
+                    document.getElementById('results_slip_six').value = serialNumberValue;
+    
+                    // Populate Exam Type fields
+                    document.getElementById('exam_type_two').value = examTypeValue;
+                    document.getElementById('exam_type_three').value = examTypeValue;
+                    document.getElementById('exam_type_four').value = examTypeValue;
+                    document.getElementById('exam_type_five').value = examTypeValue;
+                    document.getElementById('exam_type_six').value = examTypeValue;
+                }
+            }
+    
+            // When checkbox is clicked
+            checkSame.addEventListener('change', function() {
+                if (!checkSame.checked) {
+                    // Clear values when unchecked
+                    document.getElementById('results_slip_two').value = '';
+                    document.getElementById('results_slip_three').value = '';
+                    document.getElementById('results_slip_four').value = '';
+                    document.getElementById('results_slip_five').value = '';
+                    document.getElementById('results_slip_six').value = '';
+    
+                    document.getElementById('exam_type_two').value = '';
+                    document.getElementById('exam_type_three').value = '';
+                    document.getElementById('exam_type_four').value = '';
+                    document.getElementById('exam_type_five').value = '';
+                    document.getElementById('exam_type_six').value = '';
+                } else {
+                    updateFields();
+                }
+            });
+    
+            // Listen for changes in `exam_type_one` or `wassce_serial_number` and update fields dynamically
+            examTypeOne.addEventListener('input', function() {
+                if (checkSame.checked) {
+                    updateFields();
+                }
+            });
+    
+            wassceSerialNumber.addEventListener('input', function() {
+                if (checkSame.checked) {
+                    updateFields();
+                }
+            });
+        });
+    </script>
+    
+    {{-- <script>
         document.addEventListener('DOMContentLoaded', function() {
             const checkSame = document.getElementById('check_same');
             const examTypeOne = document.getElementById('exam_type_one');
@@ -962,7 +1043,7 @@
                 }
             });
         });
-    </script>
+    </script> --}}
 
     <script type="text/javascript">
         $(document).ready(function() {
@@ -976,66 +1057,7 @@
         });
     </script>
 
-    <script>
-        $(document).ready(function() {
-            const oldBranch = '{{ old('branch', $applied_applicant->branch ?? '') }}';
-            const oldCourse = '{{ old('course', $applied_applicant->course ?? '') }}';
-            // Fetch branches on page load
-            $.ajax({
-                url: '{{ route('get.branches') }}',
-                method: 'GET',
-                success: function(data) {
-                    let branchSelect = $('#branch');
-                    branchSelect.empty();
-                    branchSelect.append('<option value="">Select Branch</option>');
-                    $.each(data, function(key, branch) {
-                        let selected = (oldBranch == branch.id) ? 'selected' : '';
-                        branchSelect.append('<option value="' + branch.id + '" ' + selected +
-                            '>' + branch.branch + '</option>');
-                    });
-                    // If a branch was previously selected, trigger the change event to load the courses
-                    if (oldBranch) {
-                        branchSelect.trigger('change');
-                    }
-                },
-                error: function(xhr) {
-                    console.log('Error fetching branches:', xhr);
-                }
-            });
-
-            // Fetch courses when branch is selected
-            $('#branch').on('change', function() {
-                let branchId = $(this).val();
-                if (branchId) {
-                    $.ajax({
-                        url: '{{ route('get.courses') }}',
-                        method: 'GET',
-                        data: {
-                            branch_id: branchId
-                        },
-                        success: function(data) {
-                            let courseSelect = $('#course');
-                            courseSelect.empty();
-                            courseSelect.append('<option value="">Select Course</option>');
-                            $.each(data, function(key, course) {
-                                let selected = (oldCourse == course.id) ? 'selected' :
-                                    '';
-                                courseSelect.append('<option value="' + course.id +
-                                    '" ' + selected + '>' + course.course_name +
-                                    '</option>');
-                            });
-                        },
-                        error: function(xhr) {
-                            console.log('Error fetching courses:', xhr);
-                        }
-                    });
-                } else {
-                    $('#course').empty();
-                    $('#course').append('<option value="">Select Course</option>');
-                }
-            });
-        });
-    </script>
+ 
 
     <script>
         document.getElementById('bece_certificate').addEventListener('change', function(event) {
@@ -1131,67 +1153,10 @@
         });
     </script>
 
-    <script>
-        document.getElementById('degree_certificate').addEventListener('change', function(event) {
-                    var fileInput = event.target;
-                    var filePreview = document.getElementById('degree-file-preview');
-                    // Clear previous preview
-                    filePreview.innerHTML = '';
-                    if (fileInput.files.length > 0) {
-                        var file = fileInput.files[0];
-                        if (file.size > 1048576) {
-                            filePreview.textContent = 'File size exceeds 1MB. Please select a smaller file.';
-                            fileInput.value = ''; // Clear the file input
-                            return; // Exit the function if the file is too large
-
-                            if (file.type === 'application/pdf') {
-                                // Display file name
-                                var fileName = document.createElement('p');
-                                fileName.textContent = 'Selected file: ' + file.name;
-                                filePreview.appendChild(fileName);
-                                // Optionally, provide a link to open the PDF
-                                var fileLink = document.createElement('a');
-                                fileLink.href = URL.createObjectURL(file);
-                                fileLink.textContent = 'View PDF';
-                                fileLink.target = '_blank';
-                                filePreview.appendChild(fileLink);
-                            } else {
-                                filePreview.textContent = 'Please select a PDF file.';
-                            }
-                        }
-                    });
-    </script>
-    <script>
-        document.getElementById('professional_certificate').addEventListener('change', function(event) {
-            var fileInput = event.target;
-            var filePreview = document.getElementById('professional-file-preview');
-            // Clear previous preview
-            filePreview.innerHTML = '';
-            if (fileInput.files.length > 0) {
-                var file = fileInput.files[0];
-                if (file.size > 1048576) {
-                    filePreview.textContent = 'File size exceeds 1MB. Please select a smaller file.';
-                    fileInput.value = ''; // Clear the file input
-                    return; // Exit the function if the file is too large
-                }
-
-                if (file.type === 'application/pdf') {
-                    // Display file name
-                    var fileName = document.createElement('p');
-                    fileName.textContent = 'Selected file: ' + file.name;
-                    filePreview.appendChild(fileName);
-                    // Optionally, provide a link to open the PDF
-                    var fileLink = document.createElement('a');
-                    fileLink.href = URL.createObjectURL(file);
-                    fileLink.textContent = 'View PDF';
-                    fileLink.target = '_blank';
-                    filePreview.appendChild(fileLink);
-                } else {
-                    filePreview.textContent = 'Please select a PDF file.';
-                }
-            }
-        });
-    </script>
+ 
+ 
+ 
+    
     <script>
         $(document).ready(function() {
 
@@ -1228,7 +1193,32 @@
             });
         });
     </script>
-
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Get the current year
+            let currentYear = new Date().getFullYear();
+    
+            // Set max date to the last day of the current year (YYYY-12-31)
+            let maxDate = currentYear + "-12-31";
+    
+            // Apply max date and prevent manual typing
+            document.querySelectorAll(".date-picker").forEach(function (input) {
+                input.setAttribute("max", maxDate); // Restrict future dates
+                input.addEventListener("keydown", function (event) {
+                    event.preventDefault(); // Prevent manual input
+                });
+            });
+        });
+    </script>
+    
+{{-- <script>
+    // Select all inputs with class "date-picker" and disable manual typing
+    document.querySelectorAll('.date-picker').forEach(function (input) {
+        input.addEventListener('keydown', function (event) {
+            event.preventDefault(); // Prevent typing
+        });
+    });
+</script> --}}
     <script>
         $(document).ready(function() {
             $('#besicwizard').bootstrapWizard({

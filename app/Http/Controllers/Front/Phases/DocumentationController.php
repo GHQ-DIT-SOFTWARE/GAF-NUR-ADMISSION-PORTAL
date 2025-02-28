@@ -12,19 +12,19 @@ class DocumentationController extends Controller
 {
     public function applicant_documentation()
     {
-        $data = Applicant::with('regions')->where('qualification','QUALIFIED')->get();
+        $data = Applicant::where('qualification','QUALIFIED')->get();
         return view('admin.pages.phases.documentation.report', compact('data'));
     }
 
     public function master_filter_applicant_documentation()
     {
-        $data = ResultVerification::with(['applicant.regions', 'applicant.branches'])->get();
+        $data = ResultVerification::get();
         return view('admin.pages.phases.documentation.master_documentation', compact('data'));
     }
 
     public function applicant_result_verified($uuid)
     {
-        $applied_applicant = Applicant::with(['regions', 'branches'])->where('uuid', $uuid)->firstOrFail();
+        $applied_applicant = Applicant::where('uuid', $uuid)->firstOrFail();
         return view('admin.pages.phases.documentation.index', compact('applied_applicant'));
     }
 
@@ -41,7 +41,7 @@ class DocumentationController extends Controller
         // Validate the request data
         $validatedData = $request->validate([
             'result_verified' => 'required',
-            'result_verified_remarks' => 'required',
+            'result_verified_remarks' => 'nullable',
         ]);
         // Find the applicant by UUID
         $applied_applicant = Applicant::where('uuid', $uuid)->firstOrFail();
@@ -69,7 +69,11 @@ class DocumentationController extends Controller
                 ]);
             }
         }
-        return back()->with('success', 'Status saved successfully.');
+        $notification = [
+            'message' => 'Applicant Verified Successfully',
+            'alert-type' => 'success',
+        ];
+        return redirect()->route('report.report-generation')->with($notification);
     }
 
     public function confirm_applicant_documentation(Request $request, $uuid)

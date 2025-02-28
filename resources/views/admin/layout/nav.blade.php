@@ -57,11 +57,6 @@
                                     <span class="ripple ripple-animate"></span>
                                 </a>
                                 <ul class="pcoded-submenu">
-                                    @can('view.documentation')
-                                        <li class="{{ Route::is('document.applicant-documentation') ? 'active' : '' }}">
-                                            <a href="{{ route('document.applicant-documentation') }}">Verify Results</a>
-                                        </li>
-                                    @endcan
                                     @can('documentation.edit')
                                         <li class="{{ Route::is('document.master-filter-documentation') ? 'active' : '' }}">
                                             <a href="{{ route('document.master-filter-documentation') }}">Master
@@ -130,22 +125,17 @@
                             'subject.bece-subject-index',
                             'subject.wassce-subject-index',
                             'results.wassce-results-index',
-                            'arm.arm-of-service',
-                            'commissin.commission-type',
-                            'bran.branch-index',
-                            'course.courses-index',
-                            'set.agelimit-index',
-                        )
+                            'course.courses-index')
                             ? 'active'
                             : '' }}">
                         <a href="#!" class="nav-link "><span class="pcoded-micon"><i
                                     class="feather icon-settings"></i></span><span class="pcoded-mtext">System
                                 Setting</span></a>
                         <ul class="pcoded-submenu">
-                            <li class="{{ Route::is('view-index') ? 'active' : '' }}"><a
+                            {{-- <li class="{{ Route::is('view-index') ? 'active' : '' }}"><a
                                     href="{{ route('view-index') }}">Regions</a></li>
                             <li class="{{ Route::is('view-districts') ? 'active' : '' }}"><a
-                                    href="{{ route('view-districts') }}">Districts</a></li>
+                                    href="{{ route('view-districts') }}">Districts</a></li> --}}
                             <li class="{{ Route::is('results.bece-results-index') ? 'active' : '' }}"><a
                                     href="{{ route('results.bece-results-index') }}">Bece Results</a></li>
                             <li class="{{ Route::is('subject.bece-subject-index') ? 'active' : '' }}"><a
@@ -155,17 +145,10 @@
                             <li class="{{ Route::is('subject.wassce-subject-index') ? 'active' : '' }}"><a
                                     href="{{ route('subject.wassce-subject-index') }}">Wassce Subjects</a></li>
                             <li class="{{ Route::is('arm.arm-of-service') ? 'active' : '' }}"><a
-                                    href="{{ route('arm.arm-of-service') }}">Offering Caurses</a></li>
-                            <li class="{{ Route::is('commissin.commission-type') ? 'active' : '' }}"><a
-                                    href="{{ route('commissin.commission-type') }}">Commission Types</a></li>
-                            <li class="{{ Route::is('bran.branch-index') ? 'active' : '' }}"><a
-                                    href="{{ route('bran.branch-index') }}">Branch</a></li>
-                            <li class="{{ Route::is('course.courses-index') ? 'active' : '' }}"><a
-                                    href="{{ route('course.courses-index') }}">Courses</a></li>
-                            <li class="{{ Route::is('set.agelimit-index') ? 'active' : '' }}"><a
-                                    href="{{ route('set.agelimit-index') }}">Age Limit</a></li>
-                            <li class="{{ Route::is('report.correct-applicant-data') ? 'active' : '' }}"><a
-                                    href="{{ route('report.correct-applicant-data') }}">Applicant Preview</a></li>
+                                    href="{{ route('arm.arm-of-service') }}">Courses</a></li>
+                            
+                            {{-- <li class="{{ Route::is('report.correct-applicant-data') ? 'active' : '' }}"><a
+                                    href="{{ route('report.correct-applicant-data') }}">Applicant Preview</a></li> --}}
                         </ul>
                     </li>
 

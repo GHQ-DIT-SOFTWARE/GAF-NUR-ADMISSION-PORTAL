@@ -74,11 +74,7 @@
                                         <th>SURNAME</th>
                                         <th>OTHERNAMES</th>
                                         <th>GENDER</th>
-                                        <th>COMMISSION TYPE</th>
-                                        <th>ARM OF SERVICE</th>
                                         <th>MOBILE</th>
-                                        <th>REGION</th>
-                                        <th>BRANCH</th>
                                         <th>SERIAL NUMBER</th>
                                         <th>ACTION</th>
                                     </tr>
@@ -103,105 +99,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
 
-     {{-- <div class="row filter-row">
-                                <div class="col-sm-6 col-md-3">
-                                    <div class="form-group form-focus">
-                                        <select class="form-control" name="commission_type">
-                                            <option value>SELECT COMMISSION TYPE</option>
-                                            @foreach ($data->unique('commission_type') as $commission)
-                                                <option value="{{ $commission->commission_type }}">
-                                                    {{ $commission->commission_type }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-6 col-md-3">
-                                    <div class="form-group form-focus">
-                                        <select class="form-control" name="rank_name">
-                                            <option value>SELECT ARM OF SERVICE</option>
-                                            @foreach ($data->unique('arm_of_service') as $arm)
-                                                <option value="{{ $arm->arm_of_service }}">
-                                                    {{ $arm->arm_of_service }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-6 col-md-3">
-                                    <div class="form-group form-focus">
-                                        <input type="text" class="form-control floating" name="surname"
-                                            placeholder="SURNAME">
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-6 col-md-3">
-                                    <div class="form-group form-focus">
-                                        <input type="text" class="form-control floating" name="applicant_serial_number"
-                                            placeholder="Serial Number">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row filter-row">
-                                <div class="col-sm-6 col-md-3">
-                                    <div class="form-group form-focus">
-                                        <select class="form-control select2" name="sex">
-                                            <option value>SELECT GENDER</option>
-                                            @foreach ($data->unique('sex') as $gender)
-                                                <option value="{{ $gender->sex }}">
-                                                    {{ $gender->sex }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-6 col-md-3">
-                                    <div class="form-group form-focus">
-                                        <select class="form-control select2" name="branch">
-                                            <option value>SELECT BRANCH</option>
-                                            @foreach ($data->unique('branch') as $applicant)
-                                                @if ($applicant->branches)
-                                                    <option value="{{ $applicant->branches->id }}">
-                                                        {{ $applicant->branches->branch }}</option>
-                                                @endif
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-6 col-md-3">
-                                    <div class="form-group form-focus">
-                                        <select class="form-control select2" name="region">
-                                            <option value>SELECT REGIONS</option>
-                                            @foreach ($data->unique('region') as $applicant)
-                                                @if ($applicant->regions)
-                                                    <option value="{{ $applicant->regions->id }}">
-                                                        {{ $applicant->regions->region_name }}</option>
-                                                @endif
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6 col-md-3">
-                                    <div class="form-group form-focus">
-                                        <select class="form-control select2" name="qualification">
-                                            <option value>SELECT QUALIFICATION STATUS</option>
-                                            @foreach ($data->unique('qualification') as $status)
-                                                <option value="{{ $status->qualification }}">
-                                                    {{ $status->qualification }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6 col-md-3">
-                                    <button type="sumit" class="btn btn-primary btn-block">Filter</button>
-                                </div>
-                            </div> --}}
     <script>
         $(document).ready(function() {
             var dataTable = $('#main-interview').DataTable({

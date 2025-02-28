@@ -14,7 +14,7 @@ class ApiDocumentationController extends Controller
 
     public function applicant_documentation_table(Request $request)
     {
-        $query = Applicant::with('regions')->where('qualification','QUALIFIED');
+        $query = Applicant::where('qualification','QUALIFIED');
         // Check if there's a search query
         if ($request->has('search_query') && $request->input('search_query') != '') {
             $searchQuery = $request->input('search_query');
@@ -23,38 +23,11 @@ class ApiDocumentationController extends Controller
                 $q->where('surname', 'LIKE', '%' . $searchQuery . '%')
                     ->orWhere('other_names', 'LIKE', '%' . $searchQuery . '%')
                     ->orWhere('applicant_serial_number', 'LIKE', '%' . $searchQuery . '%')
-                    ->orWhere('cause_offers', 'LIKE', '%' . $searchQuery . '%')
-                    ->orWhereHas('regions', function ($query) use ($searchQuery) {
-                        $query->where('region_name', 'LIKE', '%' . $searchQuery . '%');
-                    });
+                    ->orWhere('cause_offers', 'LIKE', '%' . $searchQuery . '%');
             });
         }
         return DataTables::of($query)
-            ->addColumn('region_name', function ($applicant) {
-                return $applicant->regions ? $applicant->regions->region_name : 'N/A';
-            })
-            // ->addColumn('action', function ($row) {
-            //     // Generate URL for Applicant documentation status using Applicant's uuid
-            //     $statusUrl = route('document.documentation-status', ['uuid' => $row->uuid]);
-            //     // Fetch the related Documentation record using applicant_id
-            //     $documentation = Documentation::where('applicant_id', $row->id)->first();
-            //     // Generate URL for updating Documentation status using the Documentation's uuid
-            //     $statusUpdateUrl = $documentation
-            //     ? route('document.documentation-status-update', ['uuid' => $documentation->uuid])
-            //     : '#'; // Fallback if no documentation exists
-            //     $action = '<div class="btn-group" role="group">';
-            //     // Add the link for viewing status
-            //     $action .= '<a href="' . $statusUrl . '" class="btn btn-info btn-sm has-ripple"><i class="feather icon-edit"></i>&nbsp;Documentation<span class="ripple ripple-animate"></span></a>';
-            //     // Add the link for updating documentation status (only if documentation exists)
-            //     if ($documentation) {
-            //         $action .= '<a href="' . $statusUpdateUrl . '" class="btn btn-success btn-sm"><i class="feather icon-edit"></i>&nbsp;Update Documentation</a>';
-            //     } else {
-            //         $action .= '<a href="#" class="btn btn-secondary btn-sm disabled" title="No Documentation Available"><i class="feather icon-edit"></i>&nbsp;Update Documentation</a>';
-            //     }
-            //     $action .= '</div>';
-            //     return $action;
-            // })
-
+        
             ->addColumn('action', function ($row) {
                 // Documentation-related URLs
                 $statusUrl = route('document.documentation-status', ['uuid' => $row->uuid]);
@@ -73,39 +46,35 @@ class ApiDocumentationController extends Controller
                 
                 // View Documentation
                 $action .= '<a href="' . $statusUrl . '" class="btn btn-info btn-sm">
-                                <i class="feather icon-edit"></i>&nbsp;Documentation
+                                <i class="feather icon-edit"></i>&nbsp;Verification
                             </a>';
     
                 // Update Documentation (if available)
                 if ($documentation) {
                     $action .= '<a href="' . $statusUpdateUrl . '" class="btn btn-success btn-sm">
-                                    <i class="feather icon-edit"></i>&nbsp;Update Documentation
+                                    <i class="feather icon-edit"></i>&nbsp;Update Verification
                                 </a>';
                 } else {
-                    $action .= '<a href="#" class="btn btn-secondary btn-sm disabled" title="No Documentation Available">
-                                    <i class="feather icon-edit"></i>&nbsp;Update Documentation
+                    $action .= '<a href="#" class="btn btn-secondary btn-sm disabled" title="No Verification Available">
+                                    <i class="feather icon-edit"></i>&nbsp;Update Verification
                                 </a>';
                 }
-    
+                $action .= '<a href="' . $pdfUrl . '" class="btn btn-danger btn-sm" target="_blank">
+                <i class="feather icon-file"></i>&nbsp;Summary Report
+            </a>';
                 // BECE Certificate Preview
                 if ($beceUrl) {
                     $action .= '<a href="' . $beceUrl . '" class="btn btn-primary btn-sm" target="_blank">
                                     <i class="feather icon-file-text"></i>&nbsp;BECE Cert
                                 </a>';
                 }
-    
                 // WASSCE Certificate Preview
                 if ($wassceUrl) {
                     $action .= '<a href="' . $wassceUrl . '" class="btn btn-warning btn-sm" target="_blank">
                                     <i class="feather icon-file-text"></i>&nbsp;WASSCE Cert
                                 </a>';
                 }
-    
                 // PDF Report Button
-                $action .= '<a href="' . $pdfUrl . '" class="btn btn-danger btn-sm" target="_blank">
-                                <i class="feather icon-file"></i>&nbsp;PDF Report
-                            </a>';
-    
                 $action .= '</div>';
                 return $action;
             })
@@ -128,7 +97,7 @@ class ApiDocumentationController extends Controller
 
     public function master_documentation_applicant(Request $request)
     {
-        $query =ResultVerification::with(['applicant', 'applicant.regions']);
+        $query =ResultVerification::with('applicant');
         // Check if the search query exists
         if ($request->has('search_query') && $request->input('search_query') != '') {
             $searchTerm = $request->input('search_query');
@@ -158,9 +127,6 @@ class ApiDocumentationController extends Controller
             })
             ->addColumn('contact', function ($documentation) {
                 return $documentation->applicant->contact ?? 'N/A';
-            })
-            ->addColumn('region_name', function ($documentation) {
-                return $documentation->applicant->regions->region_name ?? 'N/A';
             })
             ->addColumn('applicant_serial_number', function ($documentation) {
                 return $documentation->applicant->applicant_serial_number ?? 'N/A';

@@ -39,14 +39,12 @@
                             <div class="col-md-6">
                                 <div class="media">
                                     <div class="media-body">
-                                        <p class="mb-0 text-muted"><b> GAF
+                                        <p class="mb-0 text-muted"><b>NHMC
                                                 NUMBER: {{ $applied_applicant->applicant_serial_number }} </b></p>
                                         <p class="mb-0 text-muted">
-                                            <b>ARM OF
-                                                SERVICE:</b> {{ $applied_applicant->arm_of_service }}
+                                            <b>COURSE SELECTED:</b> {{ $applied_applicant->cause_offers }}
                                         </p>
-                                        <p class="mb-0 text-muted"> <b>COMMISSION TYPE:</b>
-                                            {{ $applied_applicant->commission_type }}</p>
+                                      
                                     </div>
                                 </div>
                             </div>
@@ -54,8 +52,6 @@
                             <div class="col-md-6">
                                 <div class="media">
                                     <div class="media-body">
-                                        <p class="mb-0 text-muted"> <b>BRANCH:</b>
-                                            {{ $applied_applicant->branches->branch }}</p>
                                         <p class="mb-0 text-muted">
                                             @if ($applied_applicant->qualification == 'QUALIFIED')
                                                 <span class="badge badge-success">

@@ -35,6 +35,10 @@ class EducationController extends Controller
 
     public function saveEducationData(Request $request)
     {
+        $applicant = Applicant::where('card_id', $request->session()->get('card_id'))->firstOrFail();
+
+        $beceCertificateRule = $applicant->bece_certificate ? 'nullable|file|mimes:pdf|max:1024' : 'required|file|mimes:pdf|max:1024';
+        $wassceCertificateRule = $applicant->wassce_certificate ? 'nullable|file|mimes:pdf|max:1024' : 'required|file|mimes:pdf|max:1024';
         $subjects = [
             'bece_subject_three' => $request->bece_subject_three,
             'bece_subject_four' => $request->bece_subject_four,
@@ -60,9 +64,13 @@ class EducationController extends Controller
         // Combine custom validation with normal validation
         $validator = Validator::make($request->all(), [
             'bece_index_number' => 'required|digits:10',
-             'wassce_index_number' => 'required|digits:12',
+            'wassce_index_number' => 'required|digits:10',
             'bece_english' => 'required',
+            'wassce_subject_english_grade'=>'required',
+            'wassce_subject_maths_grade'=>'required',
             'bece_mathematics' => 'required',
+            'bece_subject_maths_grade'=>'required',
+            'bece_subject_english_grade' =>'required',
             'bece_subject_three' => 'required|different:bece_subject_four,bece_subject_five,bece_subject_six',
             'bece_subject_four' => 'required|different:bece_subject_three,bece_subject_five,bece_subject_six',
             'bece_subject_five' => 'required|different:bece_subject_three,bece_subject_four,bece_subject_six',
@@ -73,8 +81,22 @@ class EducationController extends Controller
             'wassce_subject_four' => 'required|different:wassce_subject_three,wassce_subject_five,wassce_subject_six',
             'wassce_subject_five' => 'required|different:wassce_subject_three,wassce_subject_four,wassce_subject_six',
             'wassce_subject_six' => 'required|different:wassce_subject_three,wassce_subject_four,wassce_subject_five',
-            'bece_certificate' => 'required|file|mimes:pdf|max:1024',
-            'wassce_certificate' => 'required|file|mimes:pdf|max:1024',
+            // 'bece_certificate' => 'required|file|mimes:pdf|max:1024',
+            // 'wassce_certificate' => 'required|file|mimes:pdf|max:1024',
+            'bece_certificate' => $beceCertificateRule,
+            'wassce_certificate' => $wassceCertificateRule,
+            'exam_type_one'=> 'required',
+            'exam_type_two'=> 'required',
+            'exam_type_three'=> 'required',
+            'exam_type_four'=> 'required',
+            'exam_type_five'=> 'required',
+            'exam_type_six'=> 'required',
+            'results_slip_one'=> 'required',
+            'results_slip_two'=> 'required',
+            'results_slip_three'=> 'required',
+            'results_slip_four'=> 'required',
+            'results_slip_five'=> 'required',
+            'results_slip_six'=> 'required',
         ]);
         // Merge custom errors into the validator
         if (!empty($customErrors)) {
@@ -87,7 +109,6 @@ class EducationController extends Controller
             return back()->withErrors($validator)->withInput();
         }
         // Proceed with the rest of your logic
-        $applicant = Applicant::where('card_id', $request->session()->get('card_id'))->firstOrFail();
         $bece_save_url = $applicant->bece_certificate;
         if ($request->hasFile('bece_certificate')) {
             $file = $request->file('bece_certificate');
@@ -98,6 +119,7 @@ class EducationController extends Controller
             $file->move(public_path('uploads/jhscertficate'), $name_gen);
             $bece_save_url = 'uploads/jhscertficate/' . $name_gen;
         }
+
         $wassce_save_url = $applicant->wassce_certificate;
         if ($request->hasFile('wassce_certificate')) {
             $file = $request->file('wassce_certificate');

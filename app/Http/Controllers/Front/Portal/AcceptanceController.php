@@ -36,92 +36,87 @@ class AcceptanceController extends Controller
 
     public function Declaration_and_Acceptance(Request $request)
     {
-        $request->validate([
-            'final_checked' => 'required|in:YES',
-        ]);
-        $applicant = Applicant::where('card_id', $request->session()->get('card_id'))->firstOrFail();
-        $disqualificationReasons = [];
-        if (!$request->has('final_checked') || $request->input('final_checked') !== 'YES') {
-            $disqualificationReasons[] = 'You must accept the declaration to proceed.';
-        }
-        $applicant->final_checked = 'YES';
-        $applicant->qualification = 'QUALIFIED';
-        $applicant->disqualification_reason = null;
-    // Calculate age and save it
+    $request->validate([
+        'final_checked' => 'required|in:YES',
+    ]);
+
+    $applicant = Applicant::where('card_id', $request->session()->get('card_id'))->firstOrFail();
+    $disqualificationReasons = [];
+
+    // Ensure the declaration is accepted
+    if (!$request->has('final_checked') || $request->input('final_checked') !== 'YES') {
+        $disqualificationReasons[] = 'You must accept the declaration to proceed.';
+    }
+
+    $applicant->final_checked = 'YES';
+    $applicant->qualification = 'QUALIFIED';
+    $applicant->disqualification_reason = null;
+
+    // Calculate and store applicant age
     $age = Carbon::parse($applicant->date_of_birth)->age;
     $applicant->age = $age;
-        // Save the applicant first to persist final_checked (if necessary) and qualification status
-        $applicant->save();
-        // Load the applicant's card to update status and generate serial number
-        $applicant->load('card');
-        $applicant->card->status = 1;
-       // **Generate Serial Number Based on Course**
+
+    // Check exam results and disqualify if necessary
+    $this->checkExamResults($applicant, $disqualificationReasons);
+
+    // Check age limits
+    if ($age < 16 || $age > 35) {
+        if ($age > 35 && empty($applicant->employer_letter)) {
+            $disqualificationReasons[] = 'Applicants above 35 years must be serving officers with letters from employers.';
+        } elseif ($age < 16) {
+            $disqualificationReasons[] = 'Applicants must be at least 16 years old.';
+        }
+    }
+
+    // Check for mixed exam types
+    $examTypes = [
+        'exam_type_one', 'exam_type_two', 'exam_type_three',
+        'exam_type_four', 'exam_type_five', 'exam_type_six',
+    ];
+    $examTypesList = array_filter(array_map(fn($type) => $applicant->$type, $examTypes));
+    $examCounts = array_count_values($examTypesList);
+
+    if (!empty($examCounts['SSSCE']) && !empty($examCounts['WASSCE'])) {
+        $disqualificationReasons[] = 'A combination of SSSCE and WASSCE results is not acceptable.';
+    }
+    // If disqualified, save and return early
+    if (!empty($disqualificationReasons)) {
+        return $this->disqualifyAndSave($disqualificationReasons, $applicant);
+    }
+    // Applicant is qualified - Generate Serial Number
+    $applicant->load('card');
+    $applicant->card->status = 1;
+    // Generate Serial Number Based on Course
     $year = Carbon::now()->format('y'); // '25' for 2025
     $course = $applicant->cause_offers ? strtoupper($applicant->cause_offers) : 'UNKNOWN';
-    // Determine the course code
     $courseCode = match ($course) {
         'BSC NURSING' => 'B-NUR',
         'BSC MIDWIFERY' => 'B-MID',
-        default => 'B-UNK', // Fallback if no match
+        default => 'B-UNK',
     };
-
-    // Get last assigned serial number for this course
+    // Get last assigned serial number
     $lastSerial = Applicant::where('cause_offers', $applicant->cause_offers)
-    ->whereNotNull('applicant_serial_number')
-    ->orderByDesc('id')
-    ->value('applicant_serial_number');
+        ->whereNotNull('applicant_serial_number')
+        ->orderByDesc('id')
+        ->value('applicant_serial_number');
+
     // Extract the last sequence number
     $lastNumber = 0;
     if ($lastSerial && preg_match('/\d+$/', $lastSerial, $matches)) {
-        $lastNumber = (int)$matches[0]; // Get last sequence number
+        $lastNumber = (int)$matches[0];
     }
     // Increment the serial number
     $newNumber = str_pad((string)($lastNumber + 1), 3, '0', STR_PAD_LEFT);
-    // Final Serial Number Format
     $applicantSerialNumber = "{$courseCode}-{$year}-{$newNumber}";
-        // Save the serial number to the card
-        $applicant->applicant_serial_number = $applicantSerialNumber;
-        $applicant->card->applicant_serial_number = $applicantSerialNumber;
-        $applicant->card->save();
-        // Assign the serial number to the applicant
-        $applicant->applicant_serial_number = $applicantSerialNumber;
+    // Assign Serial Number
+    $applicant->applicant_serial_number = $applicantSerialNumber;
+    $applicant->card->applicant_serial_number = $applicantSerialNumber;
+    $applicant->card->save();
+    // Generate and Save QR Code
+    // $qrCodePath = $this->generateQrCode($applicant);
+    if ($applicant->qualification === 'QUALIFIED') {
         $qrCodePath = $this->generateQrCode($applicant);
-        // Check exam results and disqualify if necessary
-        $this->checkExamResults($applicant, $disqualificationReasons);
-        // Check age limit
-        $age = Carbon::parse($applicant->date_of_birth)->age;
-        if ($age < 16 || $age > 35) {
-            if ($age > 35 && empty($applicant->employer_letter)) {
-                $disqualificationReasons[] = 'Applicants above 35 years must be serving officers with letters from employers.';
-            } elseif ($age < 16) {
-                $disqualificationReasons[] = 'Applicants must be at least 16 years old.';
-            }
-        }
-        $examTypes = [
-            'exam_type_one',
-            'exam_type_two',
-            'exam_type_three',
-            'exam_type_four',
-            'exam_type_five',
-            'exam_type_six',
-        ];
-        
-        $examTypesList = [];
-        foreach ($examTypes as $examType) {
-            if (!empty($applicant->{$examType})) {
-                $examTypesList[] = $applicant->{$examType};
-            }
-        }
-        
-        // Count occurrences of each exam type
-        $examCounts = array_count_values($examTypesList);
-        if (!empty($examCounts['SSSCE']) && !empty($examCounts['WASSCE'])) {
-            $disqualificationReasons[] = 'A combination of SSSCE and WASSCE results is not acceptable.';
-        }
-        // If there are disqualification reasons, handle disqualification
-        if (!empty($disqualificationReasons)) {
-            return $this->disqualifyAndSave($disqualificationReasons, $applicant);
-        }
+    }
         // Generate PDF URL
         $pdfUrl = route('applicant-pdf');
         $admins = User::where('is_admin', 1)->get();
@@ -136,16 +131,15 @@ class AcceptanceController extends Controller
         ]);
 
     }
-
     protected function sendQualificationSmsToApplicant($applicant, $applicantSerialNumber)
     {
         if ($applicant->qualification === 'DISQUALIFIED') {
-            $this->sendQualificationSms($applicant, 'Unfortunately, you have been DISQUALIFIED. Reason: ' . $applicant->disqualification_reason . ' Your GAF NUMBER is: ' . $applicantSerialNumber);
+            $this->sendQualificationSms($applicant, 'Unfortunately, you have been DISQUALIFIED. Reason: ' . $applicant->disqualification_reason);
         } elseif ($applicant->qualification === 'QUALIFIED') {
             $this->sendQualificationSms($applicant, 'Congratulations! You are QUALIFIED. Your GAF is: ' . $applicantSerialNumber);
         }
     }
-
+    
     public function generateQrCode($applicant)
     {
         // Define the path to save the QR code image
@@ -167,24 +161,37 @@ class AcceptanceController extends Controller
         // Return the path to the QR code image
         return $qrCodePath;
     }
-
-
+   
     protected function disqualifyAndSave($reasons, $applicant)
-    {
-        $applicant->qualification = 'DISQUALIFIED';
-        $applicant->disqualification_reason = implode('; ', $reasons);
-        $pdfUrl = route('applicant-pdf');
-        $admins = User::where('is_admin', 1)->get();
-        Notification::send($admins, new ApplicantAppliedNotification($applicant));
-        // Send SMS for disqualification
-        $this->sendQualificationSms($applicant, 'Unfortunately, you have been DISQUALIFIED. Reason: ' . $applicant->disqualification_reason . ' Your GAF NUMBER is: ' . $applicant->applicant_serial_number);
-        $applicant->save();
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Applicant has been disqualified.',
-            'pdf_url' => $pdfUrl,
-        ]);
+{
+    $applicant->qualification = 'DISQUALIFIED';
+    $applicant->disqualification_reason = implode('; ', $reasons);
+    
+    // Load the card relationship
+    $applicant->load('card');
+
+    if ($applicant->card) {
+        $applicant->card->status = 1; // Set card status to 1 for Disqualified
+        $applicant->card->save(); // Save the card status update
     }
+
+    $applicant->save(); // Save applicant data
+    
+    $pdfUrl = route('applicant-pdf'); // Generate PDF URL
+
+    $admins = User::where('is_admin', 1)->get();
+    Notification::send($admins, new ApplicantAppliedNotification($applicant));
+
+    // Send SMS for disqualification
+    $this->sendQualificationSms($applicant, 'Unfortunately, you have been DISQUALIFIED. Reason: ' . $applicant->disqualification_reason);
+
+    return response()->json([
+        'status' => 'error',
+        'message' => 'Applicant has been disqualified.',
+        'pdf_url' => $pdfUrl,
+    ]);
+}
+
 
     protected function sendQualificationSms($applicant, $message)
     {

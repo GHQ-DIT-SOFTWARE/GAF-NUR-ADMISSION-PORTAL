@@ -42,7 +42,7 @@ Results Verfication
                             <div class="row filter-row">
                                 <div class="form-group form-focus">
                                     <label for="search_query" style="font-size: 14px; color: #ee0808;">
-                                        You can search with GAF NUMBER, NAME, or BRANCH
+                                        
                                     </label>
                                     <input type="text" class="form-control floating" name="search_query"
                                         placeholder="Search..."
@@ -72,9 +72,8 @@ Results Verfication
                                         <th>GENDER</th>
                                         <th>COURSE</th>
                                         <th>MOBILE</th>
-                                        <th>REGION</th>
                                         <th>SERIAL NUMBER</th>
-                                        <th>DOCUMENTATION STATUS</th>
+                                        <th> STATUS</th>
                                         <th>ACTION</th>
                                     </tr>
                                 </thead>
@@ -164,10 +163,7 @@ Results Verfication
                         data: 'contact',
                         name: 'contact'
                     },
-                    {
-                        data: 'region_name',
-                        name: 'region_name'
-                    },
+                   
                     {
                         data: 'applicant_serial_number',
                         name: 'applicant_serial_number'

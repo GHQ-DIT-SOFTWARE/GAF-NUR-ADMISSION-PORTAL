@@ -91,116 +91,7 @@
             </div>
         </div>
     </div>
-  {{-- <div class="row filter-row">
-                                <!-- Commission Type -->
-                                <div class="col-sm-6 col-md-3">
-                                    <div class="form-group form-focus">
-                                        <select class="form-control" name="commission_type">
-                                            <option value>SELECT COMMISSION TYPE</option>
-                                            @foreach ($data->pluck('applicant')->unique('commission_type') as $applicant)
-                                                <option value="{{ $applicant->commission_type }}">
-                                                    {{ $applicant->commission_type }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
 
-                                <!-- Arm of Service -->
-                                <div class="col-sm-6 col-md-3">
-                                    <div class="form-group form-focus">
-                                        <select class="form-control" name="arm_of_service">
-                                            <option value>SELECT ARM OF SERVICE</option>
-                                            @foreach ($data->pluck('applicant')->unique('arm_of_service') as $applicant)
-                                                <option value="{{ $applicant->arm_of_service }}">
-                                                    {{ $applicant->arm_of_service }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <!-- Surname -->
-                                <div class="col-sm-6 col-md-3">
-                                    <div class="form-group form-focus">
-                                        <input type="text" class="form-control floating" name="surname"
-                                            placeholder="SURNAME">
-                                    </div>
-                                </div>
-
-                                <!-- Serial Number -->
-                                <div class="col-sm-6 col-md-3">
-                                    <div class="form-group form-focus">
-                                        <input type="text" class="form-control floating" name="applicant_serial_number"
-                                            placeholder="Serial Number">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row filter-row">
-                                <!-- Gender -->
-                                <div class="col-sm-6 col-md-3">
-                                    <div class="form-group form-focus">
-                                        <select class="form-control select2" name="sex">
-                                            <option value>SELECT GENDER</option>
-                                            @foreach ($data->pluck('applicant')->unique('sex') as $applicant)
-                                                <option value="{{ $applicant->sex }}">
-                                                    {{ $applicant->sex }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <!-- Branch -->
-                                <div class="col-sm-6 col-md-3">
-                                    <div class="form-group form-focus">
-                                        <select class="form-control select2" name="branch">
-                                            <option value>SELECT BRANCH</option>
-                                            @foreach ($data->pluck('applicant.branches')->unique('branch') as $branch)
-                                                @if ($branch)
-                                                    <option value="{{ $branch->id }}">
-                                                        {{ $branch->branch }}
-                                                    </option>
-                                                @endif
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <!-- Region -->
-                                <div class="col-sm-6 col-md-3">
-                                    <div class="form-group form-focus">
-                                        <select class="form-control select2" name="region">
-                                            <option value>SELECT REGION</option>
-                                            @foreach ($data->pluck('applicant.regions')->unique('region_name') as $region)
-                                                @if ($region)
-                                                    <option value="{{ $region->id }}">
-                                                        {{ $region->region_name }}
-                                                    </option>
-                                                @endif
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <!-- Qualification -->
-                                <div class="col-sm-6 col-md-3">
-                                    <div class="form-group form-focus">
-                                        <select class="form-control select2" name="qualification">
-                                            <option value>SELECT QUALIFICATION STATUS</option>
-                                            @foreach ($data->unique('interview_status') as $status)
-                                                <option value="{{ $status->interview_status }}">
-                                                    {{ $status->interview_status }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <!-- Filter Button -->
-                                <div class="col-sm-6 col-md-3">
-                                    <button type="submit" class="btn btn-primary btn-block">Filter</button>
-                                </div>
-                            </div> --}}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
@@ -272,24 +163,8 @@
                         name: 'sex'
                     },
                     {
-                        data: 'commission_type',
-                        name: 'commission_type'
-                    },
-                    {
-                        data: 'arm_of_service',
-                        name: 'arm_of_service'
-                    },
-                    {
                         data: 'contact',
                         name: 'contact'
-                    },
-                    {
-                        data: 'region_name',
-                        name: 'region_name'
-                    },
-                    {
-                        data: 'branch_name',
-                        name: 'branch_name'
                     },
                     {
                         data: 'applicant_serial_number',

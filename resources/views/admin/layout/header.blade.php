@@ -8,7 +8,7 @@
     <div class="collapse navbar-collapse">
         <ul class="navbar-nav ml-auto">
             <!-- Notification Dropdown -->
-            <li class="nav-item dropdown">
+            {{-- <li class="nav-item dropdown">
                 <a class="nav-link" href="#" data-toggle="dropdown">
                     <i class="feather icon-bell"></i>
                     <span class="badge badge-danger">{{ auth()->user()->unreadNotifications->count() }}</span>
@@ -32,8 +32,31 @@
                         @endforelse
                     </ul>
                 </div>
-            </li>
+            </li> --}}
 
+            <li class="nav-item dropdown">
+                <a class="nav-link" href="#" data-toggle="dropdown">
+                    <i class="feather icon-bell"></i>
+                    <span class="badge badge-danger">{{ auth()->user()->unreadNotifications->count() }}</span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right notification">
+                    <ul class="pro-body">
+                        @forelse (auth()->user()->unreadNotifications as $notification)
+                            <li class="dropdown-item">
+                                <a href="{{ route('notifications.read', $notification->id) }}">
+                                    <i class="feather icon-info"></i>
+                                    {{ $notification->data['message'] }} <!-- Notification message -->
+                                    <small>{{ $notification->created_at->diffForHumans() }}</small>
+                                </a>
+                            </li>
+                        @empty
+                            <li class="dropdown-item">
+                                <a href="#">No new notifications</a>
+                            </li>
+                        @endforelse
+                    </ul>
+                </div>
+            </li>
             <!-- User Dropdown -->
             <li class="nav-item dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">

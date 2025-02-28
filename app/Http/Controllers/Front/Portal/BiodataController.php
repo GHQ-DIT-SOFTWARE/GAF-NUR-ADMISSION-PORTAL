@@ -76,26 +76,20 @@ class BiodataController extends Controller
 
     public function saveBioData(Request $request)
     {
+        $applicant = Applicant::where('card_id', $request->session()->get('card_id'))->firstOrFail();
         $request->validate([
-            'applicant_image' => 'required|image|mimes:jpg,png|max:2048',
+            // 'applicant_image' => 'required|image|mimes:jpg,png|max:2048',
+            'applicant_image' => $applicant->applicant_image ? 'nullable|image|mimes:jpg,png|max:2048' : 'required|image|mimes:jpg,png|max:2048',
             'surname' => 'required',
             'other_names' => 'required',
             'sex' => 'required',
             'marital_status' => 'required',
-            'height' => 'required|numeric',
-            'weight' => 'required|numeric',
-            'place_of_birth' => 'required',
             'date_of_birth' => 'required|date',
-            'hometown' => 'required',
-            'district' => 'required',
-            'region' => 'required',
             'contact' => 'required|digits:10',
             'email' => 'required|email',
             'residential_address' => 'required',
             'language' => 'required|array',
-            'sports_interest' => 'required|array',
         ]);
-        $applicant = Applicant::where('card_id', $request->session()->get('card_id'))->firstOrFail();
         $save_url = $applicant->applicant_image;
         if ($request->hasFile('applicant_image')) {
             $image = $request->file('applicant_image');
@@ -109,22 +103,14 @@ class BiodataController extends Controller
             'other_names' => $request->other_names,
             'sex' => $request->sex,
             'marital_status' => $request->marital_status,
-            'height' => $request->height,
-            'weight' => $request->weight,
-            'place_of_birth' => $request->place_of_birth,
             'date_of_birth' => $request->date_of_birth,
-            'hometown' => $request->hometown,
-            'district' => $request->district,
-            'region' => $request->region,
             'contact' => $request->contact,
             'email' => $request->email,
             'residential_address' => $request->residential_address,
             'national_identity_card' => $request->national_identity_card,
             'digital_address' => $request->digital_address,
             'language' => json_encode($request->language),
-            'sports_interest' => json_encode($request->sports_interest),
         ]);
-        // send_sms($applicant->contact, 'Your biodata has been successfully updated.');
         return redirect()->route('education-details');
     }
 }

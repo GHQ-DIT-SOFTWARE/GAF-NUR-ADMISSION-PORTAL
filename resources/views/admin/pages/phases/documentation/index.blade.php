@@ -45,8 +45,6 @@ Results Verfification Phase
                                             <b>ARM OF
                                                 SERVICE:</b> {{ $applied_applicant->arm_of_service }}
                                         </p>
-                                        {{-- <p class="mb-0 text-muted"> <b>COMMISSION TYPE:</b>
-                                            {{ $applied_applicant->commission_type }}</p> --}}
                                     </div>
                                 </div>
                             </div>
@@ -54,8 +52,6 @@ Results Verfification Phase
                             <div class="col-md-6">
                                 <div class="media">
                                     <div class="media-body">
-                                        {{-- <p class="mb-0 text-muted"> <b>BRANCH:</b>
-                                            {{ $applied_applicant->branches->branch }}</p> --}}
                                         <p class="mb-0 text-muted">
                                             @if ($applied_applicant->qualification == 'QUALIFIED')
                                                 <span class="badge badge-success">

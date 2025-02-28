@@ -27,7 +27,6 @@
             border: 0px;
             border-right: 1px solid #e5e5e5;
         }
-
         #img-upload {
             /* width: 255px;
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         height: 220px; */
@@ -39,9 +38,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/plugins/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/style.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
     {{-- c5dfbf --}}
-    <body
-        class="" >
+    <body class="" >
         <section class="pcoded-apply-container">
             <div class="pcoded-content">
                 <div class="page-header">
@@ -57,7 +56,7 @@
                                                     <form method="POST" action="{{ route('logout') }}">
                                                         @csrf
                                                         <button type="submit" class="btn btn-link"
-                                                            style="color: white;">Cancel Application</button>
+                                                            style="color: white;">Save & Logout</button>
                                                     </form>
                                                 </div>
                                             </div>
@@ -227,11 +226,12 @@
                                                                     <span class="text-danger">{{ $message }}</span>
                                                                 @enderror
                                                             </div>
+
                                                             <label for="b-t-name" class="col-sm-2 col-form-label">Date of
                                                                 Birth</label>
                                                             <div class="col-sm-2">
                                                                 <div class="form-group fill">
-                                                                    <input type="date" class="form-control"
+                                                                    <input type="date" class="form-control date-picker"
                                                                         id="date_of_birth" name="date_of_birth"
                                                                         value="{{ old('date_of_birth', $applied_applicant->date_of_birth) }}">
                                                                     @error('date_of_birth')
@@ -257,7 +257,7 @@
                                                             </div>
                                                             <label for="b-t-name" class="col-sm-2 col-form-label">Email
                                                                 Address</label>
-                                                            <div class="col-sm-2">
+                                                            <div class="col-sm-6">
                                                                 <input type="text" class="form-control required"
                                                                     id="email" name="email"
                                                                     value="{{ old('email', $applied_applicant->email) }}">
@@ -292,7 +292,7 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="form-group row">
+                                                        {{-- <div class="form-group row">
                                                             <label for="languages"
                                                                 class="col-sm-2 col-form-label">Language(s) Spoken</label>
                                                             <div class="col-sm-10">
@@ -309,9 +309,23 @@
                                                                     <span class="text-danger">{{ $message }}</span>
                                                                 @enderror
                                                             </div>
+                                                        </div>  --}}
+                                                        <div class="form-group row">
+                                                            <label for="languages" class="col-sm-2 col-form-label">Language(s) Spoken</label>
+                                                            <div class="col-sm-10">
+                                                                <select class="form-control" multiple="multiple" id="languages" name="language[]">
+                                                                    @foreach ($ghanaian_languages as $language)
+                                                                        <option value="{{ $language }}" 
+                                                                            {{ in_array($language, old('language', $applied_applicant->language ?? [])) ? 'selected' : '' }}>
+                                                                            {{ $language }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                                @error('language')
+                                                                    <span class="text-danger">{{ $message }}</span>
+                                                                @enderror
+                                                            </div>
                                                         </div>
-
-                                                        
                                                         <hr>
                                                         <button type="submit" class="btn btn-primary save-btn"
                                                             style="float: right;" id="saveBioData">Next</button>
@@ -341,7 +355,27 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/js/select2.min.js"></script>
     <script src="{{ asset('frontend/assets/js/plugins/select2.full.min.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/pages/form-select-custom.js') }}"></script>
-
+  
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+    
+    <style>
+        /* Change text color of selected options */
+        .select2-selection__choice {
+            color: red !important;
+            font-weight: bold;
+        }
+    </style>
+    
+    <!-- Initialize Select2 -->
+    <script>
+        $(document).ready(function() {
+            $('#languages').select2({
+                placeholder: "Select languages",
+                allowClear: true
+            });
+        });
+    </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const checkSame = document.getElementById('check_same');
@@ -399,91 +433,7 @@
         });
     </script>
 
-    <script>
-        $(document).ready(function() {
-            const oldBranch = '{{ old('branch', $applied_applicant->branch ?? '') }}';
-            const oldCourse = '{{ old('course', $applied_applicant->course ?? '') }}';
-            // Fetch branches on page load
-            $.ajax({
-                url: '{{ route('get.branches') }}',
-                method: 'GET',
-                success: function(data) {
-                    let branchSelect = $('#branch');
-                    branchSelect.empty();
-                    branchSelect.append('<option value="">Select Branch</option>');
-                    $.each(data, function(key, branch) {
-                        let selected = (oldBranch == branch.id) ? 'selected' : '';
-                        branchSelect.append('<option value="' + branch.id + '" ' + selected +
-                            '>' + branch.branch + '</option>');
-                    });
-                    // If a branch was previously selected, trigger the change event to load the courses
-                    if (oldBranch) {
-                        branchSelect.trigger('change');
-                    }
-                },
-                error: function(xhr) {
-                    console.log('Error fetching branches:', xhr);
-                }
-            });
-            // Fetch courses when branch is selected
-            $('#branch').on('change', function() {
-                let branchId = $(this).val();
-                if (branchId) {
-                    $.ajax({
-                        url: '{{ route('get.courses') }}',
-                        method: 'GET',
-                        data: {
-                            branch_id: branchId
-                        },
-                        success: function(data) {
-                            let courseSelect = $('#course');
-                            courseSelect.empty();
-                            courseSelect.append('<option value="">Select Course</option>');
-                            $.each(data, function(key, course) {
-                                let selected = (oldCourse == course.id) ? 'selected' :
-                                    '';
-                                courseSelect.append('<option value="' + course.id +
-                                    '" ' + selected + '>' + course.course_name +
-                                    '</option>');
-                            });
-                        },
-                        error: function(xhr) {
-                            console.log('Error fetching courses:', xhr);
-                        }
-                    });
-                } else {
-                    $('#course').empty();
-                    $('#course').append('<option value="">Select Course</option>');
-                }
-            });
-        });
-    </script>
-
-    <script>
-        document.getElementById('bece_certificate').addEventListener('change', function(event) {
-            var fileInput = event.target;
-            var filePreview = document.getElementById('file-preview');
-            // Clear previous preview
-            filePreview.innerHTML = '';
-            if (fileInput.files.length > 0) {
-                var file = fileInput.files[0];
-                if (file.type === 'application/pdf') {
-                    // Display file name
-                    var fileName = document.createElement('p');
-                    fileName.textContent = 'Selected file: ' + file.name;
-                    filePreview.appendChild(fileName);
-                    // Optionally, provide a link to open the PDF
-                    var fileLink = document.createElement('a');
-                    fileLink.href = URL.createObjectURL(file);
-                    fileLink.textContent = 'View PDF';
-                    fileLink.target = '_blank';
-                    filePreview.appendChild(fileLink);
-                } else {
-                    filePreview.textContent = 'Please select a PDF file.';
-                }
-            }
-        });
-    </script>
+  
 
     <script>
         document.getElementById('wassce_certificate').addEventListener('change', function(event) {
@@ -512,208 +462,29 @@
     </script>
 
     <script>
-        $(document).ready(function() {
-            $('#district').change(function() {
-                var district_id = $(this).val();
-                if (district_id) {
-                    $.ajax({
-                        // url: '/get-regions/' + district_id,
-                        url: '/bio-data/get-regions/' + district_id,
-                        type: 'GET',
-                        dataType: 'json',
-                        success: function(data) {
-                            $('#region').empty();
-                            if (data.length > 0) {
-                                $.each(data, function(key, value) {
-                                    $('#region').append('<option value="' + value.id +
-                                        '">' + value.region_name + '</option>');
-                                });
-                            } else {
-                                $('#region').append(
-                                    '<option value="">No regions available</option>');
-                            }
-                        }
-                    });
-                } else {
-                    $('#region').empty();
-                    $('#region').append('<option value="">Select Region</option>');
-                }
+        document.addEventListener("DOMContentLoaded", function () {
+            // Get the current date in YYYY-MM-DD format
+            let today = new Date().toISOString().split("T")[0];
+    
+            // Apply max date to all date inputs
+            document.querySelectorAll(".date-picker").forEach(function (input) {
+                input.setAttribute("max", today); // Set max attribute to prevent future dates
+                
+                input.addEventListener('keydown', function (event) {
+                    event.preventDefault(); // Prevent manual typing
+                });
             });
         });
     </script>
-
-    <script>
-        document.getElementById('degree_certificate').addEventListener('change', function(event) {
-            var fileInput = event.target;
-            var filePreview = document.getElementById('degree-file-preview');
-            // Clear previous preview
-            filePreview.innerHTML = '';
-            if (fileInput.files.length > 0) {
-                var file = fileInput.files[0];
-                if (file.type === 'application/pdf') {
-                    // Display file name
-                    var fileName = document.createElement('p');
-                    fileName.textContent = 'Selected file: ' + file.name;
-                    filePreview.appendChild(fileName);
-                    // Optionally, provide a link to open the PDF
-                    var fileLink = document.createElement('a');
-                    fileLink.href = URL.createObjectURL(file);
-                    fileLink.textContent = 'View PDF';
-                    fileLink.target = '_blank';
-                    filePreview.appendChild(fileLink);
-                } else {
-                    filePreview.textContent = 'Please select a PDF file.';
-                }
-            }
+{{-- <script>
+    // Select all inputs with class "date-picker" and disable manual typing
+    document.querySelectorAll('.date-picker').forEach(function (input) {
+        input.addEventListener('keydown', function (event) {
+            event.preventDefault(); // Prevent typing
         });
-    </script>
-    <script>
-        document.getElementById('professional_certificate').addEventListener('change', function(event) {
-            var fileInput = event.target;
-            var filePreview = document.getElementById('professional-file-preview');
-            // Clear previous preview
-            filePreview.innerHTML = '';
-            if (fileInput.files.length > 0) {
-                var file = fileInput.files[0];
-                if (file.type === 'application/pdf') {
-                    // Display file name
-                    var fileName = document.createElement('p');
-                    fileName.textContent = 'Selected file: ' + file.name;
-                    filePreview.appendChild(fileName);
-                    // Optionally, provide a link to open the PDF
-                    var fileLink = document.createElement('a');
-                    fileLink.href = URL.createObjectURL(file);
-                    fileLink.textContent = 'View PDF';
-                    fileLink.target = '_blank';
-                    filePreview.appendChild(fileLink);
-                } else {
-                    filePreview.textContent = 'Please select a PDF file.';
-                }
-            }
-        });
-    </script>
-    <script>
-        $(document).ready(function() {
-
-            $(document).on('change', '.btn-file :file', function() {
-                var input = $(this),
-                    label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
-                input.trigger('fileselect', [label]);
-            });
-            $('.btn-file :file').on('fileselect', function(event, label) {
-                var input = $(this).parents('.input-group').find(':text'),
-                    log = label;
-                if (input.length) {
-                    input.val(log);
-                } else {
-                    if (log) alert(log);
-                }
-
-            });
-
-            function readURL(input) {
-                if (input.files && input.files[0]) {
-                    var reader = new FileReader();
-
-                    reader.onload = function(e) {
-                        $('#img-upload').attr('src', e.target.result);
-                    }
-
-                    reader.readAsDataURL(input.files[0]);
-                }
-            }
-
-            $("#imgInp").change(function() {
-                readURL(this);
-            });
-        });
-    </script>
-
-    <script>
-        $(document).ready(function() {
-            $('#besicwizard').bootstrapWizard({
-                withVisible: false,
-                'nextSelector': '.button-next',
-                'previousSelector': '.button-previous',
-                'firstSelector': '.button-first',
-                'lastSelector': '.button-last'
-            });
-            $('#btnwizard').bootstrapWizard({
-                withVisible: false,
-                'nextSelector': '.button-next',
-                'previousSelector': '.button-previous',
-                'firstSelector': '.button-first',
-                'lastSelector': '.button-last'
-            });
-            $('#progresswizard').bootstrapWizard({
-                withVisible: false,
-                'nextSelector': '.button-next',
-                'previousSelector': '.button-previous',
-                'firstSelector': '.button-first',
-                'lastSelector': '.button-last',
-                onTabShow: function(tab, navigation, index) {
-                    var $total = navigation.find('li').length;
-                    var $current = index + 1;
-                    var $percent = ($current / $total) * 100;
-                    $('#progresswizard .progress-bar').css({
-                        width: $percent + '%'
-                    });
-                }
-            });
-            $('#validationwizard').bootstrapWizard({
-                withVisible: false,
-                'nextSelector': '.button-next',
-                'previousSelector': '.button-previous',
-                'firstSelector': '.button-first',
-                'lastSelector': '.button-last',
-                onNext: function(tab, navigation, index) {
-                    if (index == 1) {
-                        if (!$('#validation-t-name').val()) {
-                            $('#validation-t-name').focus();
-                            $('.form-1').addClass('was-validated');
-                            return false;
-                        }
-                        if (!$('#validation-t-email').val()) {
-                            $('#validation-t-email').focus();
-                            $('.form-1').addClass('was-validated');
-                            return false;
-                        }
-                        if (!$('#validation-t-pwd').val()) {
-                            $('#validation-t-pwd').focus();
-                            $('.form-1').addClass('was-validated');
-                            return false;
-                        }
-                    }
-                    if (index == 2) {
-                        if (!$('#validation-t-address').val()) {
-                            $('#validation-t-address').focus();
-                            $('.form-2').addClass('was-validated');
-                            return false;
-                        }
-                    }
-                }
-            });
-            $('#tabswizard').bootstrapWizard({
-                'nextSelector': '.button-next',
-                'previousSelector': '.button-previous',
-            });
-            $('#verticalwizard').bootstrapWizard({
-                'nextSelector': '.button-next',
-                'previousSelector': '.button-previous',
-            });
-        });
-    </script>
-    <script type="text/javascript">
-        $('#jhs_completion_year').datepicker({
-            format: "yyyy",
-            endDate: "31/12/2024",
-            startView: 2,
-            minViewMode: 2,
-            autoclose: true,
-            calendarWeeks: true
-
-        });
-    </script>
+    });
+</script> --}}
+ 
 
     <script>
         function printData() {

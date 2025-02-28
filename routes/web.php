@@ -102,13 +102,13 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
 
     Route::get('/decrypt', [QrCodeController::class, 'decript'])->name('decrypt-applicant');
     Route::post('/qr-code', [QrCodeController::class, 'decryptQrCode'])->name('decrypt-qr-code');
-    Route::group(['prefix' => 'documentation', 'as' => 'document.'], function () {
+    Route::group(['prefix' => 'reseult-verfication', 'as' => 'document.'], function () {
         Route::get('/', [DocumentationController::class, 'applicant_documentation'])->name('applicant-documentation');
-        Route::get('/status/{uuid}', [DocumentationController::class, 'applicant_documentation_status'])->name('documentation-status');
+        Route::get('/status/{uuid}', [DocumentationController::class, 'applicant_result_verified'])->name('documentation-status');
         Route::get('/edit/status/{uuid}', [DocumentationController::class, 'documentation_update'])->name('documentation-status-update');
         Route::post('/save-documentation/{uuid}', [DocumentationController::class, 'store_applicant_documentation'])->name('status-save-documentation');
         Route::post('/update-applicant-documentation/{uuid}', [DocumentationController::class, 'confirm_applicant_documentation'])->name('documentation-update');
-        Route::get('/documentation-generate-report', [DocumentationController::class, 'master_filter_applicant_documentation'])->name('master-filter-documentation');
+        Route::get('/results-generation-report', [DocumentationController::class, 'master_filter_applicant_documentation'])->name('master-filter-documentation');
     });
 
     Route::group(['prefix' => 'applicant-preview', 'as' => 'correct.'], function () {

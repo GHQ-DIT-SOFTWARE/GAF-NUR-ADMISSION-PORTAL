@@ -1,6 +1,6 @@
 @extends('admin.layout.master')
 @section('title')
-    Documentation Phase
+    Results Verfication Phase
 @endsection
 @section('content')
     <div class="user-profile user-card mb-4">
@@ -39,7 +39,7 @@
                             <div class="col-md-6">
                                 <div class="media">
                                     <div class="media-body">
-                                        <p class="mb-0 text-muted"><b> GAF NUMBER:
+                                        <p class="mb-0 text-muted"><b> NUMBER:
                                                 {{ $applied_applicant->applicant_serial_number }}</b></p>
                                         <p class="mb-0 text-muted"><b>COURSE:</b>
                                             {{ $applied_applicant->cause_offers }}</p>
@@ -92,24 +92,24 @@
                         <input type="hidden" name="applicant_id" value="{{ $applied_applicant->id }}">
                         <div class="row">
                             <div class="col-sm-6">
-                                <select class="custom-select" name="documentation_status" required>
+                                <select class="custom-select" name="result_verified" required>
                                     <option value="">Open this select menu</option>
                                     <option value="QUALIFIED"
-                                        {{ $documentation->documentation_status == 'QUALIFIED' ? 'selected' : '' }}>
+                                        {{ $documentation->result_verified == 'QUALIFIED' ? 'selected' : '' }}>
                                         QUALIFIED</option>
                                     <option value="DISQUALIFIED"
-                                        {{ $documentation->documentation_status == 'DISQUALIFIED' ? 'selected' : '' }}>
+                                        {{ $documentation->result_verified == 'DISQUALIFIED' ? 'selected' : '' }}>
                                         DISQUALIFIED</option>
 
                                         <option value="PENDING"
-                                        {{ $documentation->documentation_status == 'PENDING' ? 'selected' : '' }}>
+                                        {{ $documentation->result_verified == 'PENDING' ? 'selected' : '' }}>
                                         PENDING</option>
                                 </select>
                             </div>
 
                             <div class="col-sm-6">
                                 <div class="form-group">
-                                    <textarea class="form-control" name="documentation_remarks" placeholder="Remarks">{{ old('documentation_remarks', $documentation->documentation_remarks) }}</textarea>
+                                    <textarea class="form-control" name="result_verified_remarks" placeholder="Remarks">{{ old('result_verified_remarks', $documentation->result_verified_remarks) }}</textarea>
                                 </div>
                             </div>
                         </div>

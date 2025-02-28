@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
@@ -18,13 +17,6 @@
 <!-- [ signin-img ] start -->
 <div class="auth-wrapper align-items-stretch aut-bg-img">
     <div class="flex-grow-1">
-        {{-- <div class="h-100 d-md-flex align-items-center auth-side-img">
-            <div class="col-sm-10 auth-content w-auto" style="background-color:#02855dab;">
-              
-                <h1 class="text-white my-4 te">WELCOME ! 37 MILITARY HOSPITAL NMTC</h1>
-               
-            </div>
-        </div> --}}
         <div class="auth-side-form">
             <div class=" auth-content">
                 <img src="assets/images/auth/auth-logo-dark.png" alt=""

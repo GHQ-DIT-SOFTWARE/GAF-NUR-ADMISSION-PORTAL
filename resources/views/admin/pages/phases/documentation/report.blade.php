@@ -76,7 +76,7 @@
                                         <th>GENDER</th>
                                         <th>COURSE</th>
                                         <th>MOBILE</th>
-                                        <th>REGION</th>
+                                       
                                         <th>SERIAL NUMBER</th>
                                         <th>ACTION</th>
                                     </tr>
@@ -168,10 +168,7 @@
                         data: 'contact',
                         name: 'contact'
                     },
-                    {
-                        data: 'region_name',
-                        name: 'region_name'
-                    },
+
                     {
                         data: 'applicant_serial_number',
                         name: 'applicant_serial_number'

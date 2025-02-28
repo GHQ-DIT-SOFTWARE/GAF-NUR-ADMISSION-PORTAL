@@ -10,7 +10,7 @@ class ReportGenerationController extends Controller
 {
     public function reports()
     {
-        $data = Applicant::with('regions')->get();
+        $data = Applicant::get();
         return view('admin.pages.reports.report', compact('data'));
     }
 

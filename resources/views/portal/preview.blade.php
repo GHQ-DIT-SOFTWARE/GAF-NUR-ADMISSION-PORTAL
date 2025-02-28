@@ -1,16 +1,17 @@
 @extends('portal.master')
+@section('title')
+PREVIEW
+@endsection
 @section('content')
     <style>
         .btn-file {
             position: relative;
             overflow: hidden;
         }
-
         .input_container {
             border: 1px solid #e5e5e5;
             /* height: 42px; */
         }
-
         input[type=file]::file-selector-button {
             background-color: #fff;
             color: #000;
@@ -21,24 +22,28 @@
             transition: .5s;
 
         }
-
         input[type=file]::file-selector-button:hover {
             background-color: #eee;
             border: 0px;
             border-right: 1px solid #e5e5e5;
         }
-
         #img-upload {
             /* width: 255px;
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 height: 220px; */
             width: 100%;
         }
+        span.form-control {
+    display: block;
+    padding: 6px;
+    border: 1px solid #ced4da;
+    background: #f8f9fa;
+    border-radius: 4px;
+}
     </style>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/css/select2.min.css" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/plugins/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/style.css') }}">
-
     <body
         class=""style="background-image: url('assets/images/nav-bg/body-bg-9.jpg'); background-repeat: no-repeat; background-size: cover; background-position: center;">
         <section class="pcoded-apply-container">
@@ -56,7 +61,7 @@
                                                     <form method="POST" action="{{ route('logout') }}">
                                                         @csrf
                                                         <button type="submit" class="btn btn-link"
-                                                            style="color: white;">Cancel Application</button>
+                                                            style="color: white;">Save & Logout</button>
                                                     </form>
                                                 </div>
                                             </div>
@@ -79,11 +84,11 @@
                         <div class="card">
                             <div class="card-header">
                                 <h4 style="text-align: center; font-family: Arial Black, Helvetica, sans-serif;">
-                                    GHANA ARMED FORCES - ONLINE ENLISTMENT PORTAL
+                                    37 MILITARY HOSPITAL NMTC ONLINE PORTAL
                                 </h4>
                                 <marquee behavior="scroll" direction="left" scrollamount="2"
                                     style="font-family: Arial, sans-serif; font-size: 16px; color: #ff0000; font-weight: bold; text-transform: uppercase;">
-                                    PLEASE COMPLETE THE VARIOUS FORMS BY CLICKING "NEXT" TO COMPLETE YOUR APPLICATION.
+                                    CAREFULLY REVIEW THE INFORMATION YOU PROVIDED BELOW. ONCE SUBMITTED, IT CANNOT BE CHANGED. AND CLICK ON THE CHECK BUTTON TO MAKE YOUR FINAL SUBMISSION.
                                 </marquee>
                                 @if ($errors->any())
                                     <div class="alert alert-danger">
@@ -110,10 +115,10 @@
                                                 data-toggle="tab">PREVIEW</a></li>
                                         <li class="nav-item"><a href="{{ route('bio-data') }}" class="nav-link">BIO
                                                 DATA
-                                                DETAILS (AMEDMENT)</a></li>
+                                                DETAILS (AMENDMENT)</a></li>
                                         <li class="nav-item"><a href="{{ route('education-details') }}"
                                                 class="nav-link">EDUCATIONAL
-                                                DETAILS (AMEDMENT)</a></li>
+                                                DETAILS (AMENDMENT)</a></li>
                                     </ul>
                                     <div class="tab-content">
                                         <div class="tab-pane" id="b-w-tab4">
@@ -125,7 +130,7 @@
                                                 <hr>
                                                 <h4 class="text-center"
                                                     style="font-weight: bolder;text-transform: uppercase; margin-top: 20px; margin-bottom: 20px;">
-                                                    Details of Application
+                                                    Applicant Details
                                                 </h4>
                                                 <hr>
                                                 @php
@@ -177,12 +182,15 @@
                                                                                         {{ $applied_applicant->surname }}
                                                                                     </td>
                                                                                     <td id="preview-othernames">
+                                                                                        <b></b>
                                                                                         {{ $applied_applicant->other_names }}
                                                                                     </td>
                                                                                     <td id="preview-sex">
+                                                                                        <b></b>
                                                                                         {{ $applied_applicant->sex }}
                                                                                     </td>
                                                                                     <td id="preview-marital-status">
+                                                                                        <b></b>
                                                                                         {{ $applied_applicant->marital_status }}
                                                                                     </td>
                                                                                 </tr>
@@ -194,55 +202,22 @@
                                                                         style="margin-left: 0.5cm; margin-right: 0.5cm;">
                                                                         <table class="table table-bordered">
                                                                             <thead>
-                                                                                <th>Height</th>
-                                                                                <th>Weight</th>
-                                                                                <th>Place of birth</th>
                                                                                 <th>Date of Birth</th>
-                                                                                <th>Hometown</th>
-                                                                            </thead>
-                                                                            <tbody>
-                                                                                <tr>
-                                                                                    <td id="preview-height">
-                                                                                        {{ $applied_applicant->height }}
-                                                                                    </td>
-                                                                                    <td id="preview-weight">
-                                                                                        {{ $applied_applicant->weight }}
-                                                                                    </td>
-                                                                                    <td id="preview-place-of-birth">
-                                                                                        {{ $applied_applicant->place_of_birth }}
-                                                                                    </td>
-                                                                                    <td id="preview-date-of-birth">
-                                                                                        {{ \Carbon\Carbon::parse($applied_applicant->date_of_birth)->format('d M, Y') }}
-                                                                                    </td>
-                                                                                    <td id="preview-hometown">
-                                                                                        {{ $applied_applicant->hometown }}
-                                                                                    </td>
-                                                                                </tr>
-                                                                            </tbody>
-                                                                        </table>
-                                                                    </div>
-
-                                                                    <div class="row"
-                                                                        style="margin-left: 0.5cm; margin-right: 0.5cm;">
-                                                                        <table class="table table-bordered">
-                                                                            <thead>
-                                                                                <th>Home District</th>
-                                                                                <th>Home Region</th>
                                                                                 <th>Mobile</th>
                                                                                 <th>Email</th>
                                                                             </thead>
                                                                             <tbody>
                                                                                 <tr>
-                                                                                    <td id="preview-district">
-                                                                                        {{ $applied_applicant->districts->district_name ?? 'N/A' }}
-                                                                                    </td>
-                                                                                    <td id="preview-region">
-                                                                                        {{ $applied_applicant->regions->region_name ?? 'N/A' }}
+                                                                                    <td id="preview-date-of-birth">
+                                                                                        <b></b>
+                                                                                        {{ \Carbon\Carbon::parse($applied_applicant->date_of_birth)->format('d M, Y') }}
                                                                                     </td>
                                                                                     <td id="preview-contact">
+                                                                                        <b></b>
                                                                                         {{ $applied_applicant->contact }}
                                                                                     </td>
                                                                                     <td id="preview-email">
+                                                                                        <b></b>
                                                                                         {{ $applied_applicant->email }}
                                                                                     </td>
                                                                                 </tr>
@@ -256,14 +231,16 @@
                                                                               
                                                                                 <th>Residential Address</th>
                                                                                 <th>Language(s) Spoken </th>
-                                                                                <th>Sports Interest</th>
+                                                                              
                                                                             </thead>
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td id="preview-residential-address">
+                                                                                        <b></b>
                                                                                         {{ $applied_applicant->residential_address }}
                                                                                     </td>
                                                                                     <td id="preview-languages">
+                                                                                        <b></b>
                                                                                         @php
                                                                                             $languages = is_string(
                                                                                                 $applied_applicant->language,
@@ -276,24 +253,11 @@
                                                                                         @endphp
                                                                                         {{ implode(', ', $languages ?? []) }}
                                                                                     </td>
-                                                                                    <td id="preview-sports-interests">
-                                                                                        @php
-                                                                                            $sportsInterests = is_string(
-                                                                                                $applied_applicant->sports_interest,
-                                                                                            )
-                                                                                                ? json_decode(
-                                                                                                    $applied_applicant->sports_interest,
-                                                                                                    true,
-                                                                                                )
-                                                                                                : $applied_applicant->sports_interest;
-                                                                                        @endphp
-                                                                                        {{ implode(', ', $sportsInterests ?? []) }}
-                                                                                    </td>
-                                                                                </tr>
                                                                                 </tr>
                                                                             </tbody>
                                                                         </table>
                                                                     </div>
+
                                                                     <h5 class="mt-5"
                                                                         style="text-transform: uppercase; text-align:left; margin-left: 0.5cm">
                                                                         Educational details</h5>
@@ -309,15 +273,19 @@
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td id="preview-bece-index">
+                                                                                        <b></b>
                                                                                         {{ $applied_applicant->bece_index_number }}
                                                                                     </td>
                                                                                     <td id="preview-jhs-completion-year">
+                                                                                        <b></b>
                                                                                         {{ \Carbon\Carbon::parse($applied_applicant->bece_year_completion)->format('d M, Y') }}
                                                                                     </td>
                                                                                     <td id="wassce_index_number">
+                                                                                        <b></b>
                                                                                         {{ $applied_applicant->wassce_index_number }}
                                                                                     </td>
                                                                                     <td id="wassce_year_completion">
+                                                                                        <b></b>
                                                                                         {{ \Carbon\Carbon::parse($applied_applicant->wassce_year_completion)->format('d M, Y') }}
                                                                                     </td>
                                                                                 </tr>
@@ -330,18 +298,20 @@
                                                                             <thead>
                                                                                 <th>Results Slip Number</th>
                                                                                 <th>School Name</th>
-                                                                                <th>Course Offered</th>
-                                                                                
+                                                                                <th>Course Offered</th> 
                                                                             </thead>
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td id="preview-shs-completion-year">
+                                                                                        <b></b>
                                                                                         {{ $applied_applicant->wassce_serial_number }}
                                                                                     </td>
                                                                                     <td id="preview-shs-name">
+                                                                                        <b></b>
                                                                                         {{ $applied_applicant->name_of_secondary_school }}
                                                                                     </td>
                                                                                     <td>
+                                                                                        <b></b>
                                                                                         {{ $applied_applicant->secondary_course_offered }}
                                                                                     </td>
                                                                                   
@@ -355,253 +325,150 @@
                                                                             <thead>
                                                                                 <th>BECE Subjects</th>
                                                                                 <th>Grades</th>
-                                                                                <th>WASSCE Exams Type</th>
+                                                                                <th>Exams Type</th>
                                                                                 <th>WASSCE Subjects</th>
                                                                                 <th>Grades</th>
-                                                                                <th>WASSCE Resultslip Number</th>
+                                                                                <th>Result slip Number</th>
                                                                             </thead>
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td>
-                                                                                        <select readonly id="bece_english"
-                                                                                            class="form-control col-sm-12 required">
-                                                                                            <option>
+                                                                                        <b>
+                                                                                            <span id="bece_english" class="form-control col-sm-12 required">
                                                                                                 {{ $applied_applicant->bece_english }}
-                                                                                            </option>
-                                                                                        </select>
-                                                                                        <select readonly id="bece_maths"
-                                                                                            class="form-control required">
-                                                                                            <option>
+                                                                                            </span>
+                                                                                            <span id="bece_maths" class="form-control required">
                                                                                                 {{ $applied_applicant->bece_mathematics }}
-                                                                                            </option>
-                                                                                        </select>
-                                                                                        <select readonly id="bece_sub1"
-                                                                                            class="form-control required">
-                                                                                            <option>
+                                                                                            </span>
+                                                                                            <span id="bece_sub1" class="form-control required">
                                                                                                 {{ $applied_applicant->bece_subject_three }}
-                                                                                            </option>
-                                                                                        </select>
-                                                                                        <select readonly id="bece_sub2"
-                                                                                            class="form-control required">
-                                                                                            <option>
+                                                                                            </span>
+                                                                                            <span id="bece_sub2" class="form-control required">
                                                                                                 {{ $applied_applicant->bece_subject_four }}
-                                                                                            </option>
-                                                                                        </select>
-                                                                                        <select readonly id="bece_sub3"
-                                                                                            class="form-control required">
-                                                                                            <option>
+                                                                                            </span>
+                                                                                            <span id="bece_sub3" class="form-control required">
                                                                                                 {{ $applied_applicant->bece_subject_five }}
-                                                                                            </option>
-                                                                                        </select>
-                                                                                        <select readonly id="bece_sub4"
-                                                                                            class="form-control required">
-                                                                                            <option>
+                                                                                            </span>
+                                                                                            <span id="bece_sub4" class="form-control required">
                                                                                                 {{ $applied_applicant->bece_subject_six }}
-                                                                                            </option>
-                                                                                        </select>
+                                                                                            </span>
+                                                                                        </b>
                                                                                     </td>
+                                                                                    
                                                                                     <td>
-                                                                                        <select readonly
-                                                                                            id="bece_english_grade"
-                                                                                            name="bece_english_grade"
-                                                                                            class="form-control required"
-                                                                                            readonly>
-                                                                                            <option>
+                                                                                        <b>
+                                                                                            <span id="bece_english_grade" class="form-control required">
                                                                                                 {{ $applied_applicant->bece_subject_english_grade }}
-                                                                                            </option>
-                                                                                        </select>
-                                                                                        <select readonly
-                                                                                            id="bece_maths_grade"
-                                                                                            name="bece_maths_grade"
-                                                                                            class="form-control required">
-                                                                                            <option>
+                                                                                            </span>
+                                                                                            <span id="bece_maths_grade" class="form-control required">
                                                                                                 {{ $applied_applicant->bece_subject_maths_grade }}
-                                                                                            </option>
-                                                                                        </select>
-                                                                                        <select readonly id="bece_sub1"
-                                                                                            name="bece_sub1"
-                                                                                            class="form-control required">
-                                                                                            <option>
+                                                                                            </span>
+                                                                                            <span id="bece_sub1" class="form-control required">
                                                                                                 {{ $applied_applicant->bece_subject_three_grade }}
-                                                                                            </option>
-                                                                                        </select>
-                                                                                        <select readonly id="bece_sub2"
-                                                                                            name="bece_sub2"
-                                                                                            class="form-control required">
-                                                                                            <option>
+                                                                                            </span>
+                                                                                            <span id="bece_sub2" class="form-control required">
                                                                                                 {{ $applied_applicant->bece_subject_four_grade }}
-                                                                                            </option>
-                                                                                        </select>
-                                                                                        <select readonly id="bece_sub3"
-                                                                                            name="bece_sub3"
-                                                                                            class="form-control required">
-                                                                                            <option>
+                                                                                            </span>
+                                                                                            <span id="bece_sub3" class="form-control required">
                                                                                                 {{ $applied_applicant->bece_subject_five_grade }}
-                                                                                            </option>
-                                                                                        </select>
-                                                                                        <select readonly id="bece_sub4"
-                                                                                            name="bece_sub4"
-                                                                                            class="form-control required">
-                                                                                            <option>
+                                                                                            </span>
+                                                                                            <span id="bece_sub4" class="form-control required">
                                                                                                 {{ $applied_applicant->bece_subject_six_grade }}
-                                                                                            </option>
-                                                                                        </select>
+                                                                                            </span>
+                                                                                        </b>
                                                                                     </td>
+                                                                                    
+
                                                                                     <td>
-                                                                                        <select readonly id="exam_type_one"
-                                                                                            class="form-control required">
-                                                                                            <option>
+                                                                                        <b>
+                                                                                            <span id="exam_type_one" class="form-control required">
                                                                                                 {{ $applied_applicant->exam_type_one }}
-                                                                                            </option>
-                                                                                        </select>
-                                                                                        <select readonly id="exam_type_two"
-                                                                                            class="form-control required">
-                                                                                            <option>
+                                                                                            </span>
+                                                                                            <span id="exam_type_two" class="form-control required">
                                                                                                 {{ $applied_applicant->exam_type_two }}
-                                                                                            </option>
-                                                                                        </select>
-                                                                                        <select readonly id="wassce_sub1"
-                                                                                            class="form-control ">
-                                                                                            <option>
+                                                                                            </span>
+                                                                                            <span id="wassce_sub1" class="form-control">
                                                                                                 {{ $applied_applicant->exam_type_three }}
-                                                                                            </option>
-                                                                                        </select>
-                                                                                        <select readonly id="wassce_sub2"
-                                                                                            class="form-control ">
-                                                                                            <option>
+                                                                                            </span>
+                                                                                            <span id="wassce_sub2" class="form-control">
                                                                                                 {{ $applied_applicant->exam_type_four }}
-                                                                                            </option>
-                                                                                        </select>
-                                                                                        <select readonly id="wassce_sub3"
-                                                                                            class="form-control ">
-                                                                                            <option>
+                                                                                            </span>
+                                                                                            <span id="wassce_sub3" class="form-control">
                                                                                                 {{ $applied_applicant->exam_type_five }}
-                                                                                            </option>
-                                                                                        </select>
-                                                                                        <select readonly id="wassce_sub4"
-                                                                                            class="form-control ">
-                                                                                            <option>
+                                                                                            </span>
+                                                                                            <span id="wassce_sub4" class="form-control">
                                                                                                 {{ $applied_applicant->exam_type_six }}
-                                                                                            </option>
-                                                                                        </select>
+                                                                                            </span>
+                                                                                        </b>
                                                                                     </td>
                                                                                     <td>
-                                                                                        <select readonly
-                                                                                            id="wassce_english"
-                                                                                            class="form-control ">
-                                                                                            <option>
+                                                                                        <b>
+                                                                                            <span id="wassce_english" class="form-control">
                                                                                                 {{ $applied_applicant->wassce_english }}
-                                                                                            </option>
-                                                                                        </select>
-                                                                                        <select readonly id="wassce_maths"
-                                                                                            class="form-control ">
-                                                                                            <option>
+                                                                                            </span>
+                                                                                            <span id="wassce_maths" class="form-control">
                                                                                                 {{ $applied_applicant->wassce_mathematics }}
-                                                                                            </option>
-                                                                                        </select>
-                                                                                        <select readonly id="wassce_sub1"
-                                                                                            class="form-control ">
-                                                                                            <option>
+                                                                                            </span>
+                                                                                            <span id="wassce_sub1" class="form-control">
                                                                                                 {{ $applied_applicant->wassce_subject_three }}
-                                                                                            </option>
-                                                                                        </select>
-                                                                                        <select readonly id="wassce_sub2"
-                                                                                            class="form-control ">
-                                                                                            <option>
+                                                                                            </span>
+                                                                                            <span id="wassce_sub2" class="form-control">
                                                                                                 {{ $applied_applicant->wassce_subject_four }}
-                                                                                            </option>
-                                                                                        </select>
-                                                                                        <select readonly id="wassce_sub3"
-                                                                                            class="form-control ">
-                                                                                            <option>
+                                                                                            </span>
+                                                                                            <span id="wassce_sub3" class="form-control">
                                                                                                 {{ $applied_applicant->wassce_subject_five }}
-                                                                                            </option>
-                                                                                        </select>
-                                                                                        <select readonly id="wassce_sub4"
-                                                                                            class="form-control ">
-                                                                                            <option>
+                                                                                            </span>
+                                                                                            <span id="wassce_sub4" class="form-control">
                                                                                                 {{ $applied_applicant->wassce_subject_six }}
-                                                                                            </option>
-                                                                                        </select>
+                                                                                            </span>
+                                                                                        </b>
                                                                                     </td>
+                                                                                    
                                                                                     <td>
-                                                                                        <select readonly
-                                                                                            id="wassce_english_grade"
-                                                                                            class="form-control ">
-                                                                                            <option>
+                                                                                        <b>
+                                                                                            <span id="wassce_english_grade" class="form-control">
                                                                                                 {{ $applied_applicant->wassce_subject_english_grade }}
-                                                                                            </option>
-                                                                                        </select>
-                                                                                        <select readonly
-                                                                                            id="wassce_maths_grade"
-                                                                                            class="form-control ">
-                                                                                            <option>
+                                                                                            </span>
+                                                                                            <span id="wassce_maths_grade" class="form-control">
                                                                                                 {{ $applied_applicant->wassce_subject_maths_grade }}
-                                                                                            </option>
-                                                                                        </select>
-                                                                                        <select readonly id="wassce_sub1"
-                                                                                            class="form-control ">
-                                                                                            <option>
+                                                                                            </span>
+                                                                                            <span id="wassce_sub1" class="form-control">
                                                                                                 {{ $applied_applicant->wassce_subject_three_grade }}
-                                                                                            </option>
-                                                                                        </select>
-                                                                                        <select readonly id="wassce_sub2"
-                                                                                            class="form-control ">
-                                                                                            <option>
+                                                                                            </span>
+                                                                                            <span id="wassce_sub2" class="form-control">
                                                                                                 {{ $applied_applicant->wassce_subject_four_grade }}
-                                                                                            </option>
-                                                                                        </select>
-                                                                                        <select readonly id="wassce_sub3"
-                                                                                            class="form-control ">
-                                                                                            <option>
+                                                                                            </span>
+                                                                                            <span id="wassce_sub3" class="form-control">
                                                                                                 {{ $applied_applicant->wassce_subject_five_grade }}
-                                                                                            </option>
-                                                                                        </select>
-                                                                                        <select readonly id="wassce_sub4"
-                                                                                            class="form-control ">
-                                                                                            <option>
+                                                                                            </span>
+                                                                                            <span id="wassce_sub4" class="form-control">
                                                                                                 {{ $applied_applicant->wassce_subject_six_grade }}
-                                                                                            </option>
-                                                                                        </select>
+                                                                                            </span>
+                                                                                        </b>
                                                                                     </td>
                                                                                     <td>
-                                                                                        <select readonly id="wassce_sub4"
-                                                                                            class="form-control ">
-                                                                                            <option>
+                                                                                        <b>
+                                                                                            <span id="results_slip_one" class="form-control">
                                                                                                 {{ $applied_applicant->results_slip_one }}
-                                                                                            </option>
-                                                                                        </select>
-                                                                                        <select readonly id="wassce_sub4"
-                                                                                            class="form-control ">
-                                                                                            <option>
+                                                                                            </span>
+                                                                                            <span id="results_slip_two" class="form-control">
                                                                                                 {{ $applied_applicant->results_slip_two }}
-                                                                                            </option>
-                                                                                        </select>
-                                                                                        <select readonly id="wassce_sub4"
-                                                                                            class="form-control ">
-                                                                                            <option>
+                                                                                            </span>
+                                                                                            <span id="results_slip_three" class="form-control">
                                                                                                 {{ $applied_applicant->results_slip_three }}
-                                                                                            </option>
-                                                                                        </select>
-                                                                                        <select readonly id="wassce_sub4"
-                                                                                            class="form-control ">
-                                                                                            <option>
+                                                                                            </span>
+                                                                                            <span id="results_slip_four" class="form-control">
                                                                                                 {{ $applied_applicant->results_slip_four }}
-                                                                                            </option>
-                                                                                        </select>
-                                                                                        <select readonly id="wassce_sub4"
-                                                                                            class="form-control ">
-                                                                                            <option>
+                                                                                            </span>
+                                                                                            <span id="results_slip_five" class="form-control">
                                                                                                 {{ $applied_applicant->results_slip_five }}
-                                                                                            </option>
-                                                                                        </select>
-                                                                                        <select readonly id="wassce_sub4"
-                                                                                            class="form-control ">
-                                                                                            <option>
+                                                                                            </span>
+                                                                                            <span id="results_slip_six" class="form-control">
                                                                                                 {{ $applied_applicant->results_slip_six }}
-                                                                                            </option>
-                                                                                        </select>
+                                                                                            </span>
+                                                                                        </b>
                                                                                     </td>
+                                                                                    
                                                                                 </tr>
                                                                             </tbody>
                                                                         </table>
@@ -614,9 +481,7 @@
                                                                                 <h5 class="mt-12" style="color: red">
                                                                                     Applicant Declaration</h5>
                                                                                 <hr>
-                                                                                <form
-                                                                                    action="{{ route('declaration-and-acceptance') }}"
-                                                                                    method="POST" id="declarationForm">
+                                                                                <form action="{{ route('declaration-and-acceptance') }}" method="POST" id="declarationForm">
                                                                                     @csrf
                                                                                     <div
                                                                                         class="custom-control custom-checkbox">
