@@ -29,6 +29,10 @@ class Course extends Model implements Auditable
     {
         return $this->belongsTo(Branch::class, 'branch_id', 'id');
     }
+
+    public function users(){
+        return $this->belongsTo(User::class, 'branch_id', 'id');
+    }
     /**
      * The attributes that should be cast.
      *

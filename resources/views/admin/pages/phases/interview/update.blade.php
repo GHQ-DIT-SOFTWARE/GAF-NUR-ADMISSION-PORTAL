@@ -39,12 +39,8 @@
                             <div class="col-md-6">
                                 <div class="media">
                                     <div class="media-body">
-                                        <p class="mb-0 text-muted"><b> GAF NUMBER:
+                                        <p class="mb-0 text-muted"><b>NUMBER:
                                                 {{ $applied_applicant->applicant_serial_number }}</b></p>
-                                        <p class="mb-0 text-muted"><b>ARM OF SERVICE:</b>
-                                            {{ $applied_applicant->arm_of_service }}</p>
-                                        <p class="mb-0 text-muted"><b>COMMISSION TYPE:</b>
-                                            {{ $applied_applicant->commission_type }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -52,18 +48,14 @@
                             <div class="col-md-6">
                                 <div class="media">
                                     <div class="media-body">
-                                        <p class="mb-0 text-muted"><b>BRANCH:</b> {{ $applied_applicant->branches->branch }}
-                                        </p>
+
                                         <p class="mb-0 text-muted">
-                                            @if ($applied_applicant->qualification == 'QUALIFIED')
+                                            @if ($applied_applicant->interview_status == 'QUALIFIED')
                                                 <span class="badge badge-success"><b>STATUS:</b>
-                                                    {{ $applied_applicant->qualification }}</span>
-                                                    @elseif($applied_applicant->qualification == 'PENDING')
-                                                    <span
-                                                        class="badge badge-warning"><b>STATUS:</b>{{ $applied_applicant->qualification }}</span>
-                                            @elseif ($applied_applicant->qualification == 'DISQUALIFIED')
+                                                    {{ $applied_applicant->interview_status }}</span>
+                                            @elseif ($applied_applicant->interview_status == 'DISQUALIFIED')
                                                 <span
-                                                    class="badge badge-danger"><b>STATUS:</b>{{ $applied_applicant->qualification }}</span>
+                                                    class="badge badge-danger"><b>STATUS:</b>{{ $applied_applicant->interview_status }}</span>
                                             @endif
                                         </p>
                                         <p class="mb-0 text-muted"><b>GENDER:</b> {{ $applied_applicant->sex }}</p>
@@ -104,9 +96,6 @@
                                     <option value="DISQUALIFIED"
                                         {{ $interview->interview_status == 'DISQUALIFIED' ? 'selected' : '' }}>
                                         DISQUALIFIED</option>
-                                        <option value="PENDING"
-                                        {{ $interview->interview_status == 'PENDING' ? 'selected' : '' }}>
-                                        PENDING</option>
                                 </select>
                             </div>
 

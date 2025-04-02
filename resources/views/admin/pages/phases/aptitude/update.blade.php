@@ -34,44 +34,7 @@
                         </div>
                         <h5 class="mb-1">{{ $applied_applicant->surname }} {{ $applied_applicant->other_names }}</h5>
                     </div>
-                    <div class="col-md-8 mt-md-4">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="media">
-                                    <div class="media-body">
-                                        <p class="mb-0 text-muted"><b> GAF NUMBER:
-                                                {{ $applied_applicant->applicant_serial_number }}</b></p>
-                                        <p class="mb-0 text-muted"><b>ARM OF SERVICE:</b>
-                                            {{ $applied_applicant->arm_of_service }}</p>
-                                        <p class="mb-0 text-muted"><b>COMMISSION TYPE:</b>
-                                            {{ $applied_applicant->commission_type }}</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="media">
-                                    <div class="media-body">
-                                        <p class="mb-0 text-muted"><b>BRANCH:</b> {{ $applied_applicant->branches->branch }}
-                                        </p>
-                                        <p class="mb-0 text-muted">
-                                            @if ($applied_applicant->qualification == 'QUALIFIED')
-                                                <span class="badge badge-success"><b>STATUS:</b>
-                                                    {{ $applied_applicant->qualification }}</span>
-                                                    @elseif($applied_applicant->qualification == 'PENDING')
-                                                    <span
-                                                        class="badge badge-warning"><b>STATUS:</b>{{ $applied_applicant->qualification }}</span>
-                                            @elseif ($applied_applicant->qualification == 'DISQUALIFIED')
-                                                <span
-                                                    class="badge badge-danger"><b>STATUS:</b>{{ $applied_applicant->qualification }}</span>
-                                            @endif
-                                        </p>
-                                        <p class="mb-0 text-muted"><b>GENDER:</b> {{ $applied_applicant->sex }}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                   
                 </div>
             </div>
         </div>

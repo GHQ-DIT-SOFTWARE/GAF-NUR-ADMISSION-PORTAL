@@ -1,5 +1,7 @@
 <?php
-declare (strict_types = 1);
+
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Front\Portal;
 
 use App\Http\Controllers\Controller;
@@ -13,6 +15,7 @@ use App\Models\WASSCESUBJECT;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+
 class EducationController extends Controller
 {
     public function __construct()
@@ -66,11 +69,11 @@ class EducationController extends Controller
             'bece_index_number' => 'required|digits:10',
             'wassce_index_number' => 'required|digits:10',
             'bece_english' => 'required',
-            'wassce_subject_english_grade'=>'required',
-            'wassce_subject_maths_grade'=>'required',
+            'wassce_subject_english_grade' => 'required',
+            'wassce_subject_maths_grade' => 'required',
             'bece_mathematics' => 'required',
-            'bece_subject_maths_grade'=>'required',
-            'bece_subject_english_grade' =>'required',
+            'bece_subject_maths_grade' => 'required',
+            'bece_subject_english_grade' => 'required',
             'bece_subject_three' => 'required|different:bece_subject_four,bece_subject_five,bece_subject_six',
             'bece_subject_four' => 'required|different:bece_subject_three,bece_subject_five,bece_subject_six',
             'bece_subject_five' => 'required|different:bece_subject_three,bece_subject_four,bece_subject_six',
@@ -85,18 +88,18 @@ class EducationController extends Controller
             // 'wassce_certificate' => 'required|file|mimes:pdf|max:1024',
             'bece_certificate' => $beceCertificateRule,
             'wassce_certificate' => $wassceCertificateRule,
-            'exam_type_one'=> 'required',
-            'exam_type_two'=> 'required',
-            'exam_type_three'=> 'required',
-            'exam_type_four'=> 'required',
-            'exam_type_five'=> 'required',
-            'exam_type_six'=> 'required',
-            'results_slip_one'=> 'required',
-            'results_slip_two'=> 'required',
-            'results_slip_three'=> 'required',
-            'results_slip_four'=> 'required',
-            'results_slip_five'=> 'required',
-            'results_slip_six'=> 'required',
+            'exam_type_one' => 'required',
+            'exam_type_two' => 'required',
+            'exam_type_three' => 'required',
+            'exam_type_four' => 'required',
+            'exam_type_five' => 'required',
+            'exam_type_six' => 'required',
+            'results_slip_one' => 'required',
+            'results_slip_two' => 'required',
+            'results_slip_three' => 'required',
+            'results_slip_four' => 'required',
+            'results_slip_five' => 'required',
+            'results_slip_six' => 'required',
         ]);
         // Merge custom errors into the validator
         if (!empty($customErrors)) {
@@ -130,6 +133,7 @@ class EducationController extends Controller
             $file->move(public_path('uploads/shscertificate'), $name_gen);
             $wassce_save_url = 'uploads/shscertificate/' . $name_gen;
         }
+
         $applicant->update([
             'bece_index_number' => $request->bece_index_number,
             'bece_year_completion' => $request->bece_year_completion,
@@ -181,5 +185,4 @@ class EducationController extends Controller
         ]);
         return redirect()->route('preview');
     }
-
 }

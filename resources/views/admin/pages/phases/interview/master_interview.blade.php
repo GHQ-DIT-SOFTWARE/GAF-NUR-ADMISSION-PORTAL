@@ -43,7 +43,7 @@
                                 <div class="col-sm-12 col-md-12">
                                     <div class="form-group form-focus">
                                         <label for="search_query" style="font-size: 14px; color: #f80404;">
-                                        search 
+                                        search
                                         </label>
                                         <input type="text" class="form-control floating" name="search_query"
                                             placeholder="Search..."
@@ -73,11 +73,8 @@
                                         <th>SURNAME</th>
                                         <th>OTHERNAMES</th>
                                         <th>GENDER</th>
-                                       
                                         <th>MOBILE</th>
-                                        
                                         <th>SERIAL NUMBER</th>
-                                        <th>COURSE</th>
                                         <th>STATUS</th>
                                         <th>ACTION</th>
                                     </tr>
@@ -167,10 +164,6 @@
                     {
                         data: 'applicant_serial_number',
                         name: 'applicant_serial_number'
-                    },
-                    {
-                        data: 'interview_marks',
-                        name: 'interview_marks'
                     },
                     {
                         data: 'interview_status',

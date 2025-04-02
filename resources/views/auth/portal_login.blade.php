@@ -24,8 +24,6 @@
 </div>
 @endif
         <div class="auth-side-form">
-           
-
             <form method="post" action="{{ route('portal.apply') }}">
                 @csrf
                  <div style="text-align: center;">
@@ -34,7 +32,6 @@
                              style=" width: 150px; height: 150px; object-fit: cover;">
                     </div>
                 <div class=" auth-content">
-                
                     <div class="form-group mb-3">
                         <label class="floating-label" for="serial_number">Serial Number</label>
                         <input type="text" class="form-control @error('serial_number') is-invalid @enderror"

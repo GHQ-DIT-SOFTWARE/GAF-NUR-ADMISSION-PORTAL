@@ -33,58 +33,6 @@
                     </nav>
                 </div>
 
-                <div class="card-body">
-                    <form action="{{ route('test.import.aptitude') }}" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        <div class="row filter-row">
-                            <div class="col-sm-6 col-md-6">
-                                <div class="form-group form-focus">
-                                    <label for="file" style="font-size: 14px; color: #f80404;">
-                                        Upload Aptitude Data Excel File:
-                                    </label>
-                                    <input type="file" class="form-control" name="file" required>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row filter-row">
-                            <div class="col-sm-6 col-md-3">
-                                <button type="submit" class="btn btn-primary btn-block">Import Data</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-
-            <div class="card user-profile-list">
-                <div class="col-md-12 border-right">
-                    <div class="card-body">
-                        <form id="filter-form">
-                            @csrf
-                            <div class="row filter-row">
-                                <div class="col-sm-12 col-md-12">
-                                    <div class="form-group form-focus">
-                                        <label for="search_query" style="font-size: 14px; color: #f80404;">
-                                            You can search by GAF NUMBER, name, branch, commission type, etc.
-                                        </label>
-                                        <input type="text" class="form-control floating" name="search_query"
-                                            placeholder="Search..."
-                                            style="border-radius: 50px; padding: 10px 20px; border: 1px solid #ccc; box-shadow: none; outline: none;">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row filter-row">
-                                <div class="col-sm-6 col-md-3">
-                                    <button type="submit" class="btn btn-primary btn-block">Search</button>
-                                </div>
-                            </div>
-
-                        </form>
-
-                    </div>
-                </div>
             </div>
 
             <!-- Show the table by default -->

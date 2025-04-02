@@ -17,7 +17,7 @@ class OfferingCourse extends Model
         * @var array<int, string>
         */
         protected $fillable = [
-'cause_offers'
+       'cause_offers'
         ];
 
         /**

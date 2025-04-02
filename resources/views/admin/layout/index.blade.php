@@ -4,7 +4,7 @@
 @endsection
 @section('content')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
+
     <div class="page-header">
         <div class="page-block">
             <div class="row align-items-center">
@@ -118,7 +118,7 @@
                 </div>
             </div>
         </div>
-      
+
         <div class="col-xl-8 col-md-12">
             <div class="card">
                 <div class="card-header">

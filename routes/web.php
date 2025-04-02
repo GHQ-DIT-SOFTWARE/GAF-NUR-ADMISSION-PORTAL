@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
+
 use App\Http\Controllers\AgeLimitController;
 use App\Http\Controllers\AuditController;
 use App\Http\Controllers\BranchController;
@@ -37,6 +39,35 @@ use App\Http\Controllers\PortalLogin;
 use App\Http\Controllers\QrCodeController;
 use App\Http\Controllers\RolesandPermission\RolesAndPermissionController;
 use App\Http\Controllers\Useraccount\UserAccountController;
+use App\Http\Controllers\Lecturer\LecturerHomeController;
+use App\Http\Controllers\Lecturer\LecturerCourseController;
+use App\Http\Controllers\Lecturer\LecturerAssignmentController;
+use App\Http\Controllers\Lecturer\LecturerQuizzesController;
+use App\Http\Controllers\Lecturer\LecturerExamsController;
+use App\Http\Controllers\Student\StudentHomeController;
+use App\Http\Controllers\Student\StudentCourseController;
+use App\Http\Controllers\Student\StudentAssignmentController;
+use App\Http\Controllers\Student\StudentAccountController;
+use App\Http\Controllers\Student\StudentTimetableController;
+use App\Http\Controllers\Student\StudentResultSlipController;
+use App\Http\Controllers\Student\StudentContactController;
+use App\Http\Controllers\Student\StudentFAQsController;
+use App\Http\Controllers\Frontend\FrontendController;
+
+
+use App\Http\Controllers\Admin\AdminHomeController;
+use App\Http\Controllers\Admin\AdminClassController;
+use App\Http\Controllers\Admin\AdminCategoryController;
+use App\Http\Controllers\Admin\AdminCourseController;
+use App\Http\Controllers\Admin\AdminSubjectController;
+use App\Http\Controllers\Admin\AdminAssignmentController;
+use App\Http\Controllers\Admin\AdminQuizzesController;
+use App\Http\Controllers\Admin\AdminExamsController;
+use App\Http\Controllers\Admin\AdminStudentController;
+use App\Http\Controllers\Admin\AdminLecturerController;
+use App\Http\Controllers\Admin\AdminScoresController;
+use App\Http\Controllers\Admin\AdminUsersController;
+use App\Http\Controllers\Admin\AdminCoursePackagingController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -84,7 +115,6 @@ Route::middleware(['portal'])->group(function () {
     });
     Route::post('/apply-logout', [PortalLogin::class, 'apply_logout'])->name('apply_logout');
     Route::get('/applicant-pdf', [ApplicantPdfGenerationController::class, 'generatePdf'])->name('applicant-pdf');
-
 });
 // Default route redirects to Portal login
 Route::get('/', function () {
@@ -126,13 +156,15 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
     });
     Route::group(['prefix' => 'aptitude-test-phase', 'as' => 'test.'], function () {
         Route::get('/', [AptitudeController::class, 'applicant_aptitude'])->name('applicant-aptitude-test');
+
+        Route::post('/save-aptitude-test', [AptitudeController::class, 'store_applicant_aptitude'])->name('store-applicant-aptitude');
+
         Route::get('/status/{uuid}', [AptitudeController::class, 'applicant_aptitude_status'])->name('aptitude-test-status');
         Route::get('/edit/aptitude-test/{uuid}', [AptitudeController::class, 'aptitude_update'])->name('aptitude-test-status-update');
         Route::post('/save-aptitude-test/{uuid}', [AptitudeController::class, 'store_applicant_aptitude'])->name('status-save-aptitude-test');
         Route::post('/update-applicant-aptitude-test/{uuid}', [AptitudeController::class, 'confirm_applicant_aptitude'])->name('aptitude-test-update');
         Route::get('/aptitude-generate-report', [AptitudeController::class, 'master_filter_applicant_aptitude'])->name('master-filter-aptitude');
         Route::post('/import-aptitude', [AptitudeController::class, 'import'])->name('import.aptitude');
-
     });
     Route::group(['prefix' => 'baisc-fitness-phase', 'as' => 'fitnesstest.'], function () {
         Route::get('/', [BasicFitnessTestController::class, 'applicant_basicfitness'])->name('applicant-basicfitness');
@@ -177,6 +209,9 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
         Route::post('/save-interview/{uuid}', [InterviewController::class, 'store_applicant_interview'])->name('status-save-interview');
         Route::post('/update-applicant-interview/{uuid}', [InterviewController::class, 'confirm_applicant_interview'])->name('interview-update');
         Route::get('/interview-generate-report', [InterviewController::class, 'master_filter_applicant_interview'])->name('master-filter-interview');
+
+        Route::post('/pass-applicants-for-admission', [InterviewController::class, 'Interview_Qualified'])->name('pass-applicants-for-admission');
+        Route::post('/disqualify-applicants', [InterviewController::class, 'Interview_Disqualified'])->name('disqualify-applicants');
     });
 
     Route::prefix('regions')->group(function () {
@@ -215,7 +250,7 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
         Route::get('/delete{uuid}', [WassceResultController::class, 'Delete'])->name('delete-wassce-results');
         Route::post('/view-wassce-results', [WassceResultController::class, 'index'])->name('view-wassce-results');
     });
-    
+
     Route::group(['prefix' => 'bece-subjects', 'as' => 'subject.'], function () {
         Route::get('/', [BeceSubjectController::class, 'view'])->name('bece-subject-index');
         Route::get('/mech', [BeceSubjectController::class, 'Add'])->name('mech-bece-subject');
@@ -335,3 +370,162 @@ Route::group(['namespace' => 'Dashboard', 'prefix' => 'dashboard', 'as' => 'dash
     Route::get('/', [DashboardController::class, 'welcomedashboard'])->name('index');
     Route::get('/analysis-dashboard', [DashboardController::class, 'index'])->name('analysis-dashboard');
 });
+
+//Admin Routes
+//Route::prefix('admin')->group(function () {
+    Route::prefix('admin')->middleware(['auth'])->group(function () {
+        //Admin HomePage Route
+        Route::get('/dashboard', [AdminHomeController::class, 'dashboard'])->name('admin.dashboard');
+
+        //Admin Courses Routes
+        Route::get('/courses', [AdminCourseController::class, 'courses'])->name('admin.courses');
+        Route::post('/course/add', [AdminCourseController::class, 'course_add'])->name('admin.course.add');
+        Route::delete('course/delete/{id}', [AdminCourseController::class, 'destroy'])->name('admin.course.delete');
+
+
+        //Admin Category Routes
+        Route::get('/category', [AdminCategoryController::class, 'category'])->name('admin.category');
+        Route::post('/category/add', [AdminCategoryController::class, 'category_add'])->name('admin.category.add');
+        Route::delete('category/delete/{id}', [AdminCategoryController::class, 'destroy'])->name('admin.category.delete');
+
+
+        //Admin Subject Routes
+        Route::get('/subjects', [AdminSubjectController::class, 'subjects'])->name('admin.subjects');
+        Route::post('/subject/add', [AdminSubjectController::class, 'subject_add'])->name('admin.subject.add');
+        Route::delete('subject/delete/{id}', [AdminSubjectController::class, 'destroy'])->name('admin.subject.delete');
+        Route::get('/subject/material', [AdminSubjectController::class, 'subject_material'])->name('admin.subject.material');
+        Route::post('/materials/store', [AdminSubjectController::class, 'material_store'])->name('admin.materials.store');
+        Route::delete('/material/delete/{id}', [AdminSubjectController::class, 'material_destroy'])->name('admin.materials.destroy');
+        Route::get('/subject/allocation', [AdminSubjectController::class, 'subject_allocation'])->name('admin.subject.allocation');
+        Route::post('/allocation/store', [AdminSubjectController::class, 'allocation_store'])->name('admin.allocation.store');
+        Route::delete('/allocation/delete/{id}', [AdminSubjectController::class, 'destroy_allocation'])->name('admin.allocation.delete');
+
+        //Admin Courses Routes
+        // Route::get('/courses', [AdminCourseController::class, 'courses'])->name('admin.courses');
+        // Route::get('/materials', [AdminCourseController::class, 'materials'])->name('admin.materials');
+        // Route::get('/courses/allocation', [AdminCourseController::class, 'courses_allocation'])->name('admin.courses.allocation');
+
+        //Assignments
+        Route::get('/assignments', [AdminAssignmentController::class, 'assignments'])->name('admin.assignments');
+        Route::get('/assignments/marks', [AdminAssignmentController::class, 'assignment_marks'])->name('admin.assignments.marks');
+        Route::post('/assignment/store', [AdminAssignmentController::class, 'assignment_store'])->name('admin.assignment.store');
+        Route::delete('/assignment/delete/{id}', [AdminAssignmentController::class, 'assignment_destroy'])->name('admin.assignment.delete');
+
+        //Score
+        Route::get('/score', [AdminScoresController::class, 'scores'])->name('admin.scores');
+
+        //Users
+        Route::get('/users', [AdminUsersController::class, 'users'])->name('admin.users');
+        Route::post('/users/store', [AdminUsersController::class, 'store'])->name('admin.users.add');
+        Route::delete('/users/delete/{id}', [AdminUsersController::class, 'destroy_users'])->name('admin.users.delete');
+
+        //allocation
+        Route::get('/user/course/allocation', [AdminUsersController::class, 'user_course_allocation'])->name('admin.user.course.allocation');
+        Route::get('/fetch-users', [AdminUsersController::class, 'fetch_users']);
+        Route::post('/users/courses/store', [AdminUsersController::class, 'users_courses_store'])->name('admin.user.course.add');
+        Route::delete('/user-course-allocation/delete/{id}', [AdminUsersController::class, 'user_course_allocation_destroy'])->name('admin.users.course.allocation.delete');
+        Route::get('/fetch-students', [AdminUsersController::class, 'fetchStudents'])->name('fetch.students');
+
+        //Course Packaging
+        Route::get('/course-packaging', [AdminCoursePackagingController::class, 'course_packaging'])->name('admin.course.packaging');
+        Route::post('/add-course-packaging', [AdminCoursePackagingController::class, 'add_course_packaging'])->name('admin.add.course.package');
+        Route::delete('/course-packaging/delete/{id}', [AdminCoursePackagingController::class, 'destroy'])->name('admin.course.package.delete');
+
+
+        //Quizzes
+        // Route::get('/quizzes', [AdminQuizzesController::class, 'quizzes'])->name('admin.quizzes');
+
+        //Exams
+        // Route::get('/exams',[AdminExamsController::class, 'exams'])->name('admin.exams');
+
+        //Reports
+        Route::get('/report/courses', [AdminCourseController::class, 'report_courses'])->name('admin.report.courses');
+        Route::get('/report/assignments', [AdminAssignmentController::class, 'report_assignments'])->name('admin.report.assignments');
+        Route::get('/report/performance', [AdminAssignmentController::class, 'report_performance'])->name('admin.report.performance');
+
+        Route::get('/guide', [AdminAssignmentController::class, 'guide'])->name('admin.guide');
+
+
+
+
+
+        //Admin Students
+        // Route::get('/students', [AdminStudentController::class, 'students'])->name('admin.students');
+
+
+        //Admin Lecturers
+        // Route::get('/lecturers', [AdminLecturerController::class, 'lecturers'])->name('admin.lecturers');
+
+    });
+
+
+
+
+    //Lecturers Route
+    //Route::prefix('lecturer')->group(function () {
+    Route::prefix('lecturer')->middleware(['auth'])->group(function () {
+
+        //Lecturer Homepage Route
+        Route::get('/dashboard', [LecturerHomeController::class, 'dashboard'])->name('lecturer.dashboard');
+
+        //Lecturer Course Route
+        Route::get('/materials', [LecturerCourseController::class, 'materials'])->name('lecturer.course.material');
+
+        //Lecturer Assignments
+        Route::get('/assignments', [LecturerAssignmentController::class, 'assignments'])->name('lecturer.assignments');
+
+        //Assignments Marks
+        Route::get('/assignments/marks', [LecturerAssignmentController::class, 'assignment_marks'])->name('lecturer.assignments.marks');
+
+        //Quizzes Marks
+        Route::get('/quizzes', [lecturerQuizzesController::class, 'quizzes'])->name('lecturer.quizzes');
+
+        //Exams mark
+        Route::get('/exams',[LecturerExamsController::class, 'exams'])->name('lecturer.exams');
+
+        //Report
+        Route::get('/report/courses', [LecturerCourseController::class, 'report_courses'])->name('lecturer.report.courses');
+        Route::get('/report/assignments', [LecturerAssignmentController::class, 'report_assignments'])->name('lecturer.report.assignments');
+        Route::get('/report/performance', [LecturerAssignmentController::class, 'report_performance'])->name('lecturer.report.performance');
+
+
+    });
+
+
+
+    //Students Route
+    //Route::prefix('student')->group(function () {
+    Route::prefix('student')->middleware(['auth'])->group(function () {
+
+        //Student Home
+        Route::get('/dashboard', [StudentHomeController::class, 'dashboard'])->name('student.dashboard');
+
+        //Admission
+        Route::get('/account', [StudentAccountController::class, 'account'])->name('student.account');
+
+        //Time Table
+        Route::get('/time-table', [StudentTimetableController::class, 'time_table'])->name('student.time.table');
+
+        //Results Slip
+        Route::get('/student-slip', [StudentResultSlipController::class, 'result_slip'])->name('student.result.slip');
+
+
+        //Student Courses
+        Route::get('/courses', [StudentCourseController::class, 'courses'])->name('student.courses');
+        Route::post('/register-courses', [StudentCourseController::class, 'register_courses'])->name('student.courses.register');
+
+
+        //Student Assignments
+        Route::get('/assignments', [StudentAssignmentController::class, 'assignments'])->name('student.assignments');
+
+        //Student Performance
+        Route::get('/performance', [StudentAssignmentController::class, 'performance'])->name('student.performance');
+
+        //Student Contact
+        Route::get('/contact', [StudentContactController::class, 'contact'])->name('student.contact');
+
+        //Student FAQs
+        Route::get('/faqs', [StudentFAQsController::class, 'faqs'])->name('student.faqs');
+
+
+    });

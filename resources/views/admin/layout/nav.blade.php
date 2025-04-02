@@ -30,8 +30,10 @@
                         </a>
                     </li>
                 @endrole
+
+
                 <li class="nav-item pcoded-menu-caption">
-                    <label>Admin</label>
+                    <label>Admin Amission Control</label>
                 </li>
                 {{-- @hasanyrole('superadmin|admin')
                     <li class="nav-item pcoded-hasmenu">
@@ -71,7 +73,7 @@
                                 </ul>
                             </li>
                         @endhasanyrole
-                      
+
                         @hasanyrole('superadmin|aptitude|user-aptitude')
                         <li
                             class="nav-item pcoded-hasmenu {{ Route::is('test.applicant-aptitude-test', 'test.master-filter-aptitude') ? 'active' : '' }}">
@@ -93,9 +95,9 @@
                             </ul>
                         </li>
                     @endhasanyrole
-                    
-                   
-                      
+
+
+
                         @hasanyrole('superadmin|interview|user-interview')
                             <li
                                 class="nav-item pcoded-hasmenu {{ Route::is('test.applicant-interview', 'test.master-filter-interview') ? 'active' : '' }}">
@@ -151,7 +153,7 @@
                                     href="{{ route('subject.wassce-subject-index') }}">Wassce Subjects</a></li>
                             <li class="{{ Route::is('arm.arm-of-service') ? 'active' : '' }}"><a
                                     href="{{ route('arm.arm-of-service') }}">Courses</a></li>
-                            
+
                             {{-- <li class="{{ Route::is('report.correct-applicant-data') ? 'active' : '' }}"><a
                                     href="{{ route('report.correct-applicant-data') }}">Applicant Preview</a></li> --}}
                         </ul>
@@ -174,6 +176,69 @@
                         </ul>
                     </li>
                 @endrole
+
+
+                <li class="nav-item pcoded-menu-caption">
+                    <label>Admin Academics Control</label>
+                </li>
+
+                <li class="nav-item ">
+                    <a href="{{ route('admin.courses') }}" class="nav-link "><span class="pcoded-micon"><i
+                                class="feather icon-users"></i></span><span
+                            class="pcoded-mtext">Courses/Progams</span></a>
+                </li>
+                <li class="nav-item ">
+                    <a href="{{ route('admin.category') }}" class="nav-link "><span class="pcoded-micon"><i
+                                class="feather icon-settings"></i></span><span
+                            class="pcoded-mtext">Subjects</span></a>
+                </li>
+                {{-- <li class="nav-item pcoded-hasmenu">
+                    <a href="#!" class="nav-link "><span class="pcoded-micon"><i  class="feather icon-book"></i></span><span class="pcoded-mtext">Subjects</span></a>
+                    <ul class="pcoded-submenu">
+                        <li><a href="{{ route('admin.subjects') }}">Add/View Subjects</a></li>
+                        <li><a href="{{ route('admin.subject.material') }}">Subject Material</a></li>
+                        <li><a href="{{ route('admin.subject.allocation') }}">Subject Allocation</a></li>
+                    </ul>
+                </li> --}}
+                <li class="nav-item pcoded-hasmenu">
+                    <a href="#!" class="nav-link "><span class="pcoded-micon"><i  class="feather icon-book"></i></span><span class="pcoded-mtext">Assignments</span></a>
+                    <ul class="pcoded-submenu">
+                        <li><a href="{{ route('admin.assignments') }}">Add/View Assignments</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item pcoded-hasmenu">
+                    <a href="#!" class="nav-link "><span class="pcoded-micon"><i  class="feather icon-check"></i></span><span class="pcoded-mtext">Assessments</span></a>
+                    <ul class="pcoded-submenu">
+                        {{-- <li><a href="{{ route('admin.assignments.marks') }}">Assignments</a></li>
+                        <li><a href="{{ route('admin.quizzes') }}">Quizzes</a></li>
+                        <li><a href="{{ route('admin.exams') }}">Exams</a></li> --}}
+                        <li><a href="{{ route('admin.scores') }}">Scores</a></li>
+                    </ul>
+                </li>
+                </li>
+                <li class="nav-item pcoded-hasmenu">
+                    <a href="#!" class="nav-link "><span class="pcoded-micon"><i
+                                class="feather icon-box"></i></span><span class="pcoded-mtext">Report</span></a>
+                    <ul class="pcoded-submenu">
+                        <li><a href="{{ route('admin.report.courses') }}">Courses</a></li>
+                        <li><a href="{{ route('admin.report.assignments') }}">Assignments</a></li>
+                        <li><a href="{{ route('admin.report.performance') }}">Performance</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item pcoded-hasmenu">
+                    <a href="#!" class="nav-link "><span class="pcoded-micon"><i class="feather icon-settings"></i></span><span class="pcoded-mtext">Settings</span></a>
+                    <ul class="pcoded-submenu">
+                        <li><a href="{{ route('admin.users') }}">Users</a></li>
+                        <li><a href="{{ route('admin.course.packaging') }}">Course Packaging</a></li>
+                        <li><a href="{{route('admin.user.course.allocation')}}">User-Course Allocation</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-item">
+                    <a href="#" class="nav-link "><span class="pcoded-micon"><i
+                                class="feather icon-book"></i></span><span class="pcoded-mtext">Guide</span></a>
+                </li>
+
             </ul>
         </div>
     </div>

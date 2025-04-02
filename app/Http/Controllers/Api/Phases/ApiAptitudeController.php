@@ -1,5 +1,7 @@
 <?php
-declare (strict_types = 1);
+
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Api\Phases;
 
 use App\Http\Controllers\Controller;
@@ -10,11 +12,13 @@ use Yajra\DataTables\DataTables;
 
 class ApiAptitudeController extends Controller
 {
-   
-    public function applicant_body_aptitude_test(Request $request)
-    {
-        $query = Applicant::whereHas('aptitude_phase');
 
+    public function applicant_aptitude_test(Request $request)
+    {
+        // $query = Applicant::whereHas('aptitude_phase');
+        $query = Applicant::whereHas('aptitude_phase', function ($q) {
+            $q->whereNull('aptitude_marks')->orWhereNull('aptitude_status');
+        });
         // Single search query handling
         if ($request->has('search_query') && $request->input('search_query') != '') {
             $searchQuery = $request->input('search_query');
@@ -38,12 +42,11 @@ class ApiAptitudeController extends Controller
                 $aptitude = Aptitude::where('applicant_id', $row->id)->first();
                 // Generate URL for updating aptitude status using the aptitude's uuid
                 $statusUpdateUrl = $aptitude
-                ? route('test.aptitude-test-status-update', ['uuid' => $aptitude->uuid])
-                : '#'; // Fallback if no aptitude exists
+                    ? route('test.aptitude-test-status-update', ['uuid' => $aptitude->uuid])
+                    : '#'; // Fallback if no aptitude exists
                 $action = '<div class="btn-group" role="group">';
                 // Add the link for viewing status
                 $action .= '<a href="' . $statusUrl . '" class="btn btn-info btn-sm has-ripple"><i class="feather icon-edit"></i>&nbsp;aptitude<span class="ripple ripple-animate"></span></a>';
-
                 // Add the link for updating aptitude status (only if aptitude exists)
                 if ($aptitude) {
                     $action .= '<a href="' . $statusUpdateUrl . '" class="btn btn-success btn-sm"><i class="feather icon-edit"></i>&nbsp;Update aptitude</a>';
@@ -107,8 +110,8 @@ class ApiAptitudeController extends Controller
                 $statusUpdateUrl = route('test.aptitude-test-status-update', ['uuid' => $aptitude->uuid]);
                 $action = '<div class="btn-group" role="group">';
                 $action .= $aptitude ?
-                '<a href="' . $statusUpdateUrl . '" class="btn btn-success btn-sm"><i class="feather icon-edit"></i>&nbsp;Update Status</a>' :
-                '<a href="#" class="btn btn-secondary btn-sm disabled" title="Not Available"><i class="feather icon-edit"></i>&nbsp;Update Not Yet</a>';
+                    '<a href="' . $statusUpdateUrl . '" class="btn btn-success btn-sm"><i class="feather icon-edit"></i>&nbsp;Update Status</a>' :
+                    '<a href="#" class="btn btn-secondary btn-sm disabled" title="Not Available"><i class="feather icon-edit"></i>&nbsp;Update Not Yet</a>';
                 $action .= '</div>';
                 return $action;
             })
@@ -127,5 +130,4 @@ class ApiAptitudeController extends Controller
             ->rawColumns(['action', 'aptitude_status'])
             ->make(true);
     }
-
 }

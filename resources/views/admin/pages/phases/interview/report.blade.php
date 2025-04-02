@@ -1,6 +1,6 @@
 @extends('admin.layout.master')
 @section('title')
-    Interview
+    INTERVIEW
 @endsection
 @section('content')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" />
@@ -11,12 +11,12 @@
             <div class="row align-items-center">
                 <div class="col-md-12">
                     <div class="page-header-title">
-                        <h5 class="m-b-10">General Report</h5>
+                        <h5 class="m-b-10">Interview</h5>
                     </div>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="#"><i class="feather icon-home"></i></a></li>
                         <li class="breadcrumb-item"><a href="#">report</a></li>
-                        <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
                     </ul>
                 </div>
             </div>
@@ -28,41 +28,43 @@
             <div class="card">
                 <div class="card-header border-0">
                     <nav class="navbar justify-content-between p-0 align-items-center">
-                        <h5>GENERAL REPORT GENERATION</h5>
+                        <h5>INTERVIEW</h5>
                     </nav>
                 </div>
             </div>
 
-            <div class="card user-profile-list">
-                <div class="col-md-12 border-right">
-                    <div class="card-body">
-                        <form id="filter-form">
-                            @csrf
-                            <div class="row filter-row">
-                                <div class="col-sm-12 col-md-12">
-                                    <div class="form-group form-focus">
-                                        <label for="search_query" style="font-size: 14px; color: #f80404;">
-                                            search 
-                                        </label>
-                                        <input type="text" class="form-control floating" name="search_query"
-                                            placeholder="Search..."
-                                            style="border-radius: 50px; padding: 10px 20px; border: 1px solid #ccc; box-shadow: none; outline: none;">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row filter-row">
-                                <div class="col-sm-6 col-md-3">
-                                    <button type="submit" class="btn btn-primary btn-block">Search</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
 
             <!-- The table is hidden by default -->
-            <div class="card" id="results-table" style="display: none;">
+            <div class="card" id="results-table">
+                <div class="card-header">
+                    <nav class="navbar justify-content-between p-0 align-items-center">
+                        <h5>Check Pass Applicants</h5>
+                        <div class="col-sm-6 text-right"><br />
+
+                            <div class="btn-group mb-2 mr-2" style="display: inline-block;">
+                                <a href="#" class="btn btn-danger btn-rounded waves-effect waves-light"
+                                    style="float:right;" id="bulkDisqualifyBtn">
+                                    <i class="fas fa-times"></i> Disqualify
+                                </a>
+                            </div>
+
+                            <div class="btn-group mb-2 mr-2" style="display: inline-block;">
+                                <a href="#" class="btn btn-success btn-rounded waves-effect waves-light"
+                                    style="float:right;" id="bulkApproveBtn">
+                                    <i class="fas fa-check-double"></i>Qualify
+                                </a>
+                            </div>
+                            <div class="text-right" style="float: right;">
+                                <div class="form-check form-switch"
+                                    style="display: inline-flex; padding: 0.75em 2em; color: #fff; background-color:rgb(151, 195, 75)">
+                                    <input class="form-check-input" type="checkbox" id="checkAllToggle">
+                                    <label class="form-check-label" for="checkAllToggle">Check</label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </nav>
+                </div>
                 <div class="card-body">
                     <div class="row align-items-center m-l-0">
                         <div class="dt-responsive table-responsive">
@@ -75,8 +77,9 @@
                                         <th>OTHERNAMES</th>
                                         <th>GENDER</th>
                                         <th>MOBILE</th>
+                                        <th>COURSE</th>
                                         <th>SERIAL NUMBER</th>
-                                        <th>ACTION</th>
+                                        <th>CHECK</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -98,6 +101,152 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Function to toggle all checkboxes
+            function toggleAll() {
+                var checkboxes = document.querySelectorAll('.approve-checkbox');
+                checkboxes.forEach(function(checkbox) {
+                    checkbox.checked = !checkbox.checked;
+                });
+            }
+            // Event listener for the Check All toggle
+            document.getElementById('checkAllToggle').addEventListener('change', function() {
+                toggleAll();
+            });
+
+            // Event listener for Bulk Approve button
+            document.getElementById('bulkApproveBtn').addEventListener('click', function() {
+                var checkedCheckboxes = document.querySelectorAll('.approve-checkbox:checked');
+                var recordIds = Array.from(checkedCheckboxes).map(function(checkbox) {
+                    return checkbox.dataset.recordId;
+                });
+
+                // ✅ Show SweetAlert2 if no checkboxes are selected
+                if (recordIds.length === 0) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'No Applicants Selected',
+                        text: 'Please select at least one applicant before proceeding.',
+                        confirmButtonText: 'OK'
+                    });
+                    return;
+                }
+
+                // Get CSRF token from the page
+                var csrfToken = document.head.querySelector('meta[name="csrf-token"]').content;
+
+                // Confirmation before submitting
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'You are about to approve the selected applicants.',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, Approve',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Make AJAX request to the server
+                        $.ajax({
+                            type: 'POST',
+                            url: '{{ route('test.pass-applicants-for-admission') }}',
+                            data: {
+                                record_ids: recordIds,
+                            },
+                            headers: {
+                                'X-CSRF-TOKEN': csrfToken,
+                            },
+                            success: function(data) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success',
+                                    text: 'Status successfully updated!',
+                                    confirmButtonText: 'OK'
+                                }).then(() => {
+                                    window.location.reload();
+                                });
+                            },
+                            error: function(error) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: 'Something went wrong! Please try again.',
+                                    confirmButtonText: 'OK'
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+<script>
+ document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('bulkDisqualifyBtn').addEventListener('click', function() {
+        var checkedCheckboxes = document.querySelectorAll('.approve-checkbox:checked');
+        var recordIds = Array.from(checkedCheckboxes).map(function(checkbox) {
+            return checkbox.dataset.recordId;
+        });
+
+        if (recordIds.length === 0) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'No Applicants Selected',
+                text: 'Please select at least one applicant before proceeding.',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
+
+        var csrfToken = document.head.querySelector('meta[name="csrf-token"]').content;
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You are about to disqualify the selected applicants.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, Disqualify',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ route('test.disqualify-applicants') }}',
+                    data: {
+                        record_ids: recordIds,  // Ensure correct name
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken,
+                    },
+                    success: function(data) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: data.message,
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    },
+                    error: function(error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: error.responseJSON.message || 'Something went wrong!',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                });
+            }
+        });
+    });
+});
+
+</script>
+
 
     <script>
         $(document).ready(function() {
@@ -158,18 +307,21 @@
                         data: 'sex',
                         name: 'sex'
                     },
-                   
                     {
                         data: 'contact',
                         name: 'contact'
                     },
+                    { data: 'cause_offers', name: 'cause_offers' },
                     {
                         data: 'applicant_serial_number',
                         name: 'applicant_serial_number'
                     },
+
                     {
-                        data: 'action',
-                        name: 'action'
+                        data: 'checkbox',
+                        name: 'checkbox',
+                        orderable: false,
+                        searchable: false,
                     },
                 ],
             });
