@@ -39,7 +39,7 @@
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/plugins/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/style.css') }}">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
-    {{-- c5dfbf --}}
+    {{-- 18570a --}}
     <body class="" >
         <section class="pcoded-apply-container">
             <div class="pcoded-content">
@@ -97,6 +97,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="col-sm-12">
                         <div class="card">
                             <div class="card-header">
@@ -193,7 +194,7 @@
                                                             </div>
                                                         </div>
 
-                                                    
+
                                                         <div class="form-group row">
                                                             <label for="b-t-name" class="col-sm-2 col-form-label">Marital
                                                                 Status</label>
@@ -255,9 +256,10 @@
                                                                     <span class="text-danger">{{ $message }}</span>
                                                                 @enderror
                                                             </div>
+
                                                             <label for="b-t-name" class="col-sm-2 col-form-label">Email
                                                                 Address</label>
-                                                            <div class="col-sm-6">
+                                                            <div class="col-sm-3">
                                                                 <input type="text" class="form-control required"
                                                                     id="email" name="email"
                                                                     value="{{ old('email', $applied_applicant->email) }}">
@@ -266,7 +268,6 @@
                                                                 @enderror
                                                             </div>
 
-                                                          
                                                         </div>
                                                         <div class="form-group row">
                                                             <label for="b-t-name"
@@ -292,12 +293,10 @@
                                                             </div>
                                                         </div>
 
-                                                        {{-- <div class="form-group row">
-                                                            <label for="languages"
-                                                                class="col-sm-2 col-form-label">Language(s) Spoken</label>
-                                                            <div class="col-sm-10">
-                                                                <select class="js-example-basic-multiple form-control"
-                                                                    multiple="multiple" id="languages" name="language[]">
+                                                        <div class="form-group row">
+                                                            <label for="languages" class="col-sm-2 col-form-label">Language(s) Spoken</label>
+                                                            <div class="col-sm-5">
+                                                                <select class="form-control" multiple="multiple" id="languages" name="language[]">
                                                                     @foreach ($ghanaian_languages as $language)
                                                                         <option value="{{ $language }}"
                                                                             {{ in_array($language, old('language', $applied_applicant->language ?? [])) ? 'selected' : '' }}>
@@ -309,21 +308,24 @@
                                                                     <span class="text-danger">{{ $message }}</span>
                                                                 @enderror
                                                             </div>
-                                                        </div>  --}}
-                                                        <div class="form-group row">
-                                                            <label for="languages" class="col-sm-2 col-form-label">Language(s) Spoken</label>
-                                                            <div class="col-sm-10">
-                                                                <select class="form-control" multiple="multiple" id="languages" name="language[]">
-                                                                    @foreach ($ghanaian_languages as $language)
-                                                                        <option value="{{ $language }}" 
-                                                                            {{ in_array($language, old('language', $applied_applicant->language ?? [])) ? 'selected' : '' }}>
-                                                                            {{ $language }}
-                                                                        </option>
-                                                                    @endforeach
+                                                            <input type="hidden" id="hidden_disability_reason" name="disability_reason" value="{{ old('disability_reason', $applied_applicant->disability_reason ?? '') }}">
+
+                                                            <!-- Disability Status Dropdown -->
+                                                            <label for="b-t-name" class="col-sm-2 col-form-label">Do you have a disability?</label>
+                                                            <div class="col-sm-2">
+                                                                <select class="form-control required" id="disability_status" name="disability_status">
+                                                                    <option value="">Choose option</option>
+                                                                    <option value="YES" {{ old('disability_status', $applied_applicant->disability_status) == 'YES' ? 'selected' : '' }}>YES</option>
+                                                                    <option value="NO" {{ old('disability_status', $applied_applicant->disability_status) == 'NO' ? 'selected' : '' }}>NO</option>
                                                                 </select>
-                                                                @error('language')
+                                                                @error('disability_status')
                                                                     <span class="text-danger">{{ $message }}</span>
                                                                 @enderror
+                                                            </div>
+
+                                                            <!-- Edit Reason Button (Only visible when a reason is set) -->
+                                                            <div id="edit_reason_section" class="mt-2" style="display: none;">
+                                                                <button type="button" id="edit_reason" class="btn btn-sm btn-primary">Edit Disability Reason</button>
                                                             </div>
                                                         </div>
                                                         <hr>
@@ -339,8 +341,33 @@
                         </div>
                     </div>
                 </div>
+                <div class="modal fade" id="disabilityReasonModal" tabindex="-1" role="dialog" aria-labelledby="disabilityReasonLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="disabilityReasonLabel">Specify Disability Reason</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <textarea id="disability_reason" class="form-control" rows="3" name="disability_reason">{{ $applied_applicant->disability_reason}}</textarea>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" id="saveDisabilityReason">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Hidden Field to Store Disability Reason -->
+<input type="hidden" id="hidden_disability_reason" name="disability_reason" value="{{ old('disability_reason', $applied_applicant->disability_reason ?? '') }}">
+                <!-- Disability Status Dropdown -->
+                </div>
+
         </section>
     </body>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <!-- Required Js -->
@@ -355,10 +382,62 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/js/select2.min.js"></script>
     <script src="{{ asset('frontend/assets/js/plugins/select2.full.min.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/pages/form-select-custom.js') }}"></script>
-  
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
-    
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let disabilityStatus = document.getElementById("disability_status");
+            let disabilityReasonModal = new bootstrap.Modal(document.getElementById("disabilityReasonModal"));
+            let disabilityReasonInput = document.getElementById("disability_reason");
+            let hiddenDisabilityReason = document.getElementById("hidden_disability_reason");
+            let editReasonBtn = document.getElementById("edit_reason");
+            let editReasonSection = document.getElementById("edit_reason_section");
+
+            // Function to show/hide the Edit Reason button
+            function updateEditButton() {
+                if (hiddenDisabilityReason.value.trim()) {
+                    editReasonSection.style.display = "block";
+                } else {
+                    editReasonSection.style.display = "none";
+                }
+            }
+
+            // Open modal when "YES" is selected
+            disabilityStatus.addEventListener("change", function () {
+                if (this.value === "YES") {
+                    disabilityReasonInput.value = hiddenDisabilityReason.value; // Load existing reason
+                    disabilityReasonModal.show();
+                } else {
+                    hiddenDisabilityReason.value = ""; // Clear reason if "NO" is selected
+                    updateEditButton();
+                }
+            });
+
+            // Save reason when modal closes
+            document.getElementById("saveDisabilityReason").addEventListener("click", function () {
+                hiddenDisabilityReason.value = disabilityReasonInput.value.trim(); // Store value in hidden input
+                updateEditButton();
+                disabilityReasonModal.hide();
+            });
+
+            // Open modal when Edit button is clicked
+            editReasonBtn.addEventListener("click", function () {
+                disabilityReasonInput.value = hiddenDisabilityReason.value; // Load saved reason
+                disabilityReasonModal.show();
+            });
+
+            // Show the edit button if a reason already exists
+            updateEditButton();
+
+            // Automatically open modal if "YES" was selected before page reload
+            if (disabilityStatus.value === "YES" && hiddenDisabilityReason.value) {
+                updateEditButton();
+            }
+        });
+    </script>
+
     <style>
         /* Change text color of selected options */
         .select2-selection__choice {
@@ -366,7 +445,7 @@
             font-weight: bold;
         }
     </style>
-    
+
     <!-- Initialize Select2 -->
     <script>
         $(document).ready(function() {
@@ -433,7 +512,6 @@
         });
     </script>
 
-  
 
     <script>
         document.getElementById('wassce_certificate').addEventListener('change', function(event) {
@@ -465,11 +543,11 @@
         document.addEventListener("DOMContentLoaded", function () {
             // Get the current date in YYYY-MM-DD format
             let today = new Date().toISOString().split("T")[0];
-    
+
             // Apply max date to all date inputs
             document.querySelectorAll(".date-picker").forEach(function (input) {
                 input.setAttribute("max", today); // Set max attribute to prevent future dates
-                
+
                 input.addEventListener('keydown', function (event) {
                     event.preventDefault(); // Prevent manual typing
                 });
@@ -484,7 +562,7 @@
         });
     });
 </script> --}}
- 
+
 
     <script>
         function printData() {

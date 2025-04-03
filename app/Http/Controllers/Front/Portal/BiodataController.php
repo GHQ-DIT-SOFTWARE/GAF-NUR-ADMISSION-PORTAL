@@ -89,6 +89,7 @@ class BiodataController extends Controller
             'email' => 'required|email',
             'residential_address' => 'required',
             'language' => 'required|array',
+            'disability_status'=>'required'
         ]);
         $save_url = $applicant->applicant_image;
         if ($request->hasFile('applicant_image')) {
@@ -110,6 +111,8 @@ class BiodataController extends Controller
             'national_identity_card' => $request->national_identity_card,
             'digital_address' => $request->digital_address,
             'language' => json_encode($request->language),
+            'disability_status'=> $request->disability_status,
+            'disability_reason'=> $request->disability_reason,
         ]);
         return redirect()->route('education-details');
     }

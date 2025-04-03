@@ -20,7 +20,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url('{{ public_path('37 school.png') }}');
+            background-image: url('{{ public_path('37.png') }}');
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
@@ -87,7 +87,7 @@
 
 <table>
     <tr>
-        <td><b>37 MILITARY HOSPITAL NMTC</b></td>
+        <td><b>GAFCONM</b></td>
         <td></td>
         <td class="status-right"><b>Status:</b> {{ $applied_applicant->qualification }}</td>
     </tr>
@@ -143,7 +143,7 @@
     </table>
 @endif
 
-<div class="watermark">37 MILITARY HOSPITAL NMTC</div>
+<div class="watermark">GHANA ARMED FORCES COLLEGE OF NURSING AND MIDWIFERY</div>
 
 </body>
 

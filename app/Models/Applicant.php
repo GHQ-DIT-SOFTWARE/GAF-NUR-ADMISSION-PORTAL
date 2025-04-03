@@ -1,6 +1,6 @@
 <?php
 
-declare (strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Models;
 
@@ -9,6 +9,7 @@ use App\Models\Traits\UuidTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
+
 class Applicant extends Model implements Auditable
 {
     use HasFactory;
@@ -100,6 +101,8 @@ class Applicant extends Model implements Auditable
         'age',
         'disqualification_reason',
         'applicant_serial_number',
+        'disability_status',
+        'disability_reason',
     ];
     public function card()
     {
@@ -125,13 +128,11 @@ class Applicant extends Model implements Auditable
         return $this->belongsTo(Course::class, 'course', 'id');
     }
     public function resultVerification()
-{
-    return $this->hasOne(ResultVerification::class, 'applicant_id', 'id');
-}
+    {
+        return $this->hasOne(ResultVerification::class, 'applicant_id', 'id');
+    }
 
-    protected $appends = [
-
-    ];
+    protected $appends = [];
     /**
      * The attributes that should be cast.
      *

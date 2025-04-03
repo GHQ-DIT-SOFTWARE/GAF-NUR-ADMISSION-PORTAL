@@ -59,23 +59,6 @@
                             </span>
                         @enderror
                     </div>
-                    <div class="form-group mb-4">
-                        <label class="floating-label" for="commission_type">Commission Type</label>
-                        <select class="form-control" id="commission_type" name="commission_type" placeholder="">
-                            <option>SELECT COMMISSION TYPE</option>
-                            @foreach ($commissions as $list)
-                                <option value="{{ $list->commission_type }}">{{ $list->commission_type }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group mb-4">
-                        <select class="form-control" id="arm_of_service" name="arm_of_service" placeholder="">
-                            <option value="">SELECT ARMY OF SERVICE</option>
-                            @foreach ($arms as $list)
-                                <option value="{{ $list->arm_of_service }}">{{ $list->arm_of_service }}</option>
-                            @endforeach
-                        </select>
-                    </div>
                     <button type="submit" class="btn btn-block btn-primary mb-4">Submit</button>
 
                 </div>

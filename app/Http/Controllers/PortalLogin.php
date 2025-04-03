@@ -1,5 +1,7 @@
 <?php
-declare (strict_types = 1);
+
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Models\Applicant;
@@ -30,9 +32,7 @@ class PortalLogin extends Controller
     }
     public function PrintSummarySheet()
     {
-        $arms = ArmOfService::get();
-        $commissions = CommissionType::get();
-        return view('auth.printsummarysheet', compact('arms', 'commissions'));
+        return view('auth.printsummarysheet');
     }
 
     public function print_summary_sheet(Request $request)
@@ -41,8 +41,6 @@ class PortalLogin extends Controller
         $request->validate([
             'serial_number' => 'required|string',
             'pincode' => 'required|string',
-            'commission_type' => 'required|string',
-            'arm_of_service' => 'required|string',
             'contact' => 'required|string',
         ]);
 
@@ -151,7 +149,7 @@ class PortalLogin extends Controller
     //     }
     // }
 
-    
+
     public function apply(Request $request)
     {
         $request->validate([
@@ -160,22 +158,22 @@ class PortalLogin extends Controller
             'cause_offers' => 'required',
             'contact' => 'required|digits:10',
         ]);
-    
+
         $card = Card::where('serial_number', $request->serial_number)
             ->where('pincode', $request->pincode)
             ->first();
-    
+
         if (!$card) {
             return back()->withErrors(['serial_number' => 'Invalid Serial Number or Pincode.']);
         }
-    
+
         if ($card->status == 1) {
             return back()->withErrors(['serial_number' => 'The card has already been used.']);
         }
-    
+
         // Check if the applicant has already applied
         $applicant = Applicant::where('card_id', $card->id)->first();
-    
+
         if ($applicant) {
             // Prevent course change
             if ($applicant->cause_offers !== $request->cause_offers) {
@@ -193,21 +191,21 @@ class PortalLogin extends Controller
                 'contact' => $request->contact,
             ]);
         }
-    
+
         // Store applicant details in the session
         $request->session()->put('serial_number', $request->serial_number);
         $request->session()->put('pincode', $request->pincode);
         $request->session()->put('card_id', $card->id);
         $request->session()->put('cause_offers', $applicant->cause_offers);
-    
+
         // Generate and send OTP
         $otp = rand(100000, 999999);
         $request->session()->put('otp', $otp);
         send_sms($request->contact, "Your OTP is: $otp");
-    
+
         return redirect()->route('verify-otp');
     }
-    
+
     public function verifyOtp(Request $request)
     {
         $request->validate([
@@ -250,5 +248,4 @@ class PortalLogin extends Controller
         $request->session()->regenerateToken();
         return response()->json(['status' => 'success']);
     }
-
 }

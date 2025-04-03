@@ -177,7 +177,7 @@
                     </li>
                 @endrole
 
-
+                @role('administrator')
                 <li class="nav-item pcoded-menu-caption">
                     <label>Admin Academics Control</label>
                 </li>
@@ -241,5 +241,6 @@
 
             </ul>
         </div>
+        @endrole
     </div>
 </nav>
