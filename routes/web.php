@@ -90,6 +90,7 @@ Route::get('/Reprint-Verify-Otp', [PortalLogin::class, 'verify_reprint_summary_r
 Route::post('/otp-for-summary-sheet-reprint', [PortalLogin::class, 'verifyOtpreprint'])->name('otp-for-reprint');
 Route::get('/Print/Summary/Sheet', [PortalLogin::class, 'PrintSummarySheet'])->name('print-summary-sheet');
 Route::post('/summary-sheet', [PortalLogin::class, 'print_summary_sheet'])->name('print-summary');
+
 // Portal landing page after login
 Route::middleware(['portal'])->group(function () {
     // Route::post('/summary-sheet', [PortalLogin::class, 'print_summary_sheet'])->name('print-summary');
@@ -146,19 +147,12 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
         Route::post('/applicant/corrections/{uuid}', [CorrectApplicantController::class, 'updateApplicantCorrections'])->name('applicant.corrections.update');
     });
 
-    Route::group(['prefix' => 'body-selection-phase', 'as' => 'bodyselection.'], function () {
-        Route::get('/', [BodySelectionController::class, 'applicant_bodyselection'])->name('applicant-body-selection');
-        Route::get('/status/{uuid}', [BodySelectionController::class, 'applicant_bodyselection_status'])->name('body-selection-status');
-        Route::get('/edit/body-selection/{uuid}', [BodySelectionController::class, 'bodyselection_update'])->name('body-selection-status-update');
-        Route::post('/save-body-selection/{uuid}', [BodySelectionController::class, 'store_applicant_bodyselection'])->name('status-save-body-selection');
-        Route::post('/update-applicant-body-selection/{uuid}', [BodySelectionController::class, 'confirm_applicant_bodyselection'])->name('body-selection-update');
-        Route::get('/bodyselection-generate-report', [BodySelectionController::class, 'master_filter_applicant_bodyselection'])->name('master-filter-body-selection');
-    });
     Route::group(['prefix' => 'aptitude-test-phase', 'as' => 'test.'], function () {
+
+        Route::post('/notify-bulk-qualified', [AptitudeController::class, 'notifyBulkQualified'])->name('bulk.qualified.applicants');
+        Route::post('/send-notify-bulk-qualified-interview', [AptitudeController::class, 'notifyInterviewBulkQualified'])->name('bulk.qualified.applicants.for.interview');
         Route::get('/', [AptitudeController::class, 'applicant_aptitude'])->name('applicant-aptitude-test');
-
         Route::post('/save-aptitude-test', [AptitudeController::class, 'store_applicant_aptitude'])->name('store-applicant-aptitude');
-
         Route::get('/status/{uuid}', [AptitudeController::class, 'applicant_aptitude_status'])->name('aptitude-test-status');
         Route::get('/edit/aptitude-test/{uuid}', [AptitudeController::class, 'aptitude_update'])->name('aptitude-test-status-update');
         Route::post('/save-aptitude-test/{uuid}', [AptitudeController::class, 'store_applicant_aptitude'])->name('status-save-aptitude-test');
@@ -166,41 +160,10 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
         Route::get('/aptitude-generate-report', [AptitudeController::class, 'master_filter_applicant_aptitude'])->name('master-filter-aptitude');
         Route::post('/import-aptitude', [AptitudeController::class, 'import'])->name('import.aptitude');
     });
-    Route::group(['prefix' => 'baisc-fitness-phase', 'as' => 'fitnesstest.'], function () {
-        Route::get('/', [BasicFitnessTestController::class, 'applicant_basicfitness'])->name('applicant-basicfitness');
-        Route::get('/status/{uuid}', [BasicFitnessTestController::class, 'applicant_basicfitness_status'])->name('basicfitness-status');
-        Route::get('/edit/basicfitness/{uuid}', [BasicFitnessTestController::class, 'basicfitness_update'])->name('basicfitness-status-update');
-        Route::post('/save-basicfitness/{uuid}', [BasicFitnessTestController::class, 'store_applicant_basicfitness'])->name('status-save-basicfitness');
-        Route::post('/update-applicant-basicfitness/{uuid}', [BasicFitnessTestController::class, 'confirm_applicant_basicfitness'])->name('basicfitness-update');
-        Route::get('/basic-fitness-generate-report', [BasicFitnessTestController::class, 'master_filter_applicant_basicfitness'])->name('master-filter-basic-fitness');
-    });
 
-    Route::group(['prefix' => 'outdoor-leaderless-test', 'as' => 'test.'], function () {
-        Route::get('/', [OutDoorLeaderlessTestController::class, 'applicant_outdoorlesstest'])->name('applicant-outdoorlesstest');
-        Route::get('/status/{uuid}', [OutDoorLeaderlessTestController::class, 'applicant_outdoorlesstest_status'])->name('outdoorlesstest-status');
-        Route::get('/edit/outdoorlesstest/{uuid}', [OutDoorLeaderlessTestController::class, 'outdoorleaderless_update'])->name('outdoorlesstest-status-update');
-        Route::post('/save-outdoorlesstest/{uuid}', [OutDoorLeaderlessTestController::class, 'store_applicant_outdoorlesstest'])->name('status-save-outdoorlesstest');
-        Route::post('/update-applicant-outdoorlesstest/{uuid}', [OutDoorLeaderlessTestController::class, 'confirm_applicant_outdoorlesstest'])->name('outdoorlesstest-update');
-        Route::get('/outdoorleaderless-generate-report', [OutDoorLeaderlessTestController::class, 'master_filter_applicant_outdoorlesstest'])->name('master-filter-outdoor');
-    });
 
-    Route::group(['prefix' => 'medicals', 'as' => 'test.'], function () {
-        Route::get('/', [MedicalsController::class, 'applicant_medicals'])->name('applicant-medical');
-        Route::get('/status/{uuid}', [MedicalsController::class, 'applicant_medicals_status'])->name('medical-status');
-        Route::get('/edit/medical/{uuid}', [MedicalsController::class, 'medicals_update'])->name('medical-status-update');
-        Route::post('/save-medical/{uuid}', [MedicalsController::class, 'store_applicant_medicals'])->name('status-save-medical');
-        Route::post('/update-applicant-medical/{uuid}', [MedicalsController::class, 'confirm_applicant_medicals'])->name('medical-update');
-        Route::get('/medical-generate-report', [MedicalsController::class, 'master_filter_applicant_medicals'])->name('master-filter-medicals');
-    });
 
-    Route::group(['prefix' => 'vetting', 'as' => 'test.'], function () {
-        Route::get('/', [VettingController::class, 'applicant_vetting'])->name('applicant-vetting');
-        Route::get('/status/{uuid}', [VettingController::class, 'applicant_vetting_status'])->name('vetting-status');
-        Route::get('/edit/vetting/{uuid}', [VettingController::class, 'vetting_update'])->name('vetting-status-update');
-        Route::post('/save-vetting/{uuid}', [VettingController::class, 'store_applicant_vetting'])->name('status-save-vetting');
-        Route::post('/update-applicant-vetting/{uuid}', [VettingController::class, 'confirm_applicant_vetting'])->name('vetting-update');
-        Route::get('/vetting-generate-report', [VettingController::class, 'master_filter_applicant_vetting'])->name('master-filter-vetting');
-    });
+
 
     Route::group(['prefix' => 'interview', 'as' => 'test.'], function () {
         Route::get('/', [InterviewController::class, 'applicant_interview'])->name('applicant-interview');
@@ -373,159 +336,155 @@ Route::group(['namespace' => 'Dashboard', 'prefix' => 'dashboard', 'as' => 'dash
 
 //Admin Routes
 //Route::prefix('admin')->group(function () {
-    Route::prefix('admin')->middleware(['auth'])->group(function () {
-        //Admin HomePage Route
-        Route::get('/dashboard', [AdminHomeController::class, 'dashboard'])->name('admin.dashboard');
+Route::prefix('admin')->middleware(['auth'])->group(function () {
+    //Admin HomePage Route
+    Route::get('/dashboard', [AdminHomeController::class, 'dashboard'])->name('admin.dashboard');
 
-        //Admin Courses Routes
-        Route::get('/courses', [AdminCourseController::class, 'courses'])->name('admin.courses');
-        Route::post('/course/add', [AdminCourseController::class, 'course_add'])->name('admin.course.add');
-        Route::delete('course/delete/{id}', [AdminCourseController::class, 'destroy'])->name('admin.course.delete');
-
-
-        //Admin Category Routes
-        Route::get('/category', [AdminCategoryController::class, 'category'])->name('admin.category');
-        Route::post('/category/add', [AdminCategoryController::class, 'category_add'])->name('admin.category.add');
-        Route::delete('category/delete/{id}', [AdminCategoryController::class, 'destroy'])->name('admin.category.delete');
+    //Admin Courses Routes
+    Route::get('/courses', [AdminCourseController::class, 'courses'])->name('admin.courses');
+    Route::post('/course/add', [AdminCourseController::class, 'course_add'])->name('admin.course.add');
+    Route::delete('course/delete/{id}', [AdminCourseController::class, 'destroy'])->name('admin.course.delete');
 
 
-        //Admin Subject Routes
-        Route::get('/subjects', [AdminSubjectController::class, 'subjects'])->name('admin.subjects');
-        Route::post('/subject/add', [AdminSubjectController::class, 'subject_add'])->name('admin.subject.add');
-        Route::delete('subject/delete/{id}', [AdminSubjectController::class, 'destroy'])->name('admin.subject.delete');
-        Route::get('/subject/material', [AdminSubjectController::class, 'subject_material'])->name('admin.subject.material');
-        Route::post('/materials/store', [AdminSubjectController::class, 'material_store'])->name('admin.materials.store');
-        Route::delete('/material/delete/{id}', [AdminSubjectController::class, 'material_destroy'])->name('admin.materials.destroy');
-        Route::get('/subject/allocation', [AdminSubjectController::class, 'subject_allocation'])->name('admin.subject.allocation');
-        Route::post('/allocation/store', [AdminSubjectController::class, 'allocation_store'])->name('admin.allocation.store');
-        Route::delete('/allocation/delete/{id}', [AdminSubjectController::class, 'destroy_allocation'])->name('admin.allocation.delete');
-
-        //Admin Courses Routes
-        // Route::get('/courses', [AdminCourseController::class, 'courses'])->name('admin.courses');
-        // Route::get('/materials', [AdminCourseController::class, 'materials'])->name('admin.materials');
-        // Route::get('/courses/allocation', [AdminCourseController::class, 'courses_allocation'])->name('admin.courses.allocation');
-
-        //Assignments
-        Route::get('/assignments', [AdminAssignmentController::class, 'assignments'])->name('admin.assignments');
-        Route::get('/assignments/marks', [AdminAssignmentController::class, 'assignment_marks'])->name('admin.assignments.marks');
-        Route::post('/assignment/store', [AdminAssignmentController::class, 'assignment_store'])->name('admin.assignment.store');
-        Route::delete('/assignment/delete/{id}', [AdminAssignmentController::class, 'assignment_destroy'])->name('admin.assignment.delete');
-
-        //Score
-        Route::get('/score', [AdminScoresController::class, 'scores'])->name('admin.scores');
-
-        //Users
-        Route::get('/users', [AdminUsersController::class, 'users'])->name('admin.users');
-        Route::post('/users/store', [AdminUsersController::class, 'store'])->name('admin.users.add');
-        Route::delete('/users/delete/{id}', [AdminUsersController::class, 'destroy_users'])->name('admin.users.delete');
-
-        //allocation
-        Route::get('/user/course/allocation', [AdminUsersController::class, 'user_course_allocation'])->name('admin.user.course.allocation');
-        Route::get('/fetch-users', [AdminUsersController::class, 'fetch_users']);
-        Route::post('/users/courses/store', [AdminUsersController::class, 'users_courses_store'])->name('admin.user.course.add');
-        Route::delete('/user-course-allocation/delete/{id}', [AdminUsersController::class, 'user_course_allocation_destroy'])->name('admin.users.course.allocation.delete');
-        Route::get('/fetch-students', [AdminUsersController::class, 'fetchStudents'])->name('fetch.students');
-
-        //Course Packaging
-        Route::get('/course-packaging', [AdminCoursePackagingController::class, 'course_packaging'])->name('admin.course.packaging');
-        Route::post('/add-course-packaging', [AdminCoursePackagingController::class, 'add_course_packaging'])->name('admin.add.course.package');
-        Route::delete('/course-packaging/delete/{id}', [AdminCoursePackagingController::class, 'destroy'])->name('admin.course.package.delete');
+    //Admin Category Routes
+    Route::get('/category', [AdminCategoryController::class, 'category'])->name('admin.category');
+    Route::post('/category/add', [AdminCategoryController::class, 'category_add'])->name('admin.category.add');
+    Route::delete('category/delete/{id}', [AdminCategoryController::class, 'destroy'])->name('admin.category.delete');
 
 
-        //Quizzes
-        // Route::get('/quizzes', [AdminQuizzesController::class, 'quizzes'])->name('admin.quizzes');
+    //Admin Subject Routes
+    Route::get('/subjects', [AdminSubjectController::class, 'subjects'])->name('admin.subjects');
+    Route::post('/subject/add', [AdminSubjectController::class, 'subject_add'])->name('admin.subject.add');
+    Route::delete('subject/delete/{id}', [AdminSubjectController::class, 'destroy'])->name('admin.subject.delete');
+    Route::get('/subject/material', [AdminSubjectController::class, 'subject_material'])->name('admin.subject.material');
+    Route::post('/materials/store', [AdminSubjectController::class, 'material_store'])->name('admin.materials.store');
+    Route::delete('/material/delete/{id}', [AdminSubjectController::class, 'material_destroy'])->name('admin.materials.destroy');
+    Route::get('/subject/allocation', [AdminSubjectController::class, 'subject_allocation'])->name('admin.subject.allocation');
+    Route::post('/allocation/store', [AdminSubjectController::class, 'allocation_store'])->name('admin.allocation.store');
+    Route::delete('/allocation/delete/{id}', [AdminSubjectController::class, 'destroy_allocation'])->name('admin.allocation.delete');
 
-        //Exams
-        // Route::get('/exams',[AdminExamsController::class, 'exams'])->name('admin.exams');
+    //Admin Courses Routes
+    // Route::get('/courses', [AdminCourseController::class, 'courses'])->name('admin.courses');
+    // Route::get('/materials', [AdminCourseController::class, 'materials'])->name('admin.materials');
+    // Route::get('/courses/allocation', [AdminCourseController::class, 'courses_allocation'])->name('admin.courses.allocation');
 
-        //Reports
-        Route::get('/report/courses', [AdminCourseController::class, 'report_courses'])->name('admin.report.courses');
-        Route::get('/report/assignments', [AdminAssignmentController::class, 'report_assignments'])->name('admin.report.assignments');
-        Route::get('/report/performance', [AdminAssignmentController::class, 'report_performance'])->name('admin.report.performance');
+    //Assignments
+    Route::get('/assignments', [AdminAssignmentController::class, 'assignments'])->name('admin.assignments');
+    Route::get('/assignments/marks', [AdminAssignmentController::class, 'assignment_marks'])->name('admin.assignments.marks');
+    Route::post('/assignment/store', [AdminAssignmentController::class, 'assignment_store'])->name('admin.assignment.store');
+    Route::delete('/assignment/delete/{id}', [AdminAssignmentController::class, 'assignment_destroy'])->name('admin.assignment.delete');
 
-        Route::get('/guide', [AdminAssignmentController::class, 'guide'])->name('admin.guide');
+    //Score
+    Route::get('/score', [AdminScoresController::class, 'scores'])->name('admin.scores');
+
+    //Users
+    Route::get('/users', [AdminUsersController::class, 'users'])->name('admin.users');
+    Route::post('/users/store', [AdminUsersController::class, 'store'])->name('admin.users.add');
+    Route::delete('/users/delete/{id}', [AdminUsersController::class, 'destroy_users'])->name('admin.users.delete');
+
+    //allocation
+    Route::get('/user/course/allocation', [AdminUsersController::class, 'user_course_allocation'])->name('admin.user.course.allocation');
+    Route::get('/fetch-users', [AdminUsersController::class, 'fetch_users']);
+    Route::post('/users/courses/store', [AdminUsersController::class, 'users_courses_store'])->name('admin.user.course.add');
+    Route::delete('/user-course-allocation/delete/{id}', [AdminUsersController::class, 'user_course_allocation_destroy'])->name('admin.users.course.allocation.delete');
+    Route::get('/fetch-students', [AdminUsersController::class, 'fetchStudents'])->name('fetch.students');
+
+    //Course Packaging
+    Route::get('/course-packaging', [AdminCoursePackagingController::class, 'course_packaging'])->name('admin.course.packaging');
+    Route::post('/add-course-packaging', [AdminCoursePackagingController::class, 'add_course_packaging'])->name('admin.add.course.package');
+    Route::delete('/course-packaging/delete/{id}', [AdminCoursePackagingController::class, 'destroy'])->name('admin.course.package.delete');
 
 
+    //Quizzes
+    // Route::get('/quizzes', [AdminQuizzesController::class, 'quizzes'])->name('admin.quizzes');
 
+    //Exams
+    // Route::get('/exams',[AdminExamsController::class, 'exams'])->name('admin.exams');
 
+    //Reports
+    Route::get('/report/courses', [AdminCourseController::class, 'report_courses'])->name('admin.report.courses');
+    Route::get('/report/assignments', [AdminAssignmentController::class, 'report_assignments'])->name('admin.report.assignments');
+    Route::get('/report/performance', [AdminAssignmentController::class, 'report_performance'])->name('admin.report.performance');
 
-        //Admin Students
-        // Route::get('/students', [AdminStudentController::class, 'students'])->name('admin.students');
-
-
-        //Admin Lecturers
-        // Route::get('/lecturers', [AdminLecturerController::class, 'lecturers'])->name('admin.lecturers');
-
-    });
+    Route::get('/guide', [AdminAssignmentController::class, 'guide'])->name('admin.guide');
 
 
 
 
-    //Lecturers Route
-    //Route::prefix('lecturer')->group(function () {
-    Route::prefix('lecturer')->middleware(['auth'])->group(function () {
 
-        //Lecturer Homepage Route
-        Route::get('/dashboard', [LecturerHomeController::class, 'dashboard'])->name('lecturer.dashboard');
-
-        //Lecturer Course Route
-        Route::get('/materials', [LecturerCourseController::class, 'materials'])->name('lecturer.course.material');
-
-        //Lecturer Assignments
-        Route::get('/assignments', [LecturerAssignmentController::class, 'assignments'])->name('lecturer.assignments');
-
-        //Assignments Marks
-        Route::get('/assignments/marks', [LecturerAssignmentController::class, 'assignment_marks'])->name('lecturer.assignments.marks');
-
-        //Quizzes Marks
-        Route::get('/quizzes', [lecturerQuizzesController::class, 'quizzes'])->name('lecturer.quizzes');
-
-        //Exams mark
-        Route::get('/exams',[LecturerExamsController::class, 'exams'])->name('lecturer.exams');
-
-        //Report
-        Route::get('/report/courses', [LecturerCourseController::class, 'report_courses'])->name('lecturer.report.courses');
-        Route::get('/report/assignments', [LecturerAssignmentController::class, 'report_assignments'])->name('lecturer.report.assignments');
-        Route::get('/report/performance', [LecturerAssignmentController::class, 'report_performance'])->name('lecturer.report.performance');
+    //Admin Students
+    // Route::get('/students', [AdminStudentController::class, 'students'])->name('admin.students');
 
 
-    });
+    //Admin Lecturers
+    // Route::get('/lecturers', [AdminLecturerController::class, 'lecturers'])->name('admin.lecturers');
+
+});
 
 
 
-    //Students Route
-    //Route::prefix('student')->group(function () {
-    Route::prefix('student')->middleware(['auth'])->group(function () {
 
-        //Student Home
-        Route::get('/dashboard', [StudentHomeController::class, 'dashboard'])->name('student.dashboard');
+//Lecturers Route
+//Route::prefix('lecturer')->group(function () {
+Route::prefix('lecturer')->middleware(['auth'])->group(function () {
 
-        //Admission
-        Route::get('/account', [StudentAccountController::class, 'account'])->name('student.account');
+    //Lecturer Homepage Route
+    Route::get('/dashboard', [LecturerHomeController::class, 'dashboard'])->name('lecturer.dashboard');
 
-        //Time Table
-        Route::get('/time-table', [StudentTimetableController::class, 'time_table'])->name('student.time.table');
+    //Lecturer Course Route
+    Route::get('/materials', [LecturerCourseController::class, 'materials'])->name('lecturer.course.material');
 
-        //Results Slip
-        Route::get('/student-slip', [StudentResultSlipController::class, 'result_slip'])->name('student.result.slip');
+    //Lecturer Assignments
+    Route::get('/assignments', [LecturerAssignmentController::class, 'assignments'])->name('lecturer.assignments');
 
+    //Assignments Marks
+    Route::get('/assignments/marks', [LecturerAssignmentController::class, 'assignment_marks'])->name('lecturer.assignments.marks');
 
-        //Student Courses
-        Route::get('/courses', [StudentCourseController::class, 'courses'])->name('student.courses');
-        Route::post('/register-courses', [StudentCourseController::class, 'register_courses'])->name('student.courses.register');
+    //Quizzes Marks
+    Route::get('/quizzes', [lecturerQuizzesController::class, 'quizzes'])->name('lecturer.quizzes');
 
+    //Exams mark
+    Route::get('/exams', [LecturerExamsController::class, 'exams'])->name('lecturer.exams');
 
-        //Student Assignments
-        Route::get('/assignments', [StudentAssignmentController::class, 'assignments'])->name('student.assignments');
-
-        //Student Performance
-        Route::get('/performance', [StudentAssignmentController::class, 'performance'])->name('student.performance');
-
-        //Student Contact
-        Route::get('/contact', [StudentContactController::class, 'contact'])->name('student.contact');
-
-        //Student FAQs
-        Route::get('/faqs', [StudentFAQsController::class, 'faqs'])->name('student.faqs');
+    //Report
+    Route::get('/report/courses', [LecturerCourseController::class, 'report_courses'])->name('lecturer.report.courses');
+    Route::get('/report/assignments', [LecturerAssignmentController::class, 'report_assignments'])->name('lecturer.report.assignments');
+    Route::get('/report/performance', [LecturerAssignmentController::class, 'report_performance'])->name('lecturer.report.performance');
+});
 
 
-    });
+
+//Students Route
+//Route::prefix('student')->group(function () {
+Route::prefix('student')->middleware(['auth'])->group(function () {
+
+    //Student Home
+    Route::get('/dashboard', [StudentHomeController::class, 'dashboard'])->name('student.dashboard');
+
+    //Admission
+    Route::get('/account', [StudentAccountController::class, 'account'])->name('student.account');
+
+    //Time Table
+    Route::get('/time-table', [StudentTimetableController::class, 'time_table'])->name('student.time.table');
+
+    //Results Slip
+    Route::get('/student-slip', [StudentResultSlipController::class, 'result_slip'])->name('student.result.slip');
+
+
+    //Student Courses
+    Route::get('/courses', [StudentCourseController::class, 'courses'])->name('student.courses');
+    Route::post('/register-courses', [StudentCourseController::class, 'register_courses'])->name('student.courses.register');
+
+
+    //Student Assignments
+    Route::get('/assignments', [StudentAssignmentController::class, 'assignments'])->name('student.assignments');
+
+    //Student Performance
+    Route::get('/performance', [StudentAssignmentController::class, 'performance'])->name('student.performance');
+
+    //Student Contact
+    Route::get('/contact', [StudentContactController::class, 'contact'])->name('student.contact');
+
+    //Student FAQs
+    Route::get('/faqs', [StudentFAQsController::class, 'faqs'])->name('student.faqs');
+});

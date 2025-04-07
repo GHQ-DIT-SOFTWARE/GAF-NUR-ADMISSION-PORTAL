@@ -1,5 +1,7 @@
 <?php
-declare (strict_types = 1);
+
+declare(strict_types=1);
+
 namespace App\Models;
 
 use App\Models\Traits\SaveToUpper;
@@ -7,6 +9,7 @@ use App\Models\Traits\UuidTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
+
 class Aptitude extends Model implements Auditable
 {
     use HasFactory;
@@ -22,6 +25,7 @@ class Aptitude extends Model implements Auditable
         'applicant_id',
         'aptitude_status',
         'aptitude_marks',
+        'notified_at'
     ];
     public function applicant()
     {
@@ -32,7 +36,5 @@ class Aptitude extends Model implements Auditable
      *
      * @var array<string, string>
      */
-    protected $casts = [
-
-    ];
+    protected $casts = [];
 }

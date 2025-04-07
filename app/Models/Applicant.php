@@ -9,6 +9,7 @@ use App\Models\Traits\UuidTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
+use Illuminate\Notifications\Notifiable;
 
 class Applicant extends Model implements Auditable
 {
@@ -16,6 +17,7 @@ class Applicant extends Model implements Auditable
     use UuidTrait;
     use SaveToUpper;
     use \OwenIt\Auditing\Auditable;
+    use Notifiable;
     /**
      * The attributes that are mass assignable.
      *

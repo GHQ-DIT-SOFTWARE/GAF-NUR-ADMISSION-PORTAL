@@ -28,9 +28,14 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header border-0">
-                    <nav class="navbar justify-content-between p-0 align-items-center">
-                        <h5>IMPORT APTITUDE TEST DATA</h5>
-                    </nav>
+                    <div class="col-md-12 border-right">
+                        <div class="card-body">
+                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#notifyModal">
+                                Notify All Qualified Applicants
+                            </button>
+
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -61,6 +66,31 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="notifyModal" tabindex="-1" aria-labelledby="notifyModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <form id="notifyForm">
+              @csrf
+              <div class="modal-header">
+                <h5 class="modal-title" id="notifyModalLabel">Notify Qualified Applicants</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="mb-3">
+                  <label for="test_date" class="form-label">Interview Test Date</label>
+                  <input type="date" class="form-control" id="test_date" name="date" >
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-success">Send Notifications</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
@@ -162,4 +192,40 @@
             });
         });
     </script>
+
+
+<script>
+    $(document).ready(function() {
+    $('#notifyForm').submit(function (e) {
+        e.preventDefault();  // Prevent the default form submission
+        console.log("Form Submitted");  // Debugging
+        let date = $('#test_date').val();
+        $.ajax({
+            url: "{{ route('test.bulk.qualified.applicants.for.interview') }}",
+            type: "POST",
+            data: {
+                _token: "{{ csrf_token() }}",
+                date: date
+            },
+            success: function (response) {
+                $('#notifyModal').modal('hide');
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: response.message || 'Notifications sent successfully.',
+                    confirmButtonColor: '#3085d6'
+                });
+            },
+            error: function () {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Failed to send notifications.',
+                    confirmButtonColor: '#d33'
+                });
+            }
+        });
+    });
+});
+</script>
 @endsection

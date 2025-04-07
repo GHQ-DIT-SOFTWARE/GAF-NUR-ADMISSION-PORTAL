@@ -25,8 +25,7 @@
                 @role('dashboard')
                     <li class="nav-item active"><a href="{{ route('dashboard.analysis-dashboard') }}"
                             class="nav-link has-ripple"><span class="pcoded-micon"><i
-                                    class="feather icon-sidebar"></i></span><span class="pcoded-mtext">Analysis
-                                Dashboard</span>
+                                    class="feather icon-sidebar"></i></span><span class="pcoded-mtext">Dashboard</span>
                         </a>
                     </li>
                 @endrole
@@ -45,9 +44,31 @@
                         </ul>
                     </li>
                 @endhasanyrole --}}
+                <li
+                class="nav-item pcoded-hasmenu {{ Route::is('report.report-generation', 'document.master-filter-documentation') ? 'active' : '' }}">
+                <a href="#!" class="nav-link "><span class="pcoded-micon"><i
+                            class="feather icon-settings"></i></span><span class="pcoded-mtext">Admission Process</span></a>
+                <ul class="pcoded-submenu">
+                    @can('view.documentation')
+                                        <li class="{{ Route::is('report.report-generation') ? 'active' : '' }}">
+                                            <a href="{{ route('report.report-generation') }}">Verify Results</a>
+                                        </li>
+                                    @endcan
+                                    @can('view.aptitude')
+                                    <li class="{{ Route::is('test.applicant-aptitude-test') ? 'active' : '' }}">
+                                        <a href="{{ route('test.applicant-aptitude-test') }}">Aptitude</a>
+                                    </li>
+                                @endcan
+                                @can('view.interview')
+                                <li class="{{ Route::is('test.applicant-interview') ? 'active' : '' }}">
+                                    <a href="{{ route('test.applicant-interview') }}">Interview</a>
+                                </li>
+                            @endcan
 
+                </ul>
+            </li>
 
-                <li class="nav-item pcoded-hasmenu">
+                {{-- <li class="nav-item pcoded-hasmenu">
                     <a href="#!" class="nav-link "><span class="pcoded-micon"><i
                                 class="feather icon-user-plus"></i></span><span class="pcoded-mtext">Phases</span></a>
                     <ul class="pcoded-submenu">
@@ -121,7 +142,7 @@
                         @endhasanyrole
                     </ul>
                 </li>
-
+ --}}
 
                 @role('superadmin')
                     <li
@@ -139,10 +160,7 @@
                                     class="feather icon-settings"></i></span><span class="pcoded-mtext">System
                                 Setting</span></a>
                         <ul class="pcoded-submenu">
-                            {{-- <li class="{{ Route::is('view-index') ? 'active' : '' }}"><a
-                                    href="{{ route('view-index') }}">Regions</a></li>
-                            <li class="{{ Route::is('view-districts') ? 'active' : '' }}"><a
-                                    href="{{ route('view-districts') }}">Districts</a></li> --}}
+
                             <li class="{{ Route::is('results.bece-results-index') ? 'active' : '' }}"><a
                                     href="{{ route('results.bece-results-index') }}">Bece Results</a></li>
                             <li class="{{ Route::is('subject.bece-subject-index') ? 'active' : '' }}"><a
@@ -154,8 +172,6 @@
                             <li class="{{ Route::is('arm.arm-of-service') ? 'active' : '' }}"><a
                                     href="{{ route('arm.arm-of-service') }}">Courses</a></li>
 
-                            {{-- <li class="{{ Route::is('report.correct-applicant-data') ? 'active' : '' }}"><a
-                                    href="{{ route('report.correct-applicant-data') }}">Applicant Preview</a></li> --}}
                         </ul>
                     </li>
 

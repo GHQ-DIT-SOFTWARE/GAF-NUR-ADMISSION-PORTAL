@@ -9,10 +9,16 @@ use App\Models\Applicant;
 use App\Models\Aptitude;
 use App\Models\Interview;
 use App\Imports\AptitudeImport;
+use App\Mail\QualifiedApplicantForInterviewNotification;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\QualifiedApplicantNotification;
 
+use App\Models\ResultVerification;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class AptitudeController extends Controller
 {
@@ -216,4 +222,134 @@ class AptitudeController extends Controller
         Excel::import(new AptitudeImport, $request->file('file'));
         return redirect()->back()->with('success', 'Aptitude data imported successfully.');
     }
+
+    public function notifyBulkQualified(Request $request)
+    {
+        Log::info('NotifyQualifiedApplicants hit', $request->all()); // or dd($request->all());
+        $date = $request->input('date');
+        // Retrieve all result verifications marked as 'QUALIFIED' and not yet notified
+        $verifications = ResultVerification::with('applicant')
+            ->where('result_verified', 'QUALIFIED')
+            ->whereNull('notified_at') // Only unnotified applicants
+            ->get();
+
+        Log::info('Total result verifications found: ' . $verifications->count());
+
+        $notifiedCount = 0;
+
+        // Loop through each verification and send notifications
+        foreach ($verifications as $verification) {
+            $applicant = $verification->applicant;
+
+            if ($applicant) {
+                Log::info('Notifying applicant: ' . $applicant->name);
+
+                // Make sure $formattedDate is available here
+                $formattedDate = \Carbon\Carbon::parse($date)->format('F j, Y');
+
+                // Send the email with both arguments
+                Mail::to($applicant->email)->send(new QualifiedApplicantNotification($applicant, $formattedDate));
+                send_sms(
+                    $applicant->contact,
+                    "Dear Applicant, congratulations! You have passed result verification. Please report for your Aptitude Test on {$date}. Good luck!"
+                );
+
+                $verification->notified_at = now();
+                $verification->save();
+
+                $notifiedCount++;
+            } else {
+                Log::warning('No applicant found for verification ' . $verification->id);
+            }
+        }
+
+        Log::info('Qualified applicants notified: ' . $notifiedCount);
+
+        return response()->json([
+            'message' => $notifiedCount . ' applicants notified.'
+        ]);
+    }
+
+    public function notifyInterviewBulkQualified(Request $request)
+    {
+        Log::info('NotifyQualifiedApplicants hit', $request->all()); // or dd($request->all());
+        $date = $request->input('date');
+        // Retrieve all result verifications marked as 'QUALIFIED' and not yet notified
+        $verifications = Aptitude::with('applicant')
+            ->where('aptitude_status', 'QUALIFIED')
+            ->whereNull('notified_at') // Only unnotified applicants
+            ->get();
+        Log::info('Total result verifications found: ' . $verifications->count());
+        $notifiedCount = 0;
+        // Loop through each verification and send notifications
+        foreach ($verifications as $verification) {
+            $applicant = $verification->applicant;
+            if ($applicant) {
+                Log::info('Notifying applicant: ' . $applicant->name);
+                // Make sure $formattedDate is available here
+                $formattedDate = \Carbon\Carbon::parse($date)->format('F j, Y');
+                // Send the email with both arguments
+                Mail::to($applicant->email)->send(new QualifiedApplicantForInterviewNotification($applicant, $formattedDate));
+                send_sms(
+                    $applicant->contact,
+                    "Dear Applicant, congratulations! You have passed the aptitude test. Please report for your Nursing Admission Interview on {$date}. Good luck!"
+                );
+                $verification->notified_at = now();
+                $verification->save();
+
+                $notifiedCount++;
+            } else {
+                Log::warning('No applicant found for verification ' . $verification->id);
+            }
+        }
+
+        Log::info('Qualified applicants notified: ' . $notifiedCount);
+
+        return response()->json([
+            'message' => $notifiedCount . ' applicants notified.'
+        ]);
+    }
+
+
+    // public function notifyBulkQualified(Request $request)
+    // {
+    //     $request->validate([
+    //         'date' => 'required|date',
+    //     ]);
+
+    //     $date = $request->date;
+    //     $formattedDate = Carbon::parse($date)->format('l, jS F Y'); // e.g. Saturday, 6th April 2025
+
+    //     $verifications = ResultVerification::with('applicant')->where('result_verified', 'QUALIFIED')
+    //         ->whereNull('notified_at') // prevent re-sending
+    //         ->whereDate('created_at', $date)
+    //         ->get();
+
+    //     $sentCount = 0;
+    //     foreach ($verifications as $verification) {
+    //         $applicant = $verification->applicant;
+
+    //         if ($applicant && $applicant->contact) {
+
+    //             send_sms(
+    //                 $applicant->contact,
+    //                 "Dear Applicant, congratulations! You have passed result verification. Please report for your Aptitude Test on {$formattedDate}. Good luck!"
+    //             );
+
+    //             if ($applicant->email) {
+    //                 Mail::to($applicant->email)->send(new QualifiedApplicantNotification($applicant, $formattedDate));
+    //             }
+
+    //             // Mark as notified
+    //             $verification->notified_at = now();
+    //             $verification->save();
+
+    //             $sentCount++;
+    //         }
+    //     }
+
+    //     return response()->json([
+    //         'message' => "Notifications sent successfully to {$sentCount} applicant(s)."
+    //     ]);
+    // }
 }
