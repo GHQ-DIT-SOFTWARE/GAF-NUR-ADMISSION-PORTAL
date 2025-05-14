@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="{{ config('app.name') }}" name="description" />
     <meta content="{{ config('app.name') }}" name="author" />
-    <link rel="icon" href="{{ asset('logo-icon.png') }}" type="image/x-icon">
+    <link rel="icon" href="{{ asset('gafconm_mini_logo.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 </head>
 <div class="auth-wrapper align-items-stretch aut-bg-img">

@@ -1,4 +1,7 @@
 @extends('portal.master')
+@section('title')
+EDUCATION
+@endsection
 @section('content')
     <style>
         .btn-file {
@@ -39,8 +42,7 @@
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/plugins/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/style.css') }}">
 
-    <body
-        class=""style="background-image: url('assets/images/nav-bg/body-bg-9.jpg'); background-repeat: no-repeat; background-size: cover; background-position: center;">
+    <body class=""style="background-image: url('assets/images/nav-bg/body-bg-9.jpg'); background-repeat: no-repeat; background-size: cover; background-position: center;">
         <section class="pcoded-apply-container">
             <div class="pcoded-content">
                 <div class="page-header">
@@ -350,7 +352,7 @@
                                                                     <select id="bece_subject_english_grade"
                                                                         name="bece_subject_english_grade"
                                                                         class="form-control required">
-                                                                        <option value="">Select Grade</option>
+                                                                        <option value="">Grade</option>
                                                                         @foreach ($bece_results as $grade)
                                                                             <option
                                                                                 value="{{ $grade->beceresults }}"{{ old('bece_subject_english_grade', $applied_applicant->bece_subject_english_grade) == $grade->beceresults ? 'selected' : '' }}>
@@ -379,7 +381,7 @@
                                                                     <select id="bece_subject_maths_grade"
                                                                         name="bece_subject_maths_grade"
                                                                         class="form-control required">
-                                                                        <option value="">Select Grade</option>
+                                                                        <option value="">Grade</option>
                                                                         @foreach ($bece_results as $grade)
                                                                             <option value="{{ $grade->beceresults }}"
                                                                                 {{ old('bece_subject_maths_grade', $applied_applicant->bece_subject_maths_grade) == $grade->beceresults ? 'selected' : '' }}>
@@ -398,14 +400,10 @@
                                                             <div class="form-group row">
                                                                 <select id="bece_subject_three"
                                                                     name="bece_subject_three"class="col-sm-6 required">
-                                                                    <option value="" selected="selected">Select
-                                                                        Subject</option>
-                                                                    @foreach ($bece_subject as $subject)
-                                                                        <option value="{{ $subject->becesubjects }}"
-                                                                            {{ old('bece_subject_three', $applied_applicant->bece_subject_three) == $subject->becesubjects ? 'selected' : '' }}>
-                                                                            {{ $subject->becesubjects }}
-                                                                        </option>
-                                                                    @endforeach
+                                                                    <option value="INTEGRATED SCIENCE"
+                                                                        {{ old('bece_subject_three', $applied_applicant->bece_subject_three) == 'INTEGRATED SCIENCE' ? 'selected' : '' }}>
+                                                                        INTEGRATED SCIENCE
+                                                                    </option>
                                                                     @error('bece_subject_three')
                                                                         <span class="text-danger">Subject Duplicated:{{ $message }}</span>
                                                                     @enderror
@@ -414,7 +412,7 @@
                                                                     <select id="bece_subject_three_grade"
                                                                         name="bece_subject_three_grade"
                                                                         class="form-control required">
-                                                                        <option value="">Select Grade</option>
+                                                                        <option value="">Grade</option>
                                                                         @foreach ($bece_results as $grade)
                                                                             <option
                                                                                 value="{{ $grade->beceresults }}"{{ old('bece_subject_three_grade', $applied_applicant->bece_subject_three_grade) == $grade->beceresults ? 'selected' : '' }}>
@@ -448,7 +446,7 @@
                                                                     <select id="bece_subject_four_grade"
                                                                         name="bece_subject_four_grade"
                                                                         class="form-control required">
-                                                                        <option value="">Select Grade</option>
+                                                                        <option value="">Grade</option>
                                                                         @foreach ($bece_results as $grade)
                                                                             <option value="{{ $grade->beceresults }}"
                                                                                 {{ old('bece_subject_four_grade', $applied_applicant->bece_subject_four_grade) == $grade->beceresults ? 'selected' : '' }}>
@@ -482,7 +480,7 @@
                                                                     <select id="bece_subject_five_grade"
                                                                         name="bece_subject_five_grade"
                                                                         class="form-control required">
-                                                                        <option value="">Select Grade</option>
+                                                                        <option value="">Grade</option>
                                                                         @foreach ($bece_results as $grade)
                                                                             <option value="{{ $grade->beceresults }}"
                                                                                 {{ old('bece_subject_five_grade', $applied_applicant->bece_subject_five_grade) == $grade->beceresults ? 'selected' : '' }}>
@@ -516,7 +514,7 @@
                                                                     <select id="bece_subject_six_grade"
                                                                         name="bece_subject_six_grade"
                                                                         class="form-control required">
-                                                                        <option value="">Select Grade</option>
+                                                                        <option value="">Grade</option>
                                                                         @foreach ($bece_results as $grade)
                                                                             <option value="{{ $grade->beceresults }}"
                                                                                 {{ old('bece_subject_six_grade', $applied_applicant->bece_subject_six_grade) == $grade->beceresults ? 'selected' : '' }}>
@@ -569,7 +567,7 @@
                                                                 <select id="wassce_subject_english_grade"
                                                                     name="wassce_subject_english_grade"
                                                                     class="form-control required">
-                                                                    <option value="">Select Grade</option>
+                                                                    <option value="">Grade</option>
                                                                     @foreach ($wassce_results as $grade)
                                                                         <option value="{{ $grade->wassceresult }}"
                                                                             {{ old('wassce_subject_english_grade', $applied_applicant->wassce_subject_english_grade) == $grade->wassceresult ? 'selected' : '' }}>
@@ -625,7 +623,7 @@
                                                                 <select id="wassce_subject_maths_grade"
                                                                     name="wassce_subject_maths_grade"
                                                                     class="form-control required">
-                                                                    <option value="">Select Grade</option>
+                                                                    <option value="">Grade</option>
                                                                     @foreach ($wassce_results as $grade)
                                                                         <option value="{{ $grade->wassceresult }}"
                                                                             {{ old('wassce_subject_maths_grade', $applied_applicant->wassce_subject_maths_grade) == $grade->wassceresult ? 'selected' : '' }}>
@@ -671,26 +669,21 @@
                                                                 @enderror
                                                             </div>
                                                             <div class="col-md-3">
-                                                                <select id="wassce_subject_three"
-                                                                    name="wassce_subject_three"
-                                                                    class="form-control required">
-                                                                    <option value="">Select Subject</option>
-                                                                    @foreach ($wassce_subject as $subject)
-                                                                        <option value="{{ $subject->wasscesubjects }}"
-                                                                            {{ old('wassce_subject_three', $applied_applicant->wassce_subject_three) == $subject->wasscesubjects ? 'selected' : '' }}>
-                                                                            {{ $subject->wasscesubjects }}
-                                                                        </option>
-                                                                    @endforeach
+                                                                <select id="wassce_subject_three"name="wassce_subject_three" class="form-control required">
+                                                                    <option value="INTEGRATED SCIENCE"
+                                                                    {{ old('wassce_subject_three', $applied_applicant->wassce_subject_three) == 'INTEGRATED SCIENCE' ? 'selected' : '' }}>
+                                                                    INTEGRATED SCIENCE</option>
                                                                 </select>
                                                                 @error('wassce_subject_three')
                                                                     <span class="text-danger">Subject Duplicated:{{ $message }}</span>
                                                                 @enderror
                                                             </div>
+
                                                             <div class="col-md-3">
                                                                 <select id="wassce_subject_three_grade"
                                                                     name="wassce_subject_three_grade"
                                                                     class="form-control required">
-                                                                    <option value="">Select Grade</option>
+                                                                    <option value="">Grade</option>
                                                                     @foreach ($wassce_results as $grade)
                                                                         <option value="{{ $grade->wassceresult }}"
                                                                             {{ old('wassce_subject_three_grade', $applied_applicant->wassce_subject_three_grade) == $grade->wassceresult ? 'selected' : '' }}>
@@ -753,7 +746,7 @@
                                                                 <select id="wassce_subject_four_grade"
                                                                     name="wassce_subject_four_grade"
                                                                     class="form-control required">
-                                                                    <option value="">Select Grade</option>
+                                                                    <option value="">Grade</option>
                                                                     @foreach ($wassce_results as $grade)
                                                                         <option value="{{ $grade->wassceresult }}"
                                                                             {{ old('wassce_subject_four_grade', $applied_applicant->wassce_subject_four_grade) == $grade->wassceresult ? 'selected' : '' }}>
@@ -817,7 +810,7 @@
                                                                 <select id="wassce_subject_five_grade"
                                                                     name="wassce_subject_five_grade"
                                                                     class="form-control required">
-                                                                    <option value="">Select Grade</option>
+                                                                    <option value="">Grade</option>
                                                                     @foreach ($wassce_results as $grade)
                                                                         <option value="{{ $grade->wassceresult }}"
                                                                             {{ old('wassce_subject_five_grade', $applied_applicant->wassce_subject_five_grade) == $grade->wassceresult ? 'selected' : '' }}>
@@ -879,7 +872,7 @@
                                                                 <select id="wassce_subject_six_grade"
                                                                     name="wassce_subject_six_grade"
                                                                     class="form-control required">
-                                                                    <option value="">Select Grade</option>
+                                                                    <option value="">Grade</option>
                                                                     @foreach ($wassce_results as $grade)
                                                                         <option value="{{ $grade->wassceresult }}"
                                                                             {{ old('wassce_subject_six_grade', $applied_applicant->wassce_subject_six_grade) == $grade->wassceresult ? 'selected' : '' }}>
@@ -942,12 +935,12 @@
             const checkSame = document.getElementById('check_same');
             const wassceSerialNumber = document.getElementById('wassce_serial_number');
             const examTypeOne = document.getElementById('exam_type_one');
-    
+
             function updateFields() {
                 if (checkSame.checked) {
                     const serialNumberValue = wassceSerialNumber.value;
                     const examTypeValue = examTypeOne.value;
-    
+
                     // Populate WASSCE Serial Number fields
                     document.getElementById('results_slip_one').value = serialNumberValue;
                     document.getElementById('results_slip_two').value = serialNumberValue;
@@ -955,7 +948,7 @@
                     document.getElementById('results_slip_four').value = serialNumberValue;
                     document.getElementById('results_slip_five').value = serialNumberValue;
                     document.getElementById('results_slip_six').value = serialNumberValue;
-    
+
                     // Populate Exam Type fields
                     document.getElementById('exam_type_two').value = examTypeValue;
                     document.getElementById('exam_type_three').value = examTypeValue;
@@ -964,7 +957,7 @@
                     document.getElementById('exam_type_six').value = examTypeValue;
                 }
             }
-    
+
             // When checkbox is clicked
             checkSame.addEventListener('change', function() {
                 if (!checkSame.checked) {
@@ -974,7 +967,7 @@
                     document.getElementById('results_slip_four').value = '';
                     document.getElementById('results_slip_five').value = '';
                     document.getElementById('results_slip_six').value = '';
-    
+
                     document.getElementById('exam_type_two').value = '';
                     document.getElementById('exam_type_three').value = '';
                     document.getElementById('exam_type_four').value = '';
@@ -984,14 +977,14 @@
                     updateFields();
                 }
             });
-    
+
             // Listen for changes in `exam_type_one` or `wassce_serial_number` and update fields dynamically
             examTypeOne.addEventListener('input', function() {
                 if (checkSame.checked) {
                     updateFields();
                 }
             });
-    
+
             wassceSerialNumber.addEventListener('input', function() {
                 if (checkSame.checked) {
                     updateFields();
@@ -999,51 +992,7 @@
             });
         });
     </script>
-    
-    {{-- <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const checkSame = document.getElementById('check_same');
-            const examTypeOne = document.getElementById('exam_type_one');
-            const resultSlipOne = document.getElementById('results_slip_one');
-            checkSame.addEventListener('change', function() {
-                if (checkSame.checked) {
-                    const examTypeValue = examTypeOne.value;
-                    const resultSlipValue = resultSlipOne.value;
-                    // Copy values to other fields
-                    document.getElementById('exam_type_two').value = examTypeValue;
-                    document.getElementById('results_slip_two').value = resultSlipValue;
 
-                    document.getElementById('exam_type_three').value = examTypeValue;
-                    document.getElementById('results_slip_three').value = resultSlipValue;
-
-                    document.getElementById('exam_type_four').value = examTypeValue;
-                    document.getElementById('results_slip_four').value = resultSlipValue;
-
-                    document.getElementById('exam_type_five').value = examTypeValue;
-                    document.getElementById('results_slip_five').value = resultSlipValue;
-
-                    document.getElementById('exam_type_six').value = examTypeValue;
-                    document.getElementById('results_slip_six').value = resultSlipValue;
-                } else {
-                    // Optionally clear the copied values when unchecked
-                    document.getElementById('exam_type_two').value = '';
-                    document.getElementById('results_slip_two').value = '';
-
-                    document.getElementById('exam_type_three').value = '';
-                    document.getElementById('results_slip_three').value = '';
-
-                    document.getElementById('exam_type_four').value = '';
-                    document.getElementById('results_slip_four').value = '';
-
-                    document.getElementById('exam_type_five').value = '';
-                    document.getElementById('results_slip_five').value = '';
-
-                    document.getElementById('exam_type_six').value = '';
-                    document.getElementById('results_slip_six').value = '';
-                }
-            });
-        });
-    </script> --}}
 
     <script type="text/javascript">
         $(document).ready(function() {
@@ -1057,7 +1006,7 @@
         });
     </script>
 
- 
+
 
     <script>
         document.getElementById('bece_certificate').addEventListener('change', function(event) {
@@ -1153,10 +1102,10 @@
         });
     </script>
 
- 
- 
- 
-    
+
+
+
+
     <script>
         $(document).ready(function() {
 
@@ -1197,10 +1146,10 @@
         document.addEventListener("DOMContentLoaded", function () {
             // Get the current year
             let currentYear = new Date().getFullYear();
-    
+
             // Set max date to the last day of the current year (YYYY-12-31)
             let maxDate = currentYear + "-12-31";
-    
+
             // Apply max date and prevent manual typing
             document.querySelectorAll(".date-picker").forEach(function (input) {
                 input.setAttribute("max", maxDate); // Restrict future dates
@@ -1210,7 +1159,7 @@
             });
         });
     </script>
-    
+
 {{-- <script>
     // Select all inputs with class "date-picker" and disable manual typing
     document.querySelectorAll('.date-picker').forEach(function (input) {
