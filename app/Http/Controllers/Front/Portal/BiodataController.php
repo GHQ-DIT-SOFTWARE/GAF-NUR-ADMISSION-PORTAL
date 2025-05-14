@@ -1,5 +1,7 @@
 <?php
-declare (strict_types = 1);
+
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Front\Portal;
 
 use App\Http\Controllers\Controller;
@@ -11,7 +13,7 @@ use App\Models\District;
 use App\Models\Region;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
-use Image;
+use Intervention\Image\Facades\Image;
 
 class BiodataController extends Controller
 {
@@ -23,25 +25,79 @@ class BiodataController extends Controller
     public function biodata()
     {
         $ghanaian_languages = [
-            'ENGLISH', 'FRENCH', 'RUSSIA', 'CHINESE', 'AKUAPEM TWI', 'DAGBANI', 'EWE', 'GA', 'DAGOMBA', 'DANGME', 'FANTE', 'KASEM',
-            'NZEMA', 'KUSAAL', 'ASANTE TWI', 'FRAFRA', 'BULI', 'KROBO', 'GRUSI', 'GUANG',
-            'HAUSA', 'KUSAAL', 'SISAALA', 'NCHUMBURUNG', 'DAGAARE', 'DANGME', 'DWABENG',
-            'FANTE', 'GONJA', 'KASEM', 'NZEMA', 'SAFALIBA', 'SISALA', 'TWI', 'UNGANA',
-            'WALI', 'BOMU', 'GURENNE', 'JWIRA-PEPESA', 'KANTOSI', 'KONKOMBA', 'KUSASI',
-            'MOORE', 'NABA', 'WASA',
+            'ENGLISH',
+            'FRENCH',
+            'RUSSIA',
+            'CHINESE',
+            'AKUAPEM TWI',
+            'DAGBANI',
+            'EWE',
+            'GA',
+            'DAGOMBA',
+            'DANGME',
+            'FANTE',
+            'KASEM',
+            'NZEMA',
+            'KUSAAL',
+            'ASANTE TWI',
+            'FRAFRA',
+            'BULI',
+            'KROBO',
+            'GRUSI',
+            'GUANG',
+            'HAUSA',
+            'KUSAAL',
+            'SISAALA',
+            'NCHUMBURUNG',
+            'DAGAARE',
+            'DANGME',
+            'DWABENG',
+            'FANTE',
+            'GONJA',
+            'KASEM',
+            'NZEMA',
+            'SAFALIBA',
+            'SISALA',
+            'TWI',
+            'UNGANA',
+            'WALI',
+            'BOMU',
+            'GURENNE',
+            'JWIRA-PEPESA',
+            'KANTOSI',
+            'KONKOMBA',
+            'KUSASI',
+            'MOORE',
+            'NABA',
+            'WASA',
         ];
         $sports_interests = [
-            'FOOTBALL', 'BASKETBALL', 'TENNIS', 'SWIMMING', 'ATHLETICS', 'BADMINTON', 'GOLF',
-            'CRICKET', 'TABLE TENNIS', 'VOLLEYBALL', 'BOXING', 'CYCLING', 'MARTIAL ARTS',
-            'HIKING', 'SKIING', 'SNOWBOARDING', 'SURFING', 'SKATEBOARDING', 'DANCING',
+            'FOOTBALL',
+            'BASKETBALL',
+            'TENNIS',
+            'SWIMMING',
+            'ATHLETICS',
+            'BADMINTON',
+            'GOLF',
+            'CRICKET',
+            'TABLE TENNIS',
+            'VOLLEYBALL',
+            'BOXING',
+            'CYCLING',
+            'MARTIAL ARTS',
+            'HIKING',
+            'SKIING',
+            'SNOWBOARDING',
+            'SURFING',
+            'SKATEBOARDING',
+            'DANCING',
         ];
         $serial_number = session('serial_number');
         $pincode = session('pincode');
         $card = Card::where('serial_number', $serial_number)->where('pincode', $pincode)->first();
         $applied_applicant = Applicant::with('districts', 'regions')->where('card_id', $card->id)->first();
-        $districts = District::all();
-        $regions = Region::all();
-        return view('portal.biodata', compact('districts', 'regions', 'applied_applicant', 'ghanaian_languages', 'sports_interests'));
+
+        return view('portal.biodata', compact('applied_applicant', 'ghanaian_languages', 'sports_interests'));
     }
 
     public function getRegions($district_id)
@@ -89,7 +145,7 @@ class BiodataController extends Controller
             'email' => 'required|email',
             'residential_address' => 'required',
             'language' => 'required|array',
-            'disability_status'=>'required'
+            'disability_status' => 'required'
         ]);
         $save_url = $applicant->applicant_image;
         if ($request->hasFile('applicant_image')) {
@@ -111,8 +167,8 @@ class BiodataController extends Controller
             'national_identity_card' => $request->national_identity_card,
             'digital_address' => $request->digital_address,
             'language' => json_encode($request->language),
-            'disability_status'=> $request->disability_status,
-            'disability_reason'=> $request->disability_reason,
+            'disability_status' => $request->disability_status,
+            'disability_reason' => $request->disability_reason,
         ]);
         return redirect()->route('education-details');
     }

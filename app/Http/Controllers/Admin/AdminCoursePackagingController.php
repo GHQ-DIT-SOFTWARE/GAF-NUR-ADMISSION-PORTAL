@@ -10,13 +10,14 @@ use App\Models\SubjectsModel;
 use Illuminate\Support\Facades\Auth;
 use App\Models\AssignmentsModel;
 use App\Models\PackagingModel;
+use App\Models\OfferingCourse;
 
 class AdminCoursePackagingController extends Controller
 {
     //
     public function course_packaging(){
-        $courses = Course::orderby('created_at','desc')->get(['id', 'course_name']);
-        $category = CategoryModel::orderby('created_at','desc')->get(['id', 'category_name']);
+        $courses = OfferingCourse::orderby('created_at','desc')->get(['id', 'cause_offers']);
+        $category = CategoryModel::orderby('created_at','desc')->get(['id', 'category_name', 'level']);
         $subjects = SubjectsModel::orderby('created_at','desc')->get(['id', 'subject_name']);
 
         return view('admin_academics.packaging.packaging',compact('courses','category','subjects'));
@@ -33,7 +34,7 @@ class AdminCoursePackagingController extends Controller
         return [
             'course' => [
                 'id' => $levels->first()->course->id,
-                'name' => $levels->first()->course->course_name,
+                'name' => $levels->first()->course->cause_offers,
             ],
             'levels' => $levels->groupBy('level')->map(function ($semesters) {
                 return [

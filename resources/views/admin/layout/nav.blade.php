@@ -193,7 +193,7 @@
                     </li>
                 @endrole
 
-                @role('administrator')
+
                 <li class="nav-item pcoded-menu-caption">
                     <label>Admin Academics Control</label>
                 </li>
@@ -201,13 +201,19 @@
                 <li class="nav-item ">
                     <a href="{{ route('admin.courses') }}" class="nav-link "><span class="pcoded-micon"><i
                                 class="feather icon-users"></i></span><span
-                            class="pcoded-mtext">Courses/Progams</span></a>
+                            class="pcoded-mtext">Progams</span></a>
                 </li>
                 <li class="nav-item ">
                     <a href="{{ route('admin.category') }}" class="nav-link "><span class="pcoded-micon"><i
-                                class="feather icon-settings"></i></span><span
-                            class="pcoded-mtext">Subjects</span></a>
+                                class="feather icon-book"></i></span><span
+                            class="pcoded-mtext">Course Subjects</span></a>
                 </li>
+                <li class="nav-item ">
+                    <a href="{{ route('admin.course.packaging') }}" class="nav-link "><span class="pcoded-micon"><i
+                                class="feather icon-box"></i></span><span
+                            class="pcoded-mtext">Course Packaging</span></a>
+                </li>
+
                 {{-- <li class="nav-item pcoded-hasmenu">
                     <a href="#!" class="nav-link "><span class="pcoded-micon"><i  class="feather icon-book"></i></span><span class="pcoded-mtext">Subjects</span></a>
                     <ul class="pcoded-submenu">
@@ -245,7 +251,6 @@
                     <a href="#!" class="nav-link "><span class="pcoded-micon"><i class="feather icon-settings"></i></span><span class="pcoded-mtext">Settings</span></a>
                     <ul class="pcoded-submenu">
                         <li><a href="{{ route('admin.users') }}">Users</a></li>
-                        <li><a href="{{ route('admin.course.packaging') }}">Course Packaging</a></li>
                         <li><a href="{{route('admin.user.course.allocation')}}">User-Course Allocation</a></li>
                     </ul>
                 </li>
@@ -257,6 +262,5 @@
 
             </ul>
         </div>
-        @endrole
     </div>
 </nav>

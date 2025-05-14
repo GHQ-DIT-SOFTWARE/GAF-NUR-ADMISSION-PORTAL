@@ -122,9 +122,9 @@ Route::get('/', function () {
     return redirect()->route('portal.login');
 });
 
-Route::get('/admin/login', function () {
-    return view('auth.login');
-})->name('admin.login');
+// Route::get('/admin/login', function () {
+//     return view('auth.login');
+// })->name('admin.login');
 Auth::routes();
 Route::post('/login', [AuthController::class, 'Login'])->name('login');
 Route::get('/logout', [AuthController::class, 'Logout'])->name('logout');

@@ -159,8 +159,8 @@ PREVIEW
                                                                     <h5 style="margin-top: 10px; color:red"><b>
                                                                              COURSE SELECTED:
                                                                             {{ $applied_applicant->cause_offers }}
-                                                                            
-                                                                          
+
+
                                                                         </b>
                                                                     </h5>
                                                                     <span></span>
@@ -228,10 +228,10 @@ PREVIEW
                                                                         style="margin-left: 0.5cm; margin-right: 0.5cm;">
                                                                         <table class="table table-bordered">
                                                                             <thead>
-                                                                              
+
                                                                                 <th>Residential Address</th>
                                                                                 <th>Language(s) Spoken </th>
-                                                                              
+
                                                                             </thead>
                                                                             <tbody>
                                                                                 <tr>
@@ -298,7 +298,7 @@ PREVIEW
                                                                             <thead>
                                                                                 <th>Results Slip Number</th>
                                                                                 <th>School Name</th>
-                                                                                <th>Course Offered</th> 
+                                                                                <th>Course Offered</th>
                                                                             </thead>
                                                                             <tbody>
                                                                                 <tr>
@@ -314,7 +314,7 @@ PREVIEW
                                                                                         <b></b>
                                                                                         {{ $applied_applicant->secondary_course_offered }}
                                                                                     </td>
-                                                                                  
+
                                                                                 </tr>
                                                                             </tbody>
                                                                         </table>
@@ -354,7 +354,7 @@ PREVIEW
                                                                                             </span>
                                                                                         </b>
                                                                                     </td>
-                                                                                    
+
                                                                                     <td>
                                                                                         <b>
                                                                                             <span id="bece_english_grade" class="form-control required">
@@ -377,7 +377,7 @@ PREVIEW
                                                                                             </span>
                                                                                         </b>
                                                                                     </td>
-                                                                                    
+
 
                                                                                     <td>
                                                                                         <b>
@@ -423,7 +423,7 @@ PREVIEW
                                                                                             </span>
                                                                                         </b>
                                                                                     </td>
-                                                                                    
+
                                                                                     <td>
                                                                                         <b>
                                                                                             <span id="wassce_english_grade" class="form-control">
@@ -468,7 +468,7 @@ PREVIEW
                                                                                             </span>
                                                                                         </b>
                                                                                     </td>
-                                                                                    
+
                                                                                 </tr>
                                                                             </tbody>
                                                                         </table>

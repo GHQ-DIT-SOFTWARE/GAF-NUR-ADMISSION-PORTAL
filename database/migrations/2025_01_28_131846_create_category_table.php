@@ -13,10 +13,12 @@ return new class extends Migration
     {
         Schema::create('category', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->index();
             $table->string('user_id');
             $table->string('category_id');
             $table->string('category_name');
             $table->string('credit_hours');
+            $table->string('level');
             $table->string('category_remarks')->nullable();
             $table->timestamps();
         });

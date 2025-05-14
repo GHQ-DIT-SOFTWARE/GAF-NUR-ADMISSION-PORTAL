@@ -105,7 +105,7 @@
                                 <select class="form-control mb-2" name="course_id" required>
                                     <option value="">--Select Course/Program--</option>
                                     @foreach($courses as $course)
-                                        <option value="{{ $course->id }}">{{ $course->course_name }}</option>
+                                        <option value="{{ $course->id }}">{{ $course->cause_offers }}</option>
                                     @endforeach
                                 </select>
 

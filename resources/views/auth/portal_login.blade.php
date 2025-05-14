@@ -23,6 +23,44 @@
     </ul>
 </div>
 @endif
+{{-- <div class="h-100 d-md-flex align-items-center auth-side-img">
+    <div class="col-sm-10 auth-content w-auto" style="background-color: #0cbc6d;">
+        <h1 class="text-white my-4">General Requirement</h1>
+        <ul class="text-white">
+            <li>Kindly <b><a href="https://apply.mil.gh/" class="text-white"><u>read</u></a></b> the general eligibility before
+                applying.</li>
+            <li>Once <b>Submitted</b>, the information provided <b>cannot</b> be changed</li>
+            <li>If at any point during the application process, an applicant decides not to continue , simply
+                close the page to discontinue without submitting. Applications are only saved when the submit
+                button is clicked.
+            </li>
+            <li>Once a scratch card is used for application, it cannot be reused.</li>
+            <li>
+                ENTRY REQUIREMENT FOR ADMISSION INTO NURSING AND MIDWIFERY TRAINING INSTITUTIONS
+                (BASIC PROGRAMMES: RGN, RM, RCN/PHN, RMN, RCPN)
+                <ul>
+                    <li>An Aggregate Score of thirty–six (36) or better comprising (A1 – C6) in three (3) Core Subjects i.e. ENGLISH, MATHEMATICS and INTEGRATED SCIENCE and in three elective Subjects (A1 – C6) in any of the following programmes itemized below.</li>
+                    <li>NB:
+                        <ul>
+                            <li>Applicants must be 16–35 years old</li>
+                            <li>Applicants who are above 35 years must be serving officers with letters from employers</li>
+                            <li>A combination of SSSCE and WASSCE results are not acceptable</li>
+                            <li>Applicants for Top-up programmes must have served for 3 years post auxiliary training with valid license</li>
+                            <li><strong>PROVISIONAL RESULTS</strong> were instructed to be uploaded</li>
+                            <li><strong>Certified/verified results</strong> from WAEC will be accepted</li>
+                            <li><strong>Passport picture requirement:</strong> in uniform, red background, 200KB size</li>
+                            <li>All documents must be in PDF</li>
+                            <li>Copy of Ghana Card/NHIA/Voter's ID</li>
+                            <li>Date of birth and name inconsistencies cannot be verified</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div> --}}
+
+
         <div class="auth-side-form">
             <form method="post" action="{{ route('portal.apply') }}">
                 @csrf
@@ -64,7 +102,7 @@
                             </span>
                         @enderror
                     </div>
-                 
+
 
                     <div class="form-group mb-4">
                         <select class="form-control" id="arm_of_service" name="cause_offers" required>

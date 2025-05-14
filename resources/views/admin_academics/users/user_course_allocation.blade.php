@@ -86,12 +86,19 @@
                             <form id="allocation-form" method="POST">
                                 @csrf
                                 <select class="form-input" name="course_id" id="courseSelect" required>
-                                    <option value="">--Select Course--</option>
+                                    <option value="">--Select Course Package--</option>
                                     @foreach($packages as $package)
-                                        <option value="{{ $package->course_id }}"
-                                                data-level="{{ $package->level }}"
-                                                data-semester="{{ $package->semester }}">
-                                            {{ $package->course->course_name ?? 'Unknown Course' }}, Level {{ $package->level }}, {{ $package->semester }}
+                                        <option value="{{ $package->id }}">
+                                            {{ $package->id ?? 'Unknown Program' }}
+                                        </option>
+                                     @endforeach
+                                </select>
+
+                                <select class="form-input" name="course_id" id="courseSelect" required>
+                                    <option value="">--Select Program--</option>
+                                    @foreach($programs as $program)
+                                        <option value="{{ $program->id }}">
+                                            {{ $program->cause_offers ?? 'Unknown Program' }}
                                         </option>
                                     @endforeach
                                 </select>

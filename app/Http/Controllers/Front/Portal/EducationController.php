@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
+
 class EducationController extends Controller
 {
     public function __construct()
@@ -39,7 +40,6 @@ class EducationController extends Controller
     public function saveEducationData(Request $request)
     {
         $applicant = Applicant::where('card_id', $request->session()->get('card_id'))->firstOrFail();
-
         $beceCertificateRule = $applicant->bece_certificate ? 'nullable|file|mimes:pdf|max:1024' : 'required|file|mimes:pdf|max:1024';
         $wassceCertificateRule = $applicant->wassce_certificate ? 'nullable|file|mimes:pdf|max:1024' : 'required|file|mimes:pdf|max:1024';
         $subjects = [

@@ -10,13 +10,14 @@ use Illuminate\Support\Facades\Auth;
 class AdminCategoryController extends Controller
 {
     //
-    public function category(){
+    public function category()
+    {
         return view('admin_academics.category.category');
     }
 
     public function getCategory()
     {
-        $category = CategoryModel::orderBy('created_at','desc')->get();
+        $category = CategoryModel::orderBy('created_at', 'desc')->get();
         return response()->json($category);
     }
 
@@ -29,7 +30,8 @@ class AdminCategoryController extends Controller
         return response()->json(['error' => 'Category not found'], 404);
     }
 
-    public function category_add(Request $request){
+    public function category_add(Request $request)
+    {
         $userID = Auth::id();
         $category = new CategoryModel();
 
@@ -46,27 +48,27 @@ class AdminCategoryController extends Controller
 
     public function update(Request $request, $id)
     {
-    $category = CategoryModel::findOrFail($id);
+        $category = CategoryModel::findOrFail($id);
 
-    // Handle JSON and form data
-    $inputData = $request->all();
+        // Handle JSON and form data
+        $inputData = $request->all();
 
-    // Check if JSON data exists
-    if ($request->isJson()) {
-        $inputData = $request->json()->all();
-    }
-
-    // Validate input
-    $allowedFields = ['category_id', 'category_name', 'credit_hours', 'level', 'category_remarks'];
-    foreach ($inputData as $key => $value) {
-        if (in_array($key, $allowedFields)) {
-            $category->$key = $value;
+        // Check if JSON data exists
+        if ($request->isJson()) {
+            $inputData = $request->json()->all();
         }
-    }
 
-    $category->save();
+        // Validate input
+        $allowedFields = ['category_id', 'category_name', 'credit_hours', 'level', 'category_remarks'];
+        foreach ($inputData as $key => $value) {
+            if (in_array($key, $allowedFields)) {
+                $category->$key = $value;
+            }
+        }
 
-    return response()->json(['success' => true, 'message' => 'Category updated successfully']);
+        $category->save();
+
+        return response()->json(['success' => true, 'message' => 'Category updated successfully']);
     }
 
 

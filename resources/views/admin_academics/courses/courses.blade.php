@@ -7,12 +7,12 @@
         <div class="row align-items-center">
             <div class="col-md-12">
                 <div class="page-header-title">
-                    <h5 class="m-b-10">Courses</h5>
+                    <h5 class="m-b-10">Programs</h5>
                 </div>
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ url('/') }}"><i class="feather icon-home"></i></a></li>
                     <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                    <li class="breadcrumb-item"><a href="#">Courses</a></li>
+                    <li class="breadcrumb-item"><a href="#">Programs</a></li>
                 </ul>
             </div>
         </div>
@@ -71,11 +71,11 @@
 
 
 </style>
-<div class="row justify-content-center">
+{{-- <div class="row justify-content-center">
 <div class="col-sm-12">
 <div class="card user-profile-list">
     <div class="card-body">
-        <b>Add Course
+        <b>Add Program
             <button id="toggle-form" class="btn btn-primary" style="float:right;">Add</button>
         </b>
 
@@ -89,7 +89,7 @@
     </div>
 </div>
 </div>
-</div>
+</div> --}}
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -105,15 +105,13 @@ $("#toggle-form").click(function() {
     <div class="col-sm-12">
         <div class="card user-profile-list">
             <div class="card-body">
-                <b>Courses (<span id="total-courses">0</span>)</b>
+                <b>Programs (<span id="total-courses">0</span>)</b>
                 <table id="courses-table" class="table table-striped">
                     <thead>
                         <tr>
-                            <th>Course ID</th>
-                            <th>Course Name</th>
-                            <th>Remarks</th>
+                            <th>Program</th>
                             <th>Created On</th>
-                            <th>Action</th>
+                            {{-- <th>Action</th> --}}
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -155,11 +153,8 @@ $("#toggle-form").click(function() {
                 $("#total-courses").text(data.length);
                 data.forEach(course => {
                     tableBody += `<tr data-id="${course.id}">
-                        <td contenteditable="true" data-column="course_id">${course.course_id}</td>
-                        <td contenteditable="true" data-column="location">${course.course_name}</td>
-                        <td contenteditable="true" data-column="remarks">${course.remarks}</td>
+                        <td contenteditable="true" data-column="course_id">${course.cause_offers}</td>
                         <td>${new Date(course.created_at).toLocaleString()}</td>
-                        <td><button class="btn btn-primary delete-btn" data-id="${course.id}"><i class="fas fa-trash"></i></button></td>
                     </tr>`;
                 });
                 // Clear the table before appending new rows

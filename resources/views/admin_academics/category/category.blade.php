@@ -6,12 +6,12 @@
                     <div class="row align-items-center">
                         <div class="col-md-12">
                             <div class="page-header-title">
-                                <h5 class="m-b-10">Subjects</h5>
+                                <h5 class="m-b-10">Course Subjects</h5>
                             </div>
                             <ul class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{url('/')}}"><i class="feather icon-home"></i></a></li>
                                 <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                                <li class="breadcrumb-item"><a href="#">Subjects</a></li>
+                                <li class="breadcrumb-item"><a href="#">Course Subjects</a></li>
                             </ul>
                         </div>
                     </div>
@@ -161,7 +161,7 @@
                         method: "POST",
                         data: $(this).serialize(),
                         success: function(response) {
-                            alert("Category added successfully");
+                            alert("Course subject added successfully");
                             $("#category-form")[0].reset();
                             fetchCategory();
                         }
@@ -215,13 +215,13 @@
 
                 $(document).on("click", ".delete-btn", function() {
                     let categoryId = $(this).data("id");
-                    if (confirm("Are you sure you want to delete this category?")) {
+                    if (confirm("Are you sure you want to delete this course subject?")) {
                         $.ajax({
                             url: `{{ url('admin/category/delete') }}/${categoryId}`,
                             method: "DELETE",  // Changed from POST to DELETE
                             data: { _token: "{{ csrf_token() }}" },
                             success: function(response) {
-                                alert("Category deleted successfully");
+                                alert("Course subject deleted successfully");
                                 fetchCategory();
                             }
                         });

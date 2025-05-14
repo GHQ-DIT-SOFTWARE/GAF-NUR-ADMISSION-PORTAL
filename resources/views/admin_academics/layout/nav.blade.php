@@ -47,7 +47,7 @@
                         {{-- <li><a href="{{ route('admin.assignments.marks') }}">Assignments</a></li>
                         <li><a href="{{ route('admin.quizzes') }}">Quizzes</a></li>
                         <li><a href="{{ route('admin.exams') }}">Exams</a></li> --}}
-                        <li><a href="{{ route('admin.scores') }}">Scores</a></li> 
+                        <li><a href="{{ route('admin.scores') }}">Scores</a></li>
                     </ul>
                 </li>
                 </li>
@@ -73,7 +73,7 @@
                     <a href="#" class="nav-link "><span class="pcoded-micon"><i
                                 class="feather icon-book"></i></span><span class="pcoded-mtext">Guide</span></a>
                 </li>
-                
+
             </ul>
 
         </div>

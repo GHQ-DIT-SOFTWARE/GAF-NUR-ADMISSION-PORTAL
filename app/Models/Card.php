@@ -10,6 +10,7 @@ class Card extends Model
 {
     use HasFactory;
     use UuidTrait;
+    
     /**
      * The attributes that are mass assignable.
      *

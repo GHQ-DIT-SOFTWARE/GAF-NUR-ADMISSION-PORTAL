@@ -5,18 +5,21 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Course;
+use App\Models\OfferingCourse;
+
 use Illuminate\Support\Facades\Auth;
 
 class AdminCourseController extends Controller
 {
     //
-    public function courses(){
+    public function courses()
+    {
         return view('admin_academics.courses.courses');
     }
 
     public function getCourses()
     {
-        $courses = Course::orderBy('created_at','desc')->get();
+        $courses = OfferingCourse::orderBy('created_at', 'desc')->get();
         return response()->json($courses);
     }
 
@@ -30,8 +33,9 @@ class AdminCourseController extends Controller
     }
 
 
-    public function course_add(Request $request){
-        $userID= Auth::id();
+    public function course_add(Request $request)
+    {
+        $userID = Auth::id();
         $course = new Course();
 
         $course->user_id = $userID;
@@ -41,33 +45,32 @@ class AdminCourseController extends Controller
         $course->save();
 
         return redirect()->back();
-
     }
 
 
     public function update(Request $request, $id)
     {
-    $course = Course::findOrFail($id);
+        $course = Course::findOrFail($id);
 
-    // Handle JSON and form data
-    $inputData = $request->all();
+        // Handle JSON and form data
+        $inputData = $request->all();
 
-    // Check if JSON data exists
-    if ($request->isJson()) {
-        $inputData = $request->json()->all();
-    }
-
-    // Validate input
-    $allowedFields = ['course_id', 'course_name', 'remarks'];
-    foreach ($inputData as $key => $value) {
-        if (in_array($key, $allowedFields)) {
-            $course->$key = $value;
+        // Check if JSON data exists
+        if ($request->isJson()) {
+            $inputData = $request->json()->all();
         }
-    }
 
-    $course->save();
+        // Validate input
+        $allowedFields = ['course_id', 'course_name', 'remarks'];
+        foreach ($inputData as $key => $value) {
+            if (in_array($key, $allowedFields)) {
+                $course->$key = $value;
+            }
+        }
 
-    return response()->json(['success' => true, 'message' => 'Course updated successfully']);
+        $course->save();
+
+        return response()->json(['success' => true, 'message' => 'Course updated successfully']);
     }
 
 
@@ -93,7 +96,8 @@ class AdminCourseController extends Controller
     //     return view('admin.courses.materials');
     // }
 
-    public function report_courses(){
+    public function report_courses()
+    {
         return view('admin_academics.courses.report');
     }
 
@@ -119,9 +123,8 @@ class AdminCourseController extends Controller
 
 
 
-    public function courses_allocation(){
+    public function courses_allocation()
+    {
         return view('admin_academics.allocations.allocations');
     }
-
-
 }

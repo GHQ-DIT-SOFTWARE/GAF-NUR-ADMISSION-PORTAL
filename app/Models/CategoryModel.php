@@ -1,12 +1,22 @@
 <?php
-
+declare (strict_types = 1);
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Traits\UuidTrait;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class CategoryModel extends Model
 {
     //
+    use HasFactory;
+    use UuidTrait;
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+
     protected $table = 'category';
 
     protected $fillable = [
@@ -16,5 +26,14 @@ class CategoryModel extends Model
         'credit_hours',
         'level',
         'category_remarks'
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+
     ];
 }
