@@ -27,7 +27,7 @@
 
         .header h1 {
             margin: 0;
-            
+
         }
 
         .section-title {
@@ -126,7 +126,7 @@
             <td><strong>Status:</strong> {{ $applied_applicant->qualification }}</td>
         </tr>
         <tr>
-            <td><strong>Applied At:</strong> {{ \Carbon\Carbon::parse($applied_applicant->created_at)->format('d M, Y h:i A') }}</td>
+            <td><strong>Applied At:</strong>{{ strtoupper(\Carbon\Carbon::parse($applied_applicant->created_at)->format('d F Y h:i A')) }}</td>
             <td><strong>Selected Course:</strong> {{ $applied_applicant->cause_offers }}</td>
         </tr>
     </table>
