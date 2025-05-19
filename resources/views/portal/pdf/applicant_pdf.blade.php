@@ -112,7 +112,6 @@
     </style>
 </head>
 <body>
-
 <div class="container">
 
     <div class="header">
@@ -130,7 +129,6 @@
             <td><strong>Selected Course:</strong> {{ $applied_applicant->cause_offers }}</td>
         </tr>
     </table>
-
     <div class="applicant-photo">
         @php $imagePath = public_path($applied_applicant->applicant_image); @endphp
         @if (file_exists($imagePath))
@@ -139,7 +137,6 @@
             <img src="{{ asset('assets/images/img_placeholder_avatar.jpg') }}" alt="Placeholder Image">
         @endif
     </div>
-
     <div class="section-title">Bio Data</div>
     <table class="data-table">
         <tr>
@@ -182,7 +179,7 @@
             </td>
         </tr>
     </table>
-<br><br>
+    <br><br>
     <div class="section-title">BECE Results</div>
     <table class="data-table">
         <tr>
@@ -210,7 +207,6 @@
             <td>{{ $applied_applicant->bece_subject_six_grade }}</td>
         </tr>
     </table>
-
     <div class="section-title">WASSCE Results</div>
     <table class="data-table">
         <tr>
@@ -232,7 +228,6 @@
             <td>{{ $applied_applicant->wassce_subject_six_grade }}</td>
         </tr>
     </table>
-
     <div class="section-title">Education Details</div>
     <table class="data-table">
         <tr>
@@ -254,12 +249,10 @@
            <td>{{ strtoupper(\Carbon\Carbon::parse($applied_applicant->bece_year_completion)->format('d F Y')) }}</td>
         </tr>
     </table>
-
     @if (!is_null($applied_applicant->disqualification_reason))
         <div class="section-title">Disqualification</div>
         <p><strong>Reason:</strong> {{ $applied_applicant->disqualification_reason }}</p>
     @endif
-
     <div class="watermark">GAFCONM Admissions Office</div>
 </div>
 </body>
