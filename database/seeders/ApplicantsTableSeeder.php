@@ -52,7 +52,7 @@ class ApplicantsTableSeeder extends Seeder
      */
     private function generateSerialNumber()
     {
-        $prefix = $this->generateRandomAlphanumeric(7); // Generate 7-character alphanumeric prefix
+        $prefix = $this->generateRandomAlphanumeric(9); // Generate 7-character alphanumeric prefix
         $sequenceNumber = str_pad($this->sequence, 3, '0', STR_PAD_LEFT); // Sequential number padded to 3 digits
         $this->sequence++;
         return $prefix . $sequenceNumber;

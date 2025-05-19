@@ -26,7 +26,7 @@ class RedirectIfAuthenticated
                 return redirect(RouteServiceProvider::HOME);
             }
         }
+       return redirect('/Portal');
 
-        return $next($request);
     }
 }

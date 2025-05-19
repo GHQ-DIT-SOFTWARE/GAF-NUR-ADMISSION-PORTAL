@@ -73,55 +73,9 @@ Route::get('/', function () {
     return redirect()->route('portal.login');
 });
 
-// Route::get('/admin/login', function () {
-//     return view('auth.login');
-// })->name('admin.login');
+
 Auth::routes();
-Route::post('/login', [AuthController::class, 'Login'])->name('login');
-Route::get('/logout', [AuthController::class, 'Logout'])->name('logout');
-Route::middleware(['admin'])->prefix('admin')->group(function () {
-    Route::get('/notifications/read/{id}', [NotificationController::class, 'markAsRead'])->name('notifications.read');
 
-    Route::get('/decrypt', [QrCodeController::class, 'decript'])->name('decrypt-applicant');
-    Route::post('/qr-code', [QrCodeController::class, 'decryptQrCode'])->name('decrypt-qr-code');
-
-
-    Route::group(['prefix' => 'applicant-preview', 'as' => 'correct.'], function () {
-        Route::get('/{uuid}', [CorrectApplicantController::class, 'applicant_corrections'])->name('correction-applicant-data');
-        Route::post('/applicant/corrections/{uuid}', [CorrectApplicantController::class, 'updateApplicantCorrections'])->name('applicant.corrections.update');
-    });
-
-
-
-
-
-    Route::group(['prefix' => 'courses', 'as' => 'course.'], function () {
-        Route::get('/', [CourseTypeController::class, 'View'])->name('courses-index');
-        Route::get('/mech', [CourseTypeController::class, 'Add'])->name('mech-courses');
-        Route::post('/store', [CourseTypeController::class, 'Store'])->name('store-courses');
-        Route::get('/edit/{uuid}', [CourseTypeController::class, 'Edit'])->name('edit-courses');
-        Route::post('/update{uuid}', [CourseTypeController::class, 'Update'])->name('update-courses');
-        Route::get('/delete{uuid}', [CourseTypeController::class, 'Delete'])->name('delete-courses');
-        Route::post('/view-courses', [CourseTypeController::class, 'index'])->name('view-courses');
-        Route::post('/course/toggle-status/{uuid}', [CourseTypeController::class, 'toggleStatus'])->name('toggle-status');
-        Route::post('get-commission-types', [CourseTypeController::class, 'getCommissionTypes'])->name('get-commission-types');
-        Route::post('get-branches', [CourseTypeController::class, 'getBranches'])->name('get-branches');
-        Route::post('get-courses', [CourseTypeController::class, 'getCourses'])->name('get-courses');
-    });
-
-
-
-    Route::prefix('audit-trail')->group(function () {
-        Route::get('/user-audit', [AuditController::class, 'Audit'])->name('user-audit-trail');
-    });
-    Route::prefix('audit-trail')->group(function () {
-        Route::get('/logs-activities', [LogactivityController::class, 'login_and_logout_activities'])->name('login_and_logout');
-    });
-});
-Route::group(['namespace' => 'Dashboard', 'prefix' => 'dashboard', 'as' => 'dashboard.', 'middleware' => 'admin'], function () {
-    Route::get('/', [DashboardController::class, 'welcomedashboard'])->name('index');
-    Route::get('/analysis-dashboard', [DashboardController::class, 'index'])->name('analysis-dashboard');
-});
 
 
 
