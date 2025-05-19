@@ -26,8 +26,7 @@ class EducationController extends Controller
     public function education_details()
     {
         $serial_number = session('serial_number');
-        $pincode = session('pincode');
-        $card = Card::where('serial_number', $serial_number)->where('pincode', $pincode)->first();
+        $card = Card::where('serial_number', $serial_number)->first();
         $applied_applicant = Applicant::with('districts', 'regions')->where('card_id', $card->id)->first();
         $bece_results = BECERESULTS::all();
         $bece_subject = BECESUBJECT::all();

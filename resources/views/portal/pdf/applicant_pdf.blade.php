@@ -150,21 +150,19 @@
         </tr>
         <tr>
             <th>Date of Birth</th>
-            <td>{{ \Carbon\Carbon::parse($applied_applicant->date_of_birth)->format('d M, Y') }}</td>
-            <th>Place of Birth</th>
-            <td>{{ $applied_applicant->place_of_birth }}</td>
-        </tr>
-        <tr>
+           <td>{{ strtoupper(\Carbon\Carbon::parse($applied_applicant->date_of_birth)->format('d F Y')) }}</td>
             <th>Sex</th>
             <td>{{ $applied_applicant->sex }}</td>
+        </tr>
+        <tr>
+           <th>Contact</th>
+            <td>{{ $applied_applicant->contact }}</td>
             <th>Marital Status</th>
             <td>{{ $applied_applicant->marital_status }}</td>
         </tr>
         <tr>
             <th>Email</th>
-            <td>{{ $applied_applicant->email }}</td>
-            <th>Contact</th>
-            <td>{{ $applied_applicant->contact }}</td>
+            <td colspan="3">{{ $applied_applicant->email }}</td>
         </tr>
         <tr>
             <th>Address</th>
@@ -241,7 +239,7 @@
             <th>Secondary School</th>
             <td>{{ $applied_applicant->name_of_secondary_school }}</td>
             <th>WASSCE Completion</th>
-            <td>{{ \Carbon\Carbon::parse($applied_applicant->wassce_year_completion)->format('d M, Y') }}</td>
+            <td>{{ strtoupper(\Carbon\Carbon::parse($applied_applicant->wassce_year_completion)->format('d F Y')) }}</td>
         </tr>
         <tr>
             <th>WASSCE Index No</th>
@@ -253,7 +251,7 @@
             <th>BECE Index No</th>
             <td>{{ $applied_applicant->bece_index_number }}</td>
             <th>BECE Completion</th>
-            <td>{{ \Carbon\Carbon::parse($applied_applicant->bece_year_completion)->format('d M, Y') }}</td>
+           <td>{{ strtoupper(\Carbon\Carbon::parse($applied_applicant->bece_year_completion)->format('d F Y')) }}</td>
         </tr>
     </table>
 

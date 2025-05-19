@@ -84,7 +84,7 @@ PREVIEW
                         <div class="card">
                             <div class="card-header">
                                 <h4 style="text-align: center; font-family: Arial Black, Helvetica, sans-serif;">
-                                    37 MILITARY HOSPITAL NMTC ONLINE PORTAL
+                                   GHANA ARMED FORCES  COLLEGE OF NURSING AND MIDWIFERY ONLINE PORTAL
                                 </h4>
                                 <marquee behavior="scroll" direction="left" scrollamount="2"
                                     style="font-family: Arial, sans-serif; font-size: 16px; color: #ff0000; font-weight: bold; text-transform: uppercase;">

@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="{{ config('app.name') }}" name="description" />
     <meta content="{{ config('app.name') }}" name="author" />
-    <link rel="icon" href="{{ asset('gafconm_mini_logo.png') }}" type="image/x-icon">
+    <link rel="icon" href="{{ asset('nursingschoollogo.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 </head>
 <div class="auth-wrapper align-items-stretch aut-bg-img">
@@ -27,8 +27,8 @@
             <form method="post" action="{{ route('portal.apply') }}">
                 @csrf
                  <div style="text-align: center;">
-                        <img src="{{ asset('03.png') }}" alt=""
-                             style=" width: 150px; height: 150px; object-fit: cover;">
+                        <img src="{{ asset('nursingschoollogo.png') }}" alt=""
+                             style=" width: 150px; height: 180px; object-fit: cover;">
                     </div>
                 <div class=" auth-content">
                     <div class="form-group mb-3">
@@ -42,7 +42,7 @@
                         @enderror
                     </div>
 
-                    <div class="form-group mb-4">
+                    {{-- <div class="form-group mb-4">
                         <label class="floating-label" for="pincode">Pincode</label>
                         <input type="pincode" class="form-control @error('pincode') is-invalid @enderror" name="pincode"
                             id="pincode" placeholder="">
@@ -51,7 +51,7 @@
                                 <strong>{{ $message }}</strong>
                             </span>
                         @enderror
-                    </div>
+                    </div> --}}
 
                     <div class="form-group mb-4">
                         <label class="floating-label" for="contact">Contact</label>
@@ -68,7 +68,7 @@
                     <div class="form-group mb-4">
                         <select class="form-control" id="arm_of_service" name="cause_offers" required>
                             <option value="">SELECT COURSE</option>
-                            @foreach ($arms as $list)
+                            @foreach ($courses as $list)
                                 <option value="{{$list->cause_offers }}">{{$list->cause_offers }}</option>
                             @endforeach
                         </select>

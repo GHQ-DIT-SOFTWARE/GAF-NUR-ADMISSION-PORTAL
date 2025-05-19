@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->uuid()->index();
             $table->string('serial_number')->nullable();
-            $table->string('pincode')->nullable();
             $table->string('status')->default('0')->comment('finalsubmission=1,unsubmit=0');
             $table->timestamps();
         });

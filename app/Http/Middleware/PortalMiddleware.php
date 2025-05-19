@@ -15,7 +15,7 @@ class PortalMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if ($request->session()->has('serial_number') && $request->session()->has('pincode')) {
+        if ($request->session()->has('serial_number')) {
             return $next($request);
         }
         return redirect()->route('portal.login');

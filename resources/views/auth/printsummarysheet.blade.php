@@ -39,7 +39,7 @@
                             </span>
                         @enderror
                     </div>
-                    <div class="form-group mb-4">
+                    {{-- <div class="form-group mb-4">
                         <label class="floating-label" for="pincode">Pincode</label>
                         <input type="pincode" class="form-control @error('pincode') is-invalid @enderror" name="pincode"
                             id="pincode" placeholder="">
@@ -48,7 +48,7 @@
                                 <strong>{{ $message }}</strong>
                             </span>
                         @enderror
-                    </div>
+                    </div> --}}
                     <div class="form-group mb-4">
                         <label class="floating-label" for="contact">Contact</label>
                         <input type="contact" class="form-control @error('contact') is-invalid @enderror" name="contact"

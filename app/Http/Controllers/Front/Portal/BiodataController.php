@@ -93,33 +93,14 @@ class BiodataController extends Controller
             'DANCING',
         ];
         $serial_number = session('serial_number');
-        $pincode = session('pincode');
-        $card = Card::where('serial_number', $serial_number)->where('pincode', $pincode)->first();
-        $applied_applicant = Applicant::with('districts', 'regions')->where('card_id', $card->id)->first();
-
+        $card = Card::where('serial_number', $serial_number)->first();
+        $applied_applicant = Applicant::where('card_id', $card->id)->first();
         return view('portal.biodata', compact('applied_applicant', 'ghanaian_languages', 'sports_interests'));
     }
 
-    public function getRegions($district_id)
-    {
-        $regions = Region::whereHas('districts', function ($query) use ($district_id) {
-            $query->where('id', $district_id);
-        })->get();
-        return response()->json($regions);
-    }
-    public function getBranches(Request $request)
-    {
-        $commissionType = session('commission_type');
-        $armOfService = session('arm_of_service');
-        if (is_null($commissionType) || is_null($armOfService)) {
-            return response()->json(['error' => 'Session values missing'], 400);
-        }
-        $branches = Branch::where('commission_type', $commissionType)
-            ->where('arm_of_service', $armOfService)
-            ->get(['id', 'branch']);
-        return response()->json($branches);
-    }
 
+
+    
     public function getCourses(Request $request)
     {
         $branchId = $request->input('branch_id');

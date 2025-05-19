@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('arm_of_services', function (Blueprint $table) {
-            $table->id();
-            $table->uuid()->index();
-            $table->string('arm_of_service')->nullable();
-            $table->timestamps();
+        Schema::table('cards', function (Blueprint $table) {
+            $table->string('applicant_serial_number')->nullable()->after('serial_number');
         });
     }
 
@@ -24,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('arm_of_services');
+        Schema::table('cards', function (Blueprint $table) {
+            //
+        });
     }
 };

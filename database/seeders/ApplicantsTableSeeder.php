@@ -10,49 +10,41 @@ class ApplicantsTableSeeder extends Seeder
 {
     private $sequence = 1; // Initialize sequence
 
-    /**
-     * Run the database seeds.
-     */
     // public function run()
     // {
+    //     $batchSize = 500; // Adjust the batch size
     //     $applicants = [];
-    //     for ($i = 0; $i < 10000; $i++) { // Adjust loop to 10,000 iterations
+
+    //     for ($i = 0; $i < 10000; $i++) {
     //         $applicants[] = [
     //             'uuid' => (string) Str::uuid(),
     //             'serial_number' => $this->generateSerialNumber(),
-    //             'pincode' => $this->generatePinCode(),
     //             'created_at' => now(),
     //             'updated_at' => now(),
     //         ];
+    //         // Insert the batch when it reaches the batch size
+    //         if (count($applicants) === $batchSize) {
+    //             DB::table('cards')->insert($applicants);
+    //             $applicants = []; // Reset the array for the next batch
+    //         }
     //     }
-    //     DB::table('cards')->insert($applicants);
+
+    //     // Insert any remaining records
+    //     if (!empty($applicants)) {
+    //         DB::table('cards')->insert($applicants);
+    //     }
     // }
+
     public function run()
     {
-        $batchSize = 500; // Adjust the batch size
-        $applicants = [];
-
-        for ($i = 0; $i < 10000; $i++) {
-            $applicants[] = [
-                'uuid' => (string) Str::uuid(),
-                'serial_number' => $this->generateSerialNumber(),
-                'pincode' => $this->generatePinCode(),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ];
-
-            // Insert the batch when it reaches the batch size
-            if (count($applicants) === $batchSize) {
-                DB::table('cards')->insert($applicants);
-                $applicants = []; // Reset the array for the next batch
-            }
-        }
-
-        // Insert any remaining records
-        if (!empty($applicants)) {
-            DB::table('cards')->insert($applicants);
-        }
+        DB::table('cards')->insert([
+            'uuid' => (string) Str::uuid(),
+            'serial_number' => $this->generateSerialNumber(),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
     }
+
     /**
      * Generate a serial number with random alphanumeric prefix and sequential suffix.
      *
