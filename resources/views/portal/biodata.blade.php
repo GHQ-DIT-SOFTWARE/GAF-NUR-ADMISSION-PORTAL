@@ -309,7 +309,6 @@
                                                                 @enderror
                                                             </div>
                                                             <input type="hidden" id="hidden_disability_reason" name="disability_reason" value="{{ old('disability_reason', $applied_applicant->disability_reason ?? '') }}">
-
                                                             <!-- Disability Status Dropdown -->
                                                             <label for="b-t-name" class="col-sm-2 col-form-label">Do you have a disability?</label>
                                                             <div class="col-sm-2">
@@ -345,7 +344,7 @@
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="disabilityReasonLabel">Specify Disability Reason</h5>
+                                <h5 class="modal-title" id="disabilityReasonLabel">Specify Disability</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -405,15 +404,18 @@
             }
 
             // Open modal when "YES" is selected
-            disabilityStatus.addEventListener("change", function () {
-                if (this.value === "YES") {
-                    disabilityReasonInput.value = hiddenDisabilityReason.value; // Load existing reason
-                    disabilityReasonModal.show();
-                } else {
-                    hiddenDisabilityReason.value = ""; // Clear reason if "NO" is selected
-                    updateEditButton();
-                }
-            });
+        disabilityStatus.addEventListener("change", function () {
+    if (this.value === "YES") {
+        if (!hiddenDisabilityReason.value.trim()) {
+            disabilityReasonInput.value = ""; // Reset if no previous reason
+            disabilityReasonModal.show();
+        }
+    } else {
+        hiddenDisabilityReason.value = ""; // Clear reason if "NO" is selected
+        updateEditButton();
+    }
+});
+
 
             // Save reason when modal closes
             document.getElementById("saveDisabilityReason").addEventListener("click", function () {
