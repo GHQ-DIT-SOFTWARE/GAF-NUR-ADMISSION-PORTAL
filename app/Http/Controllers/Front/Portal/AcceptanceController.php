@@ -84,6 +84,10 @@ class AcceptanceController extends Controller
         if (!empty($examCounts['SSSCE']) && !empty($examCounts['WASSCE'])) {
             $disqualificationReasons[] = 'A combination of SSSCE and WASSCE results is not acceptable.';
         }
+        // Check BECE index number uniqueness
+        if (DB::table('applicants')->where('bece_index_number', $applicant->bece_index_number)->where('id', '<>', $applicant->id)->exists()) {
+            $disqualificationReasons[] = 'Your Information  already exists in the portal.';
+        }
         // If disqualified, save and return early
         if (!empty($disqualificationReasons)) {
             return $this->disqualifyAndSave($disqualificationReasons, $applicant);
@@ -118,10 +122,7 @@ class AcceptanceController extends Controller
         $applicant->card->applicant_serial_number = $applicantSerialNumber;
         $applicant->card->save();
         // Generate and Save QR Code
-        // $qrCodePath = $this->generateQrCode($applicant);
-        if ($applicant->qualification === 'QUALIFIED') {
-            $qrCodePath = $this->generateQrCode($applicant);
-        }
+
         // Generate PDF URL
         $pdfUrl = route('applicant-pdf');
         $admins = User::where('is_admin', 1)->get();

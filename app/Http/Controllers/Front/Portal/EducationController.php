@@ -184,4 +184,14 @@ class EducationController extends Controller
         ]);
         return redirect()->route('preview');
     }
+
+    public function getSubjectsByCourse(Request $request)
+{
+    $course = $request->get('course');
+
+    $subjects = WASSCESUBJECT::where('main_course', $course)->get(['wasscesubjects']);
+
+    return response()->json($subjects);
+}
+
 }

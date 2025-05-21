@@ -1,5 +1,7 @@
 <?php
-declare (strict_types = 1);
+
+declare(strict_types=1);
+
 namespace App\Models;
 
 use App\Models\Traits\UuidTrait;
@@ -7,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\SaveToUpper;
 use OwenIt\Auditing\Contracts\Auditable;
+
 class WASSCESUBJECT extends Model implements Auditable
 {
     use HasFactory;
@@ -20,6 +23,7 @@ class WASSCESUBJECT extends Model implements Auditable
      */
     protected $fillable = [
         'wasscesubjects',
+        'main_course'
     ];
 
     /**
@@ -27,7 +31,5 @@ class WASSCESUBJECT extends Model implements Auditable
      *
      * @var array<string, string>
      */
-    protected $casts = [
-
-    ];
+    protected $casts = [];
 }

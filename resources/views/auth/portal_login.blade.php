@@ -14,6 +14,7 @@
 </head>
 <div class="auth-wrapper align-items-stretch aut-bg-img">
              <div class="flex-grow-1">
+        <div class="auth-side-form">
              @if($errors->any())
             <div class="alert alert-danger">
                   <ul>
@@ -23,7 +24,6 @@
                   </ul>
                  </div>
            @endif
-        <div class="auth-side-form">
             <form method="post" action="{{ route('portal.apply') }}">
                 @csrf
                  <div style="text-align: center;">

@@ -255,39 +255,22 @@ EDUCATION
                                                                 <label for="b-t-name"
                                                                     class="col-sm-3 col-form-label">Course
                                                                     Offerred</label>
+
                                                                 <div class="col-sm-3">
-                                                                    <select class="form-control required"
-                                                                        id="secondary_course_offered"
-                                                                        name="secondary_course_offered">
-                                                                        <option value="">Choose Course</option>
-                                                                        <option value="GENERAL ARTS"
-                                                                            {{ old('secondary_course_offered', $applied_applicant->secondary_course_offered) == 'GENERAL ARTS' ? 'selected' : '' }}>
-                                                                            GENERAL ARTS</option>
-                                                                        <option value="VISUAL ARTS"
-                                                                            {{ old('secondary_course_offered', $applied_applicant->secondary_course_offered) == 'VISUAL ARTS' ? 'selected' : '' }}>
-                                                                            VISUAL ARTS</option>
-                                                                        <option value="BUSINESS"
-                                                                            {{ old('secondary_course_offered', $applied_applicant->secondary_course_offered) == 'BUSINESS' ? 'selected' : '' }}>
-                                                                            BUSINESS</option>
-                                                                        <option value="SCIENCE"
-                                                                            {{ old('secondary_course_offered', $applied_applicant->secondary_course_offered) == 'SCIENCE' ? 'selected' : '' }}>
-                                                                            SCIENCE</option>
-                                                                        <option value="HOME ECONOMICS"
-                                                                            {{ old('secondary_course_offered', $applied_applicant->secondary_course_offered) == 'HOME ECONOMICS' ? 'selected' : '' }}>
-                                                                            HOME ECONOMICS</option>
-                                                                        <option value="VOCATIONAL SKILL"
-                                                                            {{ old('secondary_course_offered', $applied_applicant->secondary_course_offered) == 'VOCATIONAL SKILL' ? 'selected' : '' }}>
-                                                                            VOCATIONAL SKILL</option>
-                                                                        <option value="AGRICULTURAL SCIENCE"
-                                                                            {{ old('secondary_course_offered', $applied_applicant->secondary_course_offered) == 'AGRICULTURAL SCIENCE' ? 'selected' : '' }}>
-                                                                            AGRICULTURAL SCIENCE</option>
-                                                                    </select>
+                                                                  <select class="form-control required" id="secondary_course_offered" name="secondary_course_offered">
+    <option value="">Choose Course</option>
+    @foreach(['GENERAL ARTS', 'SCIENCE', 'HOME ECONOMICS','AGRICULTURAL SCIENCE'] as $course)
+        <option value="{{ $course }}" {{ old('secondary_course_offered', $applied_applicant->secondary_course_offered) == $course ? 'selected' : '' }}>
+            {{ $course }}
+        </option>
+    @endforeach
+</select>
                                                                     @error('secondary_course_offered')
                                                                         <span class="text-danger">{{ $message }}</span>
                                                                     @enderror
                                                                 </div>
-
                                                             </div>
+
                                                             <div class="form-group row">
 
                                                                 <label for="b-t-name" class="col-sm-3 col-form-label">Name
@@ -929,6 +912,43 @@ EDUCATION
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/js/select2.min.js"></script>
     <script src="{{ asset('frontend/assets/js/plugins/select2.full.min.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/pages/form-select-custom.js') }}"></script>
+
+
+
+    <script>
+    let selectedFour = "{{ old('wassce_subject_four', $applied_applicant->wassce_subject_four) }}";
+    let selectedFive = "{{ old('wassce_subject_five', $applied_applicant->wassce_subject_five) }}";
+    let selectedSix = "{{ old('wassce_subject_six', $applied_applicant->wassce_subject_six) }}";
+
+    function populateSubjects(subjects) {
+        const selects = [
+            { id: '#wassce_subject_four', selected: selectedFour },
+            { id: '#wassce_subject_five', selected: selectedFive },
+            { id: '#wassce_subject_six', selected: selectedSix },
+        ];
+
+        selects.forEach(({ id, selected }) => {
+            $(id).empty().append('<option value="">Select Subject</option>');
+            $.each(subjects, function (index, subject) {
+                let isSelected = (subject.wasscesubjects === selected) ? 'selected' : '';
+                $(id).append('<option value="' + subject.wasscesubjects + '" ' + isSelected + '>' + subject.wasscesubjects + '</option>');
+            });
+        });
+    }
+
+    $('#secondary_course_offered').on('change', function () {
+        let selectedCourse = $(this).val();
+        $.get('{{ route("get-wassce-subjects") }}', { course: selectedCourse }, populateSubjects);
+    });
+
+    // Optional: trigger on load if course is already selected
+    @if(old('secondary_course_offered', $applied_applicant->secondary_course_offered))
+        $(document).ready(function () {
+            $('#secondary_course_offered').trigger('change');
+        });
+    @endif
+</script>
+
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
