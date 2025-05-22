@@ -15,10 +15,16 @@
 </head>
 <div class="auth-wrapper align-items-stretch aut-bg-img">
     <div class="flex-grow-1">
+
         <div class="auth-side-form">
+
             <form method="post" action="{{ route('print-summary') }}">
                 @csrf
                 <div class=" auth-content">
+                     <div style="text-align: center;">
+                        <img src="{{ asset('new-logo.png') }}" alt=""
+                             style=" width: 150px; height: 180px; object-fit: cover;">
+                    </div>
                     @if ($errors->any())
                         <div class="alert alert-danger">
                             <ul>
@@ -28,7 +34,7 @@
                             </ul>
                         </div>
                     @endif
-                    <h3 class="mb-4 f-w-400">Signin</h3>
+                    <h6 class="mb-4 f-w-400 text-center">REPRINT-SUMMARY-SHEET</h6>
                     <div class="form-group mb-3">
                         <label class="floating-label" for="serial_number">Serial Number</label>
                         <input type="text" class="form-control @error('serial_number') is-invalid @enderror"

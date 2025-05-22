@@ -16,6 +16,10 @@
 <div class="auth-wrapper align-items-stretch aut-bg-img">
     <div class="flex-grow-1">
         <div class="auth-side-form">
+             <div style="text-align: center;">
+                        <img src="{{ asset('new-logo.png') }}" alt=""
+                             style=" width: 150px; height: 180px; object-fit: cover;">
+                    </div>
             <form method="post" action="{{ route('otp-for-reprint') }}">
                 @csrf
                 <div class="auth-content">

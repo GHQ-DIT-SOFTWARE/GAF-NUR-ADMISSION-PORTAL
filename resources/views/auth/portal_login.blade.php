@@ -27,7 +27,7 @@
             <form method="post" action="{{ route('portal.apply') }}">
                 @csrf
                  <div style="text-align: center;">
-                        <img src="{{ asset('nursingschoollogo.png') }}" alt=""
+                        <img src="{{ asset('new-logo.png') }}" alt=""
                              style=" width: 150px; height: 180px; object-fit: cover;">
                     </div>
                 <div class=" auth-content">
