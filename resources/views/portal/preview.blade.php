@@ -475,6 +475,31 @@ PREVIEW
                                                                             </tbody>
                                                                         </table>
                                                                     </div>
+
+
+
+
+                                                                     @if($applied_applicant->disability_status === 'YES')
+    <div class="row" style="margin-left: 0.5cm; margin-right: 0.5cm;">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>DISABILITY STATUS</th>
+                    <th>Disability Specification</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><b>{{ $applied_applicant->disability_status }}</b></td>
+                    <td><b>{{ $applied_applicant->disability_reason }}</b></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+@else
+    <p><strong>DISABILITY STATUS:</strong> No Disability</p>
+@endif
+
                                                                 </div>
                                                                 <div class="col-md-12">
                                                                     <div style="">
