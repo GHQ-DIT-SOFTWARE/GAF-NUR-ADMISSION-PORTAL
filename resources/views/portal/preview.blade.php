@@ -210,7 +210,8 @@ PREVIEW
                                                                                 <tr>
                                                                                     <td id="preview-date-of-birth">
                                                                                         <b></b>
-                                                                                        {{ \Carbon\Carbon::parse($applied_applicant->date_of_birth)->format('d M, Y') }}
+                                                                                       {{ strtoupper(\Carbon\Carbon::parse($applied_applicant->date_of_birth)->format('d F Y')) }}
+
                                                                                     </td>
                                                                                     <td id="preview-contact">
                                                                                         <b></b>
@@ -278,7 +279,8 @@ PREVIEW
                                                                                     </td>
                                                                                     <td id="preview-jhs-completion-year">
                                                                                         <b></b>
-                                                                                        {{ \Carbon\Carbon::parse($applied_applicant->bece_year_completion)->format('d M, Y') }}
+                                                                                       {{ strtoupper(\Carbon\Carbon::parse($applied_applicant->bece_year_completion)->format('d F Y')) }}
+
                                                                                     </td>
                                                                                     <td id="wassce_index_number">
                                                                                         <b></b>
@@ -286,7 +288,7 @@ PREVIEW
                                                                                     </td>
                                                                                     <td id="wassce_year_completion">
                                                                                         <b></b>
-                                                                                        {{ \Carbon\Carbon::parse($applied_applicant->wassce_year_completion)->format('d M, Y') }}
+                                                                                       {{ strtoupper(\Carbon\Carbon::parse($applied_applicant->wassce_year_completion)->format('d F Y')) }}
                                                                                     </td>
                                                                                 </tr>
                                                                             </tbody>

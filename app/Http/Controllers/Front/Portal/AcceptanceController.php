@@ -145,7 +145,7 @@ class AcceptanceController extends Controller
         if ($applicant->qualification === 'DISQUALIFIED') {
             $this->sendQualificationSms($applicant, 'Unfortunately, you have been DISQUALIFIED. Reason: ' . $applicant->disqualification_reason);
         } elseif ($applicant->qualification === 'QUALIFIED') {
-            $this->sendQualificationSms($applicant, 'Congratulations! You are QUALIFIED. Your GAF is: ' . $applicantSerialNumber);
+            $this->sendQualificationSms($applicant, 'Your Application has been received. We are reviewing it and will notify you if you pass the checks. Thank you.');
         }
     }
 
