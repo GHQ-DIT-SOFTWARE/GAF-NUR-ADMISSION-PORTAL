@@ -249,6 +249,10 @@
            <td>{{ strtoupper(\Carbon\Carbon::parse($applied_applicant->bece_year_completion)->format('d F Y')) }}</td>
         </tr>
     </table>
+     @if (!is_null($applied_applicant->disability_reason))
+        <div class="section-title">Disability Reason</div>
+        <p><strong>State:</strong> {{ $applied_applicant->disability_reason }}</p>
+    @endif
     @if (!is_null($applied_applicant->disqualification_reason))
         <div class="section-title">Disqualification</div>
         <p><strong>Reason:</strong> {{ $applied_applicant->disqualification_reason }}</p>

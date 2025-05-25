@@ -10,6 +10,7 @@ class ApplicantsTableSeeder extends Seeder
 {
     private $sequence = 20; // Initialize sequence
 
+<<<<<<< HEAD
     // public function run()
     // {
         // $batchSize = 500; // Adjust the batch size
@@ -57,7 +58,42 @@ class ApplicantsTableSeeder extends Seeder
         }
         
         
+=======
+    public function run()
+    {
+        $batchSize = 500; // Adjust the batch size
+        $applicants = [];
+
+        for ($i = 0; $i < 10000; $i++) {
+            $applicants[] = [
+                'uuid' => (string) Str::uuid(),
+                'serial_number' => $this->generateSerialNumber(),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+            // Insert the batch when it reaches the batch size
+            if (count($applicants) === $batchSize) {
+                DB::table('cards')->insert($applicants);
+                $applicants = []; // Reset the array for the next batch
+            }
+        }
+
+        // Insert any remaining records
+        if (!empty($applicants)) {
+            DB::table('cards')->insert($applicants);
+        }
+>>>>>>> 9b010d59259aa45258f0b4bd696c0613642fa9eb
     }
+
+    // public function run()
+    // {
+    //     DB::table('cards')->insert([
+    //         'uuid' => (string) Str::uuid(),
+    //         'serial_number' => $this->generateSerialNumber(),
+    //         'created_at' => now(),
+    //         'updated_at' => now(),
+    //     ]);
+    // }
 
     /**
      * Generate a serial number with random alphanumeric prefix and sequential suffix.

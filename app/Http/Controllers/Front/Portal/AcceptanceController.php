@@ -88,6 +88,10 @@ class AcceptanceController extends Controller
         if (DB::table('applicants')->where('bece_index_number', $applicant->bece_index_number)->where('id', '<>', $applicant->id)->exists()) {
             $disqualificationReasons[] = 'Your Information  already exists in the portal.';
         }
+        // Check National Identification card index number uniqueness
+        if (DB::table('applicants')->where('national_identity_card', $applicant->national_identity_card)->where('id', '<>', $applicant->id)->exists()) {
+            $disqualificationReasons[] = 'Your Information  already exists in the portal.';
+        }
         // If disqualified, save and return early
         if (!empty($disqualificationReasons)) {
             return $this->disqualifyAndSave($disqualificationReasons, $applicant);
@@ -141,7 +145,7 @@ class AcceptanceController extends Controller
         if ($applicant->qualification === 'DISQUALIFIED') {
             $this->sendQualificationSms($applicant, 'Unfortunately, you have been DISQUALIFIED. Reason: ' . $applicant->disqualification_reason);
         } elseif ($applicant->qualification === 'QUALIFIED') {
-            $this->sendQualificationSms($applicant, 'Congratulations! You are QUALIFIED. Your GAF is: ' . $applicantSerialNumber);
+            $this->sendQualificationSms($applicant, 'Your Application has been received. We are reviewing it and will notify you if you pass the checks. Thank you.');
         }
     }
 

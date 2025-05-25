@@ -216,7 +216,7 @@
                                                                     <span class="text-danger">{{ $message }}</span>
                                                                 @enderror
                                                             </div>
-                                                            <label for="b-t-name" class="col-sm-2 col-form-label">National
+                                                            {{-- <label for="b-t-name" class="col-sm-2 col-form-label">National
                                                                 ID (Ghana Card)</label>
                                                             <div class="col-sm-2">
                                                                 <input type="text" class="form-control"
@@ -226,7 +226,25 @@
                                                                 @error('national_identity_card')
                                                                     <span class="text-danger">{{ $message }}</span>
                                                                 @enderror
-                                                            </div>
+                                                            </div> --}}
+                                                            <label for="national_identity_card" class="col-sm-2 col-form-label">
+    National ID (Ghana Card)
+</label>
+<div class="col-sm-2">
+    <input type="text" class="form-control"
+        id="national_identity_card"
+        name="national_identity_card"
+        placeholder="GHA-123456789-1"
+        maxlength="16"
+        pattern="GHA-\d{9}-\d{1}"
+        title="Format: GHA-XXXXXXXXX-X (e.g., GHA-123456789-1)"
+        required
+        value="{{ old('national_identity_card', $applied_applicant->national_identity_card) }}">
+    @error('national_identity_card')
+        <span class="text-danger">{{ $message }}</span>
+    @enderror
+</div>
+
 
                                                             <label for="b-t-name" class="col-sm-2 col-form-label">Date of
                                                                 Birth</label>
