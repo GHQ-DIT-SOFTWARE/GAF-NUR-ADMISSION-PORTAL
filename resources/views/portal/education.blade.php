@@ -907,8 +907,6 @@ EDUCATION
     <script src="{{ asset('frontend/assets/js/pcoded.min.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/plugins/jquery.bootstrap.wizard.min.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/plugins/moment.min.js') }}"></script>
-    <script src="{{ asset('frontend/assets/js/plugins/daterangepicker.js') }}"></script>
-    <script src="{{ asset('frontend/assets/js/pages/ac-datepicker.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/js/select2.min.js"></script>
     <script src="{{ asset('frontend/assets/js/plugins/select2.full.min.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/pages/form-select-custom.js') }}"></script>
@@ -1262,39 +1260,7 @@ EDUCATION
             });
         });
     </script>
-    <script type="text/javascript">
-        $('#jhs_completion_year').datepicker({
-            format: "yyyy",
-            endDate: "31/12/2024",
-            startView: 2,
-            minViewMode: 2,
-            autoclose: true,
-            calendarWeeks: true
 
-        });
-    </script>
+    
 
-    <script>
-        function printData() {
-            var divToPrint = document.getElementById("printTable");
-            newWin = window.open("");
-            newWin.document.write(divToPrint.outerHTML);
-            newWin.print();
-            newWin.close();
-        }
-        $('.btn-print-invoice').on('click', function() {
-            printData();
-        })
-    </script>
-
-    <script>
-        $(document).ready(function() {
-            $("#datepicker").datepicker({
-                format: "yyyy",
-                viewMode: "years",
-                minViewMode: "years",
-                autoclose: true
-            });
-        })
-    </script>
 @endsection

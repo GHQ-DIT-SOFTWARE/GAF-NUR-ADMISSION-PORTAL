@@ -179,6 +179,22 @@
             </td>
         </tr>
     </table>
+    @if (!is_null($applied_applicant->disability_reason))
+    <table class="table table-bordered" style="width: 100%; margin-bottom: 15px;">
+        <thead>
+            <tr>
+                <th colspan="2" style="text-align: left;">Disability Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="width: 30%;"><strong>Disability Reason</strong></td>
+                <td>{{ $applied_applicant->disability_reason }}</td>
+            </tr>
+        </tbody>
+    </table>
+@endif
+
     <br><br>
     <div class="section-title">BECE Results</div>
     <table class="data-table">
@@ -249,10 +265,7 @@
            <td>{{ strtoupper(\Carbon\Carbon::parse($applied_applicant->bece_year_completion)->format('d F Y')) }}</td>
         </tr>
     </table>
-     @if (!is_null($applied_applicant->disability_reason))
-        <div class="section-title">Disability Reason</div>
-        <p><strong>State:</strong> {{ $applied_applicant->disability_reason }}</p>
-    @endif
+
     @if (!is_null($applied_applicant->disqualification_reason))
         <div class="section-title">Disqualification</div>
         <p><strong>Reason:</strong> {{ $applied_applicant->disqualification_reason }}</p>

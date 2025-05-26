@@ -35,6 +35,7 @@ class AcceptanceController extends Controller
         return view('portal.preview', compact('applied_applicant'));
     }
 
+
     public function Declaration_and_Acceptance(Request $request)
     {
         $request->validate([
@@ -43,23 +44,57 @@ class AcceptanceController extends Controller
 
         $applicant = Applicant::where('card_id', $request->session()->get('card_id'))->firstOrFail();
         $disqualificationReasons = [];
+        $duplicateReasons = [];
 
         // Ensure the declaration is accepted
         if (!$request->has('final_checked') || $request->input('final_checked') !== 'YES') {
             $disqualificationReasons[] = 'You must accept the declaration to proceed.';
         }
 
+        // Check for BECE index number or National ID duplication
+        $beceExists = DB::table('applicants')
+            ->where('bece_index_number', $applicant->bece_index_number)
+            ->where('id', '<>', $applicant->id)
+            ->exists();
+
+        $nationalIdExists = DB::table('applicants')
+            ->where('national_identity_card', $applicant->national_identity_card)
+            ->where('id', '<>', $applicant->id)
+            ->exists();
+        if ($request->input('final_checked') === 'YES' && ($beceExists || $nationalIdExists)) {
+            $applicant->qualification = 'DISQUALIFIED';
+            // Update the card status
+            $applicant->load('card');
+            if ($applicant->card) {
+                $applicant->card->status = 1; // Or whatever value is appropriate
+                $applicant->card->save();
+            }
+
+            return response()->json([
+                'status' => 'duplicate',
+                'message' => 'Your information already exists in the portal.',
+                'redirect_url' => route('applicant.already-exists')
+            ]);
+        }
+
+        // if ($request->input('final_checked') === 'YES' && ($beceExists || $nationalIdExists)) {
+        //     return response()->json([
+        //         'status' => 'duplicate',
+        //         'message' => 'Your information already exists in the portal.',
+        //         'redirect_url' => route('applicant.already-exists')
+        //     ]);
+        // }
+
+
+
         $applicant->final_checked = 'YES';
         $applicant->qualification = 'QUALIFIED';
         $applicant->disqualification_reason = null;
-
         // Calculate and store applicant age
         $age = Carbon::parse($applicant->date_of_birth)->age;
         $applicant->age = $age;
-
         // Check exam results and disqualify if necessary
         $this->checkExamResults($applicant, $disqualificationReasons);
-
         // Check age limits
         if ($age < 16 || $age > 35) {
             if ($age > 35 && empty($applicant->employer_letter)) {
@@ -68,7 +103,6 @@ class AcceptanceController extends Controller
                 $disqualificationReasons[] = 'Applicants must be at least 16 years old.';
             }
         }
-
         // Check for mixed exam types
         $examTypes = [
             'exam_type_one',
@@ -85,16 +119,11 @@ class AcceptanceController extends Controller
             $disqualificationReasons[] = 'A combination of SSSCE and WASSCE results is not acceptable.';
         }
         // Check BECE index number uniqueness
-        if (DB::table('applicants')->where('bece_index_number', $applicant->bece_index_number)->where('id', '<>', $applicant->id)->exists()) {
-            $disqualificationReasons[] = 'Your Information  already exists in the portal.';
-        }
-        // Check National Identification card index number uniqueness
-        if (DB::table('applicants')->where('national_identity_card', $applicant->national_identity_card)->where('id', '<>', $applicant->id)->exists()) {
-            $disqualificationReasons[] = 'Your Information  already exists in the portal.';
-        }
+
         // If disqualified, save and return early
         if (!empty($disqualificationReasons)) {
-            return $this->disqualifyAndSave($disqualificationReasons, $applicant);
+            $this->disqualifyAndSave($disqualificationReasons, $applicant, $request); // ✅ Now passing 3 arguments
+
         }
         // Applicant is qualified - Generate Serial Number
         $applicant->load('card');
@@ -149,27 +178,6 @@ class AcceptanceController extends Controller
         }
     }
 
-    public function generateQrCode($applicant)
-    {
-        // Define the path to save the QR code image
-        $qrCodePath = 'uploads/qrcodes/' . $applicant->applicant_serial_number . '.png';
-        $fullPath = public_path($qrCodePath);
-        // Construct the path without the base URL
-        $path = 'applicant/' . $applicant->uuid;
-        // Create a new QR code with just the path (without the domain)
-        $qrCode = new QrCode($path);
-        $qrCode->setSize(300);
-        // Write the QR code to a PNG file
-        $writer = new PngWriter();
-        $result = $writer->write($qrCode);
-        // Save the QR code image to the specified path
-        file_put_contents($fullPath, $result->getString());
-        // Store the path to the QR code image in the applicant's record
-        $applicant->qr_code_path = $qrCodePath;
-        $applicant->save();
-        // Return the path to the QR code image
-        return $qrCodePath;
-    }
 
     protected function disqualifyAndSave($reasons, $applicant)
     {
@@ -183,17 +191,12 @@ class AcceptanceController extends Controller
             $applicant->card->status = 1; // Set card status to 1 for Disqualified
             $applicant->card->save(); // Save the card status update
         }
-
         $applicant->save(); // Save applicant data
-
         $pdfUrl = route('applicant-pdf'); // Generate PDF URL
-
         $admins = User::where('is_admin', 1)->get();
         Notification::send($admins, new ApplicantAppliedNotification($applicant));
-
         // Send SMS for disqualification
         $this->sendQualificationSms($applicant, 'Unfortunately, you have been DISQUALIFIED. Reason: ' . $applicant->disqualification_reason);
-
         return response()->json([
             'status' => 'error',
             'message' => 'Applicant has been disqualified.',

@@ -10,7 +10,7 @@
     <meta name="description" content="" />
     <meta name="keywords" content="">
     <meta name="author" content="Phoenixcoded" />
-    <link rel="icon" href="{{ asset('logo-icon.png') }}" type="image/x-icon">
+ <link rel="icon" href="{{ asset('nursingschoollogo.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/plugins/flipclock.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"

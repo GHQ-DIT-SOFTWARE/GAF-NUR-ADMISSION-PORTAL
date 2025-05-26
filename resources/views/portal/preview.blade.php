@@ -259,6 +259,27 @@ PREVIEW
                                                                         </table>
                                                                     </div>
 
+                                                                     @if($applied_applicant->disability_status === 'YES')
+    <div class="row" style="margin-left: 0.5cm; margin-right: 0.5cm;">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>DISABILITY STATUS</th>
+                    <th>Disability Specification</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><b>{{ $applied_applicant->disability_status }}</b></td>
+                    <td><b>{{ $applied_applicant->disability_reason }}</b></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+@else
+    <p><strong>DISABILITY STATUS:</strong> No Disability</p>
+@endif
+
                                                                     <h5 class="mt-5"
                                                                         style="text-transform: uppercase; text-align:left; margin-left: 0.5cm">
                                                                         Educational details</h5>
@@ -476,30 +497,6 @@ PREVIEW
                                                                         </table>
                                                                     </div>
 
-
-
-
-                                                                     @if($applied_applicant->disability_status === 'YES')
-    <div class="row" style="margin-left: 0.5cm; margin-right: 0.5cm;">
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>DISABILITY STATUS</th>
-                    <th>Disability Specification</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><b>{{ $applied_applicant->disability_status }}</b></td>
-                    <td><b>{{ $applied_applicant->disability_reason }}</b></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-@else
-    <p><strong>DISABILITY STATUS:</strong> No Disability</p>
-@endif
-
                                                                 </div>
                                                                 <div class="col-md-12">
                                                                     <div style="">
@@ -562,6 +559,44 @@ PREVIEW
                 </div>
         </section>
     </body>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+document.getElementById('final-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const form = this;
+
+    fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'duplicate') {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Duplicate Entry',
+                text: data.message,
+                confirmButtonText: 'OK',
+                timer: 2000, // Optional: auto-close after 2s
+                timerProgressBar: true,
+            }).then(() => {
+                window.location.href = data.redirect_url;
+            });
+        } else if (data.status === 'error') {
+            window.location.href = data.pdf_url;
+        } else {
+            // Handle other success case
+        }
+    });
+});
+</script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <!--  Js -->
@@ -576,15 +611,103 @@ PREVIEW
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/js/select2.min.js"></script>
     <script src="{{ asset('frontend/assets/js/plugins/select2.full.min.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/pages/form-select-custom.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+
+<script>
+document.getElementById('declarationForm').addEventListener('submit', function(e) {
+    e.preventDefault(); // Prevent default form submission
+
+    const checkbox = document.getElementById('customCheck1');
+
+    if (!checkbox.checked) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Declaration Required',
+            text: 'You must agree to the declaration before submitting.',
+        });
+        return;
+    }
+    // Proceed with form submission via fetch
+    const form = this;
+    const formData = new FormData(form);
+
+    fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Server response:', data); // Debugging log
+
+        if (data.status === 'duplicate') {
+            // 🔥 Show SweetAlert if duplicate
+            Swal.fire({
+                icon: 'warning',
+                title: 'Duplicate Entry',
+                text: data.message || 'Your information already exists in the portal.',
+                confirmButtonText: 'OK',
+                timer: 3000,
+                timerProgressBar: true,
+            }).then(() => {
+                window.location.href = data.redirect_url || '/Portal';
+            });
+        }
+        else if (data.status === 'error') {
+            // ❌ Disqualified: Open PDF and logout after delay
+            if (data.pdf_url) {
+                window.open(data.pdf_url, '_blank');
+            }
+            setTimeout(() => logoutUser(), 500);
+        }
+        else if (data.status === 'success') {
+            // ✅ Qualified: Open PDF and logout
+            if (data.pdf_url) {
+                window.open(data.pdf_url, '_blank');
+            }
+            setTimeout(() => logoutUser(), 500);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Submission Failed',
+            text: 'An error occurred while submitting. Please try again.',
+        });
+    });
+});
+
+function logoutUser() {
+    fetch('{{ route('apply_logout') }}', {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+        }
+    })
+    .then(() => {
+        window.location.href = '/Portal';
+    })
+    .catch(error => console.error('Logout failed:', error));
+}
+</script>
+
+{{--
     <script>
         document.getElementById('declarationForm').addEventListener('submit', function(e) {
-            const checkbox = document.getElementById('customCheck1');
-            if (!checkbox.checked) {
-                e.preventDefault(); // Prevent form submission
-                alert('You must agree to the declaration before submitting the application.');
-                return;
-            }
+            e.preventDefault(); // 🛑 Prevent default form submission first
+    const checkbox = document.getElementById('customCheck1');
+    if (!checkbox.checked) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Declaration Required',
+            text: 'You must agree to the declaration before submitting.',
+        });
+        return; // ❗ Exit early so form doesn't proceed
+    }
             // Proceed with form submission
             e.preventDefault(); // Prevent default form submission
             let form = this;
@@ -622,7 +745,7 @@ PREVIEW
                 })
                 .catch(error => console.error('Logout failed:', error));
         }
-    </script>
+    </script> --}}
 
     <script type="text/javascript">
         $(document).ready(function() {
@@ -758,27 +881,6 @@ PREVIEW
         });
     </script>
 
-    <script>
-        function printData() {
-            var divToPrint = document.getElementById("printTable");
-            newWin = window.open("");
-            newWin.document.write(divToPrint.outerHTML);
-            newWin.print();
-            newWin.close();
-        }
-        $('.btn-print-invoice').on('click', function() {
-            printData();
-        })
-    </script>
 
-    <script>
-        $(document).ready(function() {
-            $("#datepicker").datepicker({
-                format: "yyyy",
-                viewMode: "years",
-                minViewMode: "years",
-                autoclose: true
-            });
-        })
-    </script>
+
 @endsection

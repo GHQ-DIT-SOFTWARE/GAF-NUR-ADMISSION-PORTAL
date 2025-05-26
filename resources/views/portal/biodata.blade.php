@@ -394,8 +394,7 @@
     <script src="{{ asset('frontend/assets/js/pcoded.min.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/plugins/jquery.bootstrap.wizard.min.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/plugins/moment.min.js') }}"></script>
-    <script src="{{ asset('frontend/assets/js/plugins/daterangepicker.js') }}"></script>
-    <script src="{{ asset('frontend/assets/js/pages/ac-datepicker.js') }}"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/js/select2.min.js"></script>
     <script src="{{ asset('frontend/assets/js/plugins/select2.full.min.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/pages/form-select-custom.js') }}"></script>
@@ -597,14 +596,5 @@
         })
     </script>
 
-    <script>
-        $(document).ready(function() {
-            $("#datepicker").datepicker({
-                format: "yyyy",
-                viewMode: "years",
-                minViewMode: "years",
-                autoclose: true
-            });
-        })
-    </script>
+
 @endsection

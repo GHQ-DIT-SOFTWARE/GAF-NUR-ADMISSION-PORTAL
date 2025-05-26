@@ -38,6 +38,7 @@ Route::post('/otp-for-summary-sheet-reprint', [PortalLogin::class, 'verifyOtprep
 Route::get('/Print/Summary/Sheet', [PortalLogin::class, 'PrintSummarySheet'])->name('print-summary-sheet');
 Route::post('/summary-sheet', [PortalLogin::class, 'print_summary_sheet'])->name('print-summary');
 
+
 // Portal landing page after login
 Route::middleware(['portal'])->group(function () {
 
@@ -46,11 +47,11 @@ Route::middleware(['portal'])->group(function () {
         Route::get('/bio-data', [BiodataController::class, 'biodata'])->name('bio-data');
         Route::post('save-biodata', [BiodataController::class, 'saveBioData'])->name('saveBioData');
     });
+
     Route::prefix('education')->group(function () {
         Route::get('/details', [EducationController::class, 'education_details'])->name('education-details');
         Route::post('save-education-data', [EducationController::class, 'saveEducationData'])->name('saveEducationData');
         Route::get('/get-wassce-subjects', [EducationController::class, 'getSubjectsByCourse'])->name('get-wassce-subjects');
-
     });
 
     Route::prefix('declaration-and-acceptance')->group(function () {
@@ -59,14 +60,13 @@ Route::middleware(['portal'])->group(function () {
     });
     Route::post('/apply-logout', [PortalLogin::class, 'apply_logout'])->name('apply_logout');
     Route::get('/applicant-pdf', [ApplicantPdfGenerationController::class, 'generatePdf'])->name('applicant-pdf');
+
+    Route::get('/applicant/already-exists', function () {
+        return view('portal.pdf.already_exist');
+    })->name('applicant.already-exists');
 });
 // Default route redirects to Portal login
 Route::get('/', function () {
     return redirect()->route('portal.login');
 });
 Auth::routes();
-
-
-
-
-
