@@ -8,31 +8,55 @@ use Illuminate\Support\Str;
 
 class ApplicantsTableSeeder extends Seeder
 {
-    private $sequence = 1; // Initialize sequence
+    private $sequence = 20; // Initialize sequence
+
+    // public function run()
+    // {
+        // $batchSize = 500; // Adjust the batch size
+        // $applicants = [];
+
+        // for ($i = 0; $i < 10000; $i++) {
+        //     $applicants[] = [
+    //             'uuid' => (string) Str::uuid(),
+    //             'serial_number' => $this->generateSerialNumber(),
+    //             'created_at' => now(),
+    //             'updated_at' => now(),
+    //         ];
+    //         // Insert the batch when it reaches the batch size
+    //         if (count($applicants) === $batchSize) {
+    //             DB::table('cards')->insert($applicants);
+    //             $applicants = []; // Reset the array for the next batch
+    //         }
+    //     }
+
+    //     // Insert any remaining records
+    //     if (!empty($applicants)) {
+    //         DB::table('cards')->insert($applicants);
+    //     }
+    // }
 
     public function run()
     {
-        $batchSize = 500; // Adjust the batch size
+        $batchSize = 5; // Adjust the batch size
         $applicants = [];
 
-        for ($i = 0; $i < 10000; $i++) {
+        for ($i = 0; $i < 10; $i++) {
             $applicants[] = [
-                'uuid' => (string) Str::uuid(),
-                'serial_number' => $this->generateSerialNumber(),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ];
-            // Insert the batch when it reaches the batch size
+
+            'uuid' => (string) Str::uuid(),
+            'serial_number' => $this->generateSerialNumber(),
+            'created_at' => now(),
+            'updated_at' => now(),
+             ];
+
+            //  Insert the batch when it reaches the batch size
             if (count($applicants) === $batchSize) {
                 DB::table('cards')->insert($applicants);
                 $applicants = []; // Reset the array for the next batch
-            }
+           }
         }
 
-        // Insert any remaining records
-        if (!empty($applicants)) {
-            DB::table('cards')->insert($applicants);
-        }
+
     }
 
     // public function run()
@@ -52,7 +76,7 @@ class ApplicantsTableSeeder extends Seeder
      */
     private function generateSerialNumber()
     {
-        $prefix = $this->generateRandomAlphanumeric(9); // Generate 7-character alphanumeric prefix
+        $prefix = $this->generateRandomAlphanumeric(9); // Generate 9-character alphanumeric prefix
         $sequenceNumber = str_pad($this->sequence, 3, '0', STR_PAD_LEFT); // Sequential number padded to 3 digits
         $this->sequence++;
         return $prefix . $sequenceNumber;
@@ -76,10 +100,10 @@ class ApplicantsTableSeeder extends Seeder
      *
      * @return string
      */
-    private function generatePinCode()
-    {
-        return substr(str_shuffle(str_repeat('123456789', 12)), 0, 12); // Exclude '0' from the pincode
-    }
+    // private function generatePinCode()
+    // {
+    //     return substr(str_shuffle(str_repeat('123456789', 12)), 0, 12); // Exclude '0' from the pincode
+    // }
 
     /**
      * Generate a random string for the surname field.

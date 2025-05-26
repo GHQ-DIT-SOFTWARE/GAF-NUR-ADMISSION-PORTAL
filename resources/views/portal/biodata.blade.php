@@ -79,7 +79,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <h4 style="text-align: center; font-family: Arial Black, Helvetica, sans-serif;">
-                                     WELCOME TO GHANA ARMED FORCES  COLLEGE OF NURSING AND MIDWIFERY ONLINE PORTAL
+                                     WELCOME TO THE GHANA ARMED FORCES COLLEGE OF NURSING AND MIDWIFERY PORTAL
                                 </h4>
                                 <marquee behavior="scroll" direction="left" scrollamount="2"
                                     style="font-family: Arial, sans-serif; font-size: 16px; color: #ff0000; font-weight: bold; text-transform: uppercase;">
