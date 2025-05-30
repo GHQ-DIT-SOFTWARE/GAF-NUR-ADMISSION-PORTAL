@@ -69,7 +69,7 @@ EDUCATION
                                     <li class="breadcrumb-item"><a href="index.html"><i class="feather icon-home"></i></a>
                                     </li>
                                     <li class="breadcrumb-item"><a href="#!">COURSE SELECTED:
-                                            {{ $applied_applicant->cause_offers }}
+                                            {{ $applied_applicant->cause_offers }} / ENTRANCE: {{ $applied_applicant->entrance_type }}
                                            </a></li>
 
                                 </ul>
@@ -175,6 +175,7 @@ EDUCATION
                                                                     </div>
                                                                 </div>
                                                             </div>
+
                                                             <div class="form-group row">
                                                                 <label for="b-t-name" class="col-sm-3 col-form-label">Upload
                                                                     JHS
@@ -882,6 +883,71 @@ EDUCATION
                                                     <div class="col-md-12">
                                                         <hr>
                                                     </div>
+
+                                                   @if($applied_applicant->entrance_type === 'TOP UP')
+    <div class="col-md-12">
+        <h5 class="mt-5">Top Details</h5>
+        <hr>
+        <div>
+            <div class="form-group row">
+                <label for="b-t-name" class="col-sm-3 col-form-label">Institution</label>
+                <div class="col-sm-3">
+                    <input type="text" class="form-control"
+                        id="institution" name="institution"
+                        value="{{ old('institution', $applied_applicant->institution) }}" >
+                    @error('institution')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <label for="b-t-name" class="col-sm-3 col-form-label">Upload NMC/Results slip</label>
+                <div class="col-sm-3">
+                    <div class="file btn waves-effect waves-light btn-outline-primary mt-3 file-btn">
+                        <i class="feather icon-paperclip"></i> Add Attachment
+                        <input type="file" name="results_certificate"
+                            accept=".pdf" id="results_certificate" />
+                        @error('results_certificate')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div id="results_certificate-file-preview" class="mt-2">
+                        @if ($applied_applicant->results_certificate)
+                            <p>Selected file:
+                                {{ pathinfo($applied_applicant->results_certificate, PATHINFO_FILENAME) }}.{{ pathinfo($applied_applicant->results_certificate, PATHINFO_EXTENSION) }}
+                            </p>
+                            <a href="{{ asset($applied_applicant->results_certificate) }}" target="_blank">View PDF</a>
+                        @endif
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="b-t-name" class="col-sm-3 col-form-label">Upload Transcript</label>
+                <div class="col-sm-3">
+                    <div class="file btn waves-effect waves-light btn-outline-primary mt-3 file-btn">
+                        <i class="feather icon-paperclip"></i> Add Attachment
+                        <input type="file" name="transcript"
+                            accept=".pdf" id="transcript" />
+                        @error('transcript')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div id="transcript-file-preview" class="mt-2">
+                        @if ($applied_applicant->transcript)
+                            <p>Selected file:
+                                {{ pathinfo($applied_applicant->transcript, PATHINFO_FILENAME) }}.{{ pathinfo($applied_applicant->transcript, PATHINFO_EXTENSION) }}
+                            </p>
+                            <a href="{{ asset($applied_applicant->transcript) }}" target="_blank">View PDF</a>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
+
                                                     <div class="col-md-12">
                                                         <button type="submit" class="btn btn-primary save-btn"
                                                             id="saveEducationData" style="float: right;">Next</button>
@@ -1090,37 +1156,68 @@ EDUCATION
         });
     </script>
 
-    <script>
-        $(document).ready(function() {
-            $('#district').change(function() {
-                var district_id = $(this).val();
-                if (district_id) {
-                    $.ajax({
-                        url: '/get-regions/' + district_id,
-                        type: 'GET',
-                        dataType: 'json',
-                        success: function(data) {
-                            $('#region').empty();
-                            if (data.length > 0) {
-                                $.each(data, function(key, value) {
-                                    $('#region').append('<option value="' + value.id +
-                                        '">' + value.region_name + '</option>');
-                                });
-                            } else {
-                                $('#region').append(
-                                    '<option value="">No regions available</option>');
-                            }
-                        }
-                    });
-                } else {
-                    $('#region').empty();
-                    $('#region').append('<option value="">Select Region</option>');
+ <script>
+        document.getElementById('results_certificate').addEventListener('change', function(event) {
+            var fileInput = event.target;
+            var filePreview = document.getElementById('results_certificate-file-preview');
+            // Clear previous preview
+            filePreview.innerHTML = '';
+            if (fileInput.files.length > 0) {
+                var file = fileInput.files[0];
+                if (file.size > 1048576) {
+                    filePreview.textContent = 'File size exceeds 1MB. Please select a smaller file.';
+                    fileInput.value = ''; // Clear the file input
+                    return; // Exit the function if the file is too large
                 }
-            });
+
+                if (file.type === 'application/pdf') {
+                    // Display file name
+                    var fileName = document.createElement('p');
+                    fileName.textContent = 'Selected file: ' + file.name;
+                    filePreview.appendChild(fileName);
+                    // Optionally, provide a link to open the PDF
+                    var fileLink = document.createElement('a');
+                    fileLink.href = URL.createObjectURL(file);
+                    fileLink.textContent = 'View PDF';
+                    fileLink.target = '_blank';
+                    filePreview.appendChild(fileLink);
+                } else {
+                    filePreview.textContent = 'Please select a PDF file.';
+                }
+            }
         });
     </script>
+ <script>
+        document.getElementById('transcript').addEventListener('change', function(event) {
+            var fileInput = event.target;
+            var filePreview = document.getElementById('transcript-file-preview');
+            // Clear previous preview
+            filePreview.innerHTML = '';
+            if (fileInput.files.length > 0) {
+                var file = fileInput.files[0];
+                if (file.size > 1048576) {
+                    filePreview.textContent = 'File size exceeds 1MB. Please select a smaller file.';
+                    fileInput.value = ''; // Clear the file input
+                    return; // Exit the function if the file is too large
+                }
 
-
+                if (file.type === 'application/pdf') {
+                    // Display file name
+                    var fileName = document.createElement('p');
+                    fileName.textContent = 'Selected file: ' + file.name;
+                    filePreview.appendChild(fileName);
+                    // Optionally, provide a link to open the PDF
+                    var fileLink = document.createElement('a');
+                    fileLink.href = URL.createObjectURL(file);
+                    fileLink.textContent = 'View PDF';
+                    fileLink.target = '_blank';
+                    filePreview.appendChild(fileLink);
+                } else {
+                    filePreview.textContent = 'Please select a PDF file.';
+                }
+            }
+        });
+    </script>
 
 
 
@@ -1261,6 +1358,6 @@ EDUCATION
         });
     </script>
 
-    
+
 
 @endsection

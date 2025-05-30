@@ -90,6 +90,8 @@ class PortalLogin extends Controller
             'serial_number' => 'required',
             'cause_offers' => 'required',
             'contact' => 'required|digits:10',
+            'entrance_type' => 'required',
+
         ]);
 
         $card = Card::where('serial_number', $request->serial_number)->first();
@@ -110,6 +112,10 @@ class PortalLogin extends Controller
             if ($applicant->cause_offers !== $request->cause_offers) {
                 return back()->withErrors(['cause_offers' => 'You cannot change your selected course once applied.']);
             }
+            //Prevent Entrance Type
+            if ($applicant->entrance_type !== $request->entrance_type) {
+                return back()->withErrors(['entrance_type' => 'You cannot change your selected entrance type once applied.']);
+            }
             // Update only contact information
             $applicant->update([
                 'contact' => $request->contact,
@@ -120,12 +126,15 @@ class PortalLogin extends Controller
                 'card_id' => $card->id,
                 'cause_offers' => $request->cause_offers,
                 'contact' => $request->contact,
+                'entrance_type' => $request->entrance_type,
+
             ]);
         }
         // Store applicant details in the session
         $request->session()->put('serial_number', $request->serial_number);
         $request->session()->put('card_id', $card->id);
         $request->session()->put('cause_offers', $applicant->cause_offers);
+        $request->session()->put('entrance_type', $applicant->entrance_type);
 
         // Generate and send OTP
         $otp = rand(100000, 999999);
@@ -135,63 +144,6 @@ class PortalLogin extends Controller
         return redirect()->route('verify-otp');
     }
 
-
-
-    // public function apply(Request $request)
-    // {
-    //     $request->validate([
-    //         'serial_number' => 'required',
-    //         'pincode' => 'required',
-    //         'cause_offers' => 'required',
-    //         'contact' => 'required|digits:10',
-    //     ]);
-
-    //     $card = Card::where('serial_number', $request->serial_number)
-    //         ->where('pincode', $request->pincode)
-    //         ->first();
-
-    //     if (!$card) {
-    //         return back()->withErrors(['serial_number' => 'Invalid Serial Number or Pincode.']);
-    //     }
-
-    //     if ($card->status == 1) {
-    //         return back()->withErrors(['serial_number' => 'The card has already been used.']);
-    //     }
-
-    //     // Check if the applicant has already applied
-    //     $applicant = Applicant::where('card_id', $card->id)->first();
-
-    //     if ($applicant) {
-    //         // Prevent course change
-    //         if ($applicant->cause_offers !== $request->cause_offers) {
-    //             return back()->withErrors(['cause_offers' => 'You cannot change your selected course once applied.']);
-    //         }
-    //         // Update only contact information
-    //         $applicant->update([
-    //             'contact' => $request->contact,
-    //         ]);
-    //     } else {
-    //         // New applicant record
-    //         $applicant = Applicant::create([
-    //             'card_id' => $card->id,
-    //             'cause_offers' => $request->cause_offers,
-    //             'contact' => $request->contact,
-    //         ]);
-    //     }
-
-    //     // Store applicant details in the session
-    //     $request->session()->put('serial_number', $request->serial_number);
-    //     $request->session()->put('pincode', $request->pincode);
-    //     $request->session()->put('card_id', $card->id);
-    //     $request->session()->put('cause_offers', $applicant->cause_offers);
-
-    //     // Generate and send OTP
-    //     $otp = rand(100000, 999999);
-    //     $request->session()->put('otp', $otp);
-    //     send_sms($request->contact, "Your OTP is: $otp");
-
-    //     return redirect()->route('verify-otp');
-    // }
 
     public function verifyOtp(Request $request)
     {
@@ -230,7 +182,7 @@ class PortalLogin extends Controller
     public function apply_logout(Request $request)
     {
         $applicant = Applicant::where('card_id', $request->session()->get('card_id'))->firstOrFail();
-        $request->session()->forget(['serial_number','card_id']);
+        $request->session()->forget(['serial_number', 'card_id']);
         // Regenerate the CSRF token (optional)
         $request->session()->regenerateToken();
         return response()->json(['status' => 'success']);

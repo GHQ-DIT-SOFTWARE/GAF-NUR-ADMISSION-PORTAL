@@ -41,6 +41,16 @@ class EducationController extends Controller
         $applicant = Applicant::where('card_id', $request->session()->get('card_id'))->firstOrFail();
         $beceCertificateRule = $applicant->bece_certificate ? 'nullable|file|mimes:pdf|max:1024' : 'required|file|mimes:pdf|max:1024';
         $wassceCertificateRule = $applicant->wassce_certificate ? 'nullable|file|mimes:pdf|max:1024' : 'required|file|mimes:pdf|max:1024';
+
+        if ($applicant->entrance_type === 'TOP UP') {
+            $TranscriptCertificateRule = $applicant->transcript ? 'nullable|file|mimes:pdf|max:1024' : 'required|file|mimes:pdf|max:1024';
+            $nmcCertificateRule = $applicant->results_certificate ? 'nullable|file|mimes:pdf|max:1024' : 'required|file|mimes:pdf|max:1024';
+        } else {
+            // Set to nullable or skip adding the rules entirely
+            $TranscriptCertificateRule = 'nullable';
+            $nmcCertificateRule = 'nullable';
+        }
+
         $subjects = [
             'bece_subject_three' => $request->bece_subject_three,
             'bece_subject_four' => $request->bece_subject_four,
@@ -87,6 +97,8 @@ class EducationController extends Controller
             // 'wassce_certificate' => 'required|file|mimes:pdf|max:1024',
             'bece_certificate' => $beceCertificateRule,
             'wassce_certificate' => $wassceCertificateRule,
+            'results_certificate' => $nmcCertificateRule,
+            'transcript' => $TranscriptCertificateRule,
             'exam_type_one' => 'required',
             'exam_type_two' => 'required',
             'exam_type_three' => 'required',
@@ -132,6 +144,28 @@ class EducationController extends Controller
             $file->move(public_path('uploads/shscertificate'), $name_gen);
             $wassce_save_url = 'uploads/shscertificate/' . $name_gen;
         }
+
+        $transcript_save_url = $applicant->transcript;
+        if ($request->hasFile('transcript')) {
+            $file = $request->file('transcript');
+            // Use the original file name and sanitize it
+            $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+            $extension = $file->getClientOriginalExtension();
+            $name_gen = $originalName . '.' . $extension;
+            $file->move(public_path('uploads/transcripts'), $name_gen);
+            $transcript_save_url = 'uploads/transcripts/' . $name_gen;
+        }
+        $nmc_save_url = $applicant->results_certificate;
+        if ($request->hasFile('results_certificate')) {
+            $file = $request->file('results_certificate');
+            // Use the original file name and sanitize it
+            $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+            $extension = $file->getClientOriginalExtension();
+            $name_gen = $originalName . '.' . $extension;
+            $file->move(public_path('uploads/nmccerts'), $name_gen);
+            $nmc_save_url = 'uploads/nmccerts/' . $name_gen;
+        }
+
 
         $applicant->update([
             'bece_index_number' => $request->bece_index_number,
@@ -181,17 +215,20 @@ class EducationController extends Controller
             'results_slip_four' => $request->results_slip_four,
             'results_slip_five' => $request->results_slip_five,
             'results_slip_six' => $request->results_slip_six,
+
+            'institution' => $request->institution,
+            'results_certificate' => $nmc_save_url,
+            'transcript' => $transcript_save_url,
         ]);
         return redirect()->route('preview');
     }
 
     public function getSubjectsByCourse(Request $request)
-{
-    $course = $request->get('course');
+    {
+        $course = $request->get('course');
 
-    $subjects = WASSCESUBJECT::where('main_course', $course)->get(['wasscesubjects']);
+        $subjects = WASSCESUBJECT::where('main_course', $course)->get(['wasscesubjects']);
 
-    return response()->json($subjects);
-}
-
+        return response()->json($subjects);
+    }
 }

@@ -20,7 +20,9 @@ trait SaveToUpper
         'bece_certificate',
         'professional_certificate',
         'applicant_image',
-        'qr_code_path',
+        'birth_certificate',
+        'transcript',
+        'results_certificate'
     ];
     public function setAttribute($key, $value)
     {

@@ -6,11 +6,8 @@ namespace App\Http\Controllers\Front\Portal;
 
 use App\Http\Controllers\Controller;
 use App\Models\Applicant;
-use App\Models\Branch;
 use App\Models\Card;
 use App\Models\Course;
-use App\Models\District;
-use App\Models\Region;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Intervention\Image\Facades\Image;
@@ -100,7 +97,7 @@ class BiodataController extends Controller
 
 
 
-    
+
     public function getCourses(Request $request)
     {
         $branchId = $request->input('branch_id');
@@ -117,6 +114,7 @@ class BiodataController extends Controller
         $request->validate([
             // 'applicant_image' => 'required|image|mimes:jpg,png|max:2048',
             'applicant_image' => $applicant->applicant_image ? 'nullable|image|mimes:jpg,png|max:2048' : 'required|image|mimes:jpg,png|max:2048',
+            'birth_certificate' => $applicant->bece_certificate ? 'nullable|file|mimes:pdf|max:1024' : 'required|file|mimes:pdf|max:1024',
             'surname' => 'required',
             'other_names' => 'required',
             'sex' => 'required',
@@ -135,6 +133,16 @@ class BiodataController extends Controller
             Image::make($image)->resize(200, 200)->save('uploads/applicantimages/' . $name_gen);
             $save_url = 'uploads/applicantimages/' . $name_gen;
         }
+        $birthcertificate_save_url = $applicant->birth_certificate;
+        if ($request->hasFile('birth_certificate')) {
+            $file = $request->file('birth_certificate');
+            // Use the original file name and sanitize it
+            $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+            $extension = $file->getClientOriginalExtension();
+            $name_gen = $originalName . '.' . $extension;
+            $file->move(public_path('uploads/birthcertificate'), $name_gen);
+            $birthcertificate_save_url = 'uploads/birthcertificate/' . $name_gen;
+        }
         $applicant->update([
             'applicant_image' => $save_url,
             'surname' => $request->surname,
@@ -144,6 +152,7 @@ class BiodataController extends Controller
             'date_of_birth' => $request->date_of_birth,
             'contact' => $request->contact,
             'email' => $request->email,
+            'birth_certificate' => $birthcertificate_save_url,
             'residential_address' => $request->residential_address,
             'national_identity_card' => $request->national_identity_card,
             'digital_address' => $request->digital_address,

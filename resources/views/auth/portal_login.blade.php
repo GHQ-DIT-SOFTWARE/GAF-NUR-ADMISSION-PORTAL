@@ -14,8 +14,15 @@
 </head>
 <div class="auth-wrapper align-items-stretch aut-bg-img">
              <div class="flex-grow-1">
+
         <div class="auth-side-form">
-             @if($errors->any())
+
+            <form method="post" action="{{ route('portal.apply') }}">
+                @csrf
+                 <div style="text-align: center;">
+                        <img src="{{ asset('new-logo.png') }}" alt=""
+                             style=" width: 150px; height: 180px; object-fit: cover;">
+                              @if($errors->any())
             <div class="alert alert-danger">
                   <ul>
                      @foreach ($errors->all() as $error)
@@ -24,11 +31,6 @@
                   </ul>
                  </div>
            @endif
-            <form method="post" action="{{ route('portal.apply') }}">
-                @csrf
-                 <div style="text-align: center;">
-                        <img src="{{ asset('new-logo.png') }}" alt=""
-                             style=" width: 150px; height: 180px; object-fit: cover;">
                     </div>
                 <div class=" auth-content">
                     <div class="form-group mb-3">
@@ -42,16 +44,7 @@
                         @enderror
                     </div>
 
-                    {{-- <div class="form-group mb-4">
-                        <label class="floating-label" for="pincode">Pincode</label>
-                        <input type="pincode" class="form-control @error('pincode') is-invalid @enderror" name="pincode"
-                            id="pincode" placeholder="">
-                        @error('pincode')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div> --}}
+
 
                     <div class="form-group mb-4">
                         <label class="floating-label" for="contact">Contact</label>
@@ -63,7 +56,6 @@
                             </span>
                         @enderror
                     </div>
-
 
                     <div class="form-group mb-4">
                         <select class="form-control" id="arm_of_service" name="cause_offers" required>
@@ -78,7 +70,20 @@
                             <strong>{{ $message }}</strong>
                         </span>
                     @enderror
-                    </div>
+                </div>
+                 <div class="form-group mb-4">
+                        <select class="form-control" id="entrance_type" name="entrance_type" required>
+                            <option value="">ENTRANCE TYPE</option>
+                             <option value="REGULAR">REGULAR</option>
+                              <option value="TOP UP">TOP UP</option>
+                        </select>
+
+                        @error('entrance_type')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                </div>
                     <button type="submit" class="btn btn-block btn-primary mb-4">Submit</button>
                     <p class="mb-2 text-muted">Forgot to Print Summary Sheet? <a
                             href="{{ route('print-summary-sheet') }}" class="f-w-400">Print</a></p>

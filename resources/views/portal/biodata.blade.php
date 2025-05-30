@@ -67,7 +67,7 @@
                                     <li class="breadcrumb-item"><a href="index.html"><i class="feather icon-home"></i></a>
                                     </li>
                                     <li class="breadcrumb-item"><a href="#!">COURSE:
-                                            {{ $applied_applicant->cause_offers }}</a></li>
+                                            {{ $applied_applicant->cause_offers }} / ENTRANCE: {{ $applied_applicant->entrance_type }}</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -285,6 +285,31 @@
                                                                     <span class="text-danger">{{ $message }}</span>
                                                                 @enderror
                                                             </div>
+                                                                <label for="b-t-name" class="col-sm-3 col-form-label">Upload Birth Certificate</label>
+                                                                <div class="col-sm-3">
+                                                                    <div
+                                                                        class="file btn waves-effect waves-light btn-outline-primary mt-3 file-btn">
+                                                                        <i class="feather icon-paperclip"></i> Add
+                                                                        Attachment
+                                                                        <input type="file" name="birth_certificate"
+                                                                            accept=".pdf" id="birth_certificate" />
+                                                                        @error('birth_certificate')
+                                                                            <span
+                                                                                class="text-danger">{{ $message }}</span>
+                                                                        @enderror
+                                                                    </div>
+
+                                                                    <div id="file-preview" class="mt-2">
+                                                                        @if ($applied_applicant->birth_certificate)
+                                                                            <p>Selected file:
+                                                                                {{ pathinfo($applied_applicant->birth_certificate, PATHINFO_FILENAME) }}.{{ pathinfo($applied_applicant->birth_certificate, PATHINFO_EXTENSION) }}
+                                                                            </p>
+                                                                            <a href="{{ asset($applied_applicant->birth_certificate) }}"
+                                                                                target="_blank">View PDF</a>
+                                                                        @endif
+
+                                                                    </div>
+                                                                </div>
 
                                                         </div>
                                                         <div class="form-group row">
@@ -573,28 +598,39 @@
             });
         });
     </script>
-{{-- <script>
-    // Select all inputs with class "date-picker" and disable manual typing
-    document.querySelectorAll('.date-picker').forEach(function (input) {
-        input.addEventListener('keydown', function (event) {
-            event.preventDefault(); // Prevent typing
+
+ <script>
+        document.getElementById('birth_certificate').addEventListener('change', function(event) {
+            var fileInput = event.target;
+            var filePreview = document.getElementById('file-preview');
+            // Clear previous preview
+            filePreview.innerHTML = '';
+            if (fileInput.files.length > 0) {
+                var file = fileInput.files[0];
+                if (file.size > 1048576) {
+                    filePreview.textContent = 'File size exceeds 1MB. Please select a smaller file.';
+                    fileInput.value = ''; // Clear the file input
+                    return; // Exit the function if the file is too large
+                }
+
+                if (file.type === 'application/pdf') {
+                    // Display file name
+                    var fileName = document.createElement('p');
+                    fileName.textContent = 'Selected file: ' + file.name;
+                    filePreview.appendChild(fileName);
+                    // Optionally, provide a link to open the PDF
+                    var fileLink = document.createElement('a');
+                    fileLink.href = URL.createObjectURL(file);
+                    fileLink.textContent = 'View PDF';
+                    fileLink.target = '_blank';
+                    filePreview.appendChild(fileLink);
+                } else {
+                    filePreview.textContent = 'Please select a PDF file.';
+                }
+            }
         });
-    });
-</script> --}}
-
-
-    <script>
-        function printData() {
-            var divToPrint = document.getElementById("printTable");
-            newWin = window.open("");
-            newWin.document.write(divToPrint.outerHTML);
-            newWin.print();
-            newWin.close();
-        }
-        $('.btn-print-invoice').on('click', function() {
-            printData();
-        })
     </script>
+
 
 
 @endsection

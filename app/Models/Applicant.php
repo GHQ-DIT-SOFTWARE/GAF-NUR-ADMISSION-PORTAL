@@ -105,6 +105,11 @@ class Applicant extends Model implements Auditable
         'applicant_serial_number',
         'disability_status',
         'disability_reason',
+        'entrance_type',
+        'birth_certificate',
+        'institution',
+        'results_certificate',
+        'transcript',
     ];
     public function card()
     {

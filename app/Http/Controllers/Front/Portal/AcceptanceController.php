@@ -77,32 +77,46 @@ class AcceptanceController extends Controller
             ]);
         }
 
-        // if ($request->input('final_checked') === 'YES' && ($beceExists || $nationalIdExists)) {
-        //     return response()->json([
-        //         'status' => 'duplicate',
-        //         'message' => 'Your information already exists in the portal.',
-        //         'redirect_url' => route('applicant.already-exists')
-        //     ]);
-        // }
-
-
 
         $applicant->final_checked = 'YES';
         $applicant->qualification = 'QUALIFIED';
         $applicant->disqualification_reason = null;
+        // Generate Serial Number Based on Course
+        $year = Carbon::now()->format('y'); // '25' for 2025
+        $course = $applicant->cause_offers ? strtoupper($applicant->cause_offers) : 'UNKNOWN';
+        $courseCode = match ($course) {
+            'BSC NURSING' => 'B-NUR',
+            'BSC MIDWIFERY' => 'B-MID',
+            default => 'B-UNK',
+        };
         // Calculate and store applicant age
         $age = Carbon::parse($applicant->date_of_birth)->age;
         $applicant->age = $age;
         // Check exam results and disqualify if necessary
         $this->checkExamResults($applicant, $disqualificationReasons);
+        $this->checkResults($applicant, $disqualificationReasons);
         // Check age limits
-        if ($age < 16 || $age > 35) {
-            if ($age > 35 && empty($applicant->employer_letter)) {
-                $disqualificationReasons[] = 'Applicants above 35 years must be serving officers with letters from employers.';
-            } elseif ($age < 16) {
+        if (strtoupper($applicant->entrance_type) === 'REGULAR') {
+            if ($age < 16 || $age > 35) {
+                if ($age > 35 && empty($applicant->employer_letter)) {
+                    $disqualificationReasons[] = 'Applicants above 35 years must be serving officers with letters from employers.';
+                } elseif ($age < 16) {
+                    $disqualificationReasons[] = 'Applicants must be at least 16 years old.';
+                }
+            }
+        } elseif (strtoupper($applicant->entrance_type) === 'TOP UP') {
+            if ($age < 16) {
                 $disqualificationReasons[] = 'Applicants must be at least 16 years old.';
             }
         }
+
+        // if ($age < 16 || $age > 35) {
+        //     if ($age > 35 && empty($applicant->employer_letter)) {
+        //         $disqualificationReasons[] = 'Applicants above 35 years must be serving officers with letters from employers.';
+        //     } elseif ($age < 16) {
+        //         $disqualificationReasons[] = 'Applicants must be at least 16 years old.';
+        //     }
+        // }
         // Check for mixed exam types
         $examTypes = [
             'exam_type_one',
@@ -128,14 +142,7 @@ class AcceptanceController extends Controller
         // Applicant is qualified - Generate Serial Number
         $applicant->load('card');
         $applicant->card->status = 1;
-        // Generate Serial Number Based on Course
-        $year = Carbon::now()->format('y'); // '25' for 2025
-        $course = $applicant->cause_offers ? strtoupper($applicant->cause_offers) : 'UNKNOWN';
-        $courseCode = match ($course) {
-            'BSC NURSING' => 'B-NUR',
-            'BSC MIDWIFERY' => 'B-MID',
-            default => 'B-UNK',
-        };
+
         // Get last assigned serial number
         $lastSerial = Applicant::where('cause_offers', $applicant->cause_offers)
             ->whereNotNull('applicant_serial_number')
@@ -169,6 +176,8 @@ class AcceptanceController extends Controller
             'pdf_url' => $pdfUrl,
         ]);
     }
+
+
     protected function sendQualificationSmsToApplicant($applicant, $applicantSerialNumber)
     {
         if ($applicant->qualification === 'DISQUALIFIED') {
@@ -178,15 +187,12 @@ class AcceptanceController extends Controller
         }
     }
 
-
     protected function disqualifyAndSave($reasons, $applicant)
     {
         $applicant->qualification = 'DISQUALIFIED';
         $applicant->disqualification_reason = implode('; ', $reasons);
-
         // Load the card relationship
         $applicant->load('card');
-
         if ($applicant->card) {
             $applicant->card->status = 1; // Set card status to 1 for Disqualified
             $applicant->card->save(); // Save the card status update
@@ -225,6 +231,42 @@ class AcceptanceController extends Controller
         }
         return $branchCode;
     }
+
+    protected function checkResults($applicant, array &$disqualificationReasons)
+    {
+        $gradeMap = [
+            'A1' => 1,
+            'B2' => 2,
+            'B3' => 3,
+            'C4' => 4,
+            'C5' => 5,
+            'C6' => 6,
+            'D7' => 7,
+            'E8' => 8,
+            'F9' => 9,
+        ];
+
+        $grades = [
+            $applicant->wassce_subject_english_grade,
+            $applicant->wassce_subject_maths_grade,
+            $applicant->wassce_subject_three_grade,
+            $applicant->wassce_subject_four_grade,
+            $applicant->wassce_subject_five_grade,
+            $applicant->wassce_subject_six_grade,
+        ];
+
+        $gradeValues = array_map(function ($grade) use ($gradeMap) {
+            return $gradeMap[$grade] ?? 0; // If grade is invalid/missing, count it as 0
+        }, $grades);
+
+        $total = array_sum($gradeValues);
+
+        if ($total > 14) {
+            $disqualificationReasons[] = 'Total aggregate of six WASSCE subjects exceeds 14.';
+        }
+    }
+
+
 
 
     protected function checkExamResults($applicant, &$disqualificationReasons)
