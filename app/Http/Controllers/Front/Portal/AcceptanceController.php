@@ -61,14 +61,20 @@ class AcceptanceController extends Controller
             ->where('national_identity_card', $applicant->national_identity_card)
             ->where('id', '<>', $applicant->id)
             ->exists();
+
         if ($request->input('final_checked') === 'YES' && ($beceExists || $nationalIdExists)) {
             $applicant->qualification = 'DISQUALIFIED';
+
             // Update the card status
             $applicant->load('card');
             if ($applicant->card) {
-                $applicant->card->status = 1; // Or whatever value is appropriate
+                $applicant->card->status = 1;
                 $applicant->card->save();
             }
+
+            // Invalidate session
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
 
             return response()->json([
                 'status' => 'duplicate',
@@ -95,6 +101,7 @@ class AcceptanceController extends Controller
         // Check exam results and disqualify if necessary
         $this->checkExamResults($applicant, $disqualificationReasons);
         $this->checkResults($applicant, $disqualificationReasons);
+
         // Check age limits
         if (strtoupper($applicant->entrance_type) === 'REGULAR') {
             if ($age < 16 || $age > 35) {
@@ -132,7 +139,6 @@ class AcceptanceController extends Controller
         if (!empty($examCounts['SSSCE']) && !empty($examCounts['WASSCE'])) {
             $disqualificationReasons[] = 'A combination of SSSCE and WASSCE results is not acceptable.';
         }
-        // Check BECE index number uniqueness
 
         // If disqualified, save and return early
         if (!empty($disqualificationReasons)) {
@@ -149,19 +155,17 @@ class AcceptanceController extends Controller
             ->orderByDesc('id')
             ->value('applicant_serial_number');
 
-        // Extract the last sequence number
         $lastNumber = 0;
         if ($lastSerial && preg_match('/\d+$/', $lastSerial, $matches)) {
             $lastNumber = (int)$matches[0];
         }
-        // Increment the serial number
+
         $newNumber = str_pad((string)($lastNumber + 1), 3, '0', STR_PAD_LEFT);
         $applicantSerialNumber = "{$courseCode}-{$year}-{$newNumber}";
-        // Assign Serial Number
+
         $applicant->applicant_serial_number = $applicantSerialNumber;
         $applicant->card->applicant_serial_number = $applicantSerialNumber;
         $applicant->card->save();
-        // Generate and Save QR Code
 
         // Generate PDF URL
         $pdfUrl = route('applicant-pdf');
@@ -176,8 +180,6 @@ class AcceptanceController extends Controller
             'pdf_url' => $pdfUrl,
         ]);
     }
-
-
     protected function sendQualificationSmsToApplicant($applicant, $applicantSerialNumber)
     {
         if ($applicant->qualification === 'DISQUALIFIED') {
@@ -187,12 +189,15 @@ class AcceptanceController extends Controller
         }
     }
 
+
     protected function disqualifyAndSave($reasons, $applicant)
     {
         $applicant->qualification = 'DISQUALIFIED';
         $applicant->disqualification_reason = implode('; ', $reasons);
+
         // Load the card relationship
         $applicant->load('card');
+
         if ($applicant->card) {
             $applicant->card->status = 1; // Set card status to 1 for Disqualified
             $applicant->card->save(); // Save the card status update
@@ -265,8 +270,6 @@ class AcceptanceController extends Controller
             $disqualificationReasons[] = 'Total aggregate of six WASSCE subjects exceeds 14.';
         }
     }
-
-
 
 
     protected function checkExamResults($applicant, &$disqualificationReasons)
