@@ -166,26 +166,26 @@
             <td colspan="3">{{ $applied_applicant->residential_address }}</td>
         </tr>
         <tr>
-            <th>Disability Status</th>
-            <td>{{ $applied_applicant->disability_status }}</td>
             <th>Languages</th>
-            <td>
-                @php
-                    $languages = is_string($applied_applicant->language)
-                        ? json_decode($applied_applicant->language, true)
-                        : $applied_applicant->language;
-                @endphp
-                {{ implode(', ', $languages ?? []) }}
+                <td colspan="3">
+                    @php
+                        $languages = is_string($applied_applicant->language)
+                            ? json_decode($applied_applicant->language, true)
+                            : $applied_applicant->language;
+                    @endphp
+                    {{ implode(', ', $languages ?? []) }}
+                </td>
+        </tr>
+        @if (!is_null($applied_applicant->disability_reason))
+    
+        <tr>
+           
+            
+            <th>Disability</th>
+                <td colspan="3">{{ $applied_applicant->disability_reason }}</td>
             </td>
         </tr>
-         @if (!is_null($applied_applicant->disability_reason))
-    
-            <tr>
-                <th>Disability Reason</th>
-                <td colspan="3">{{ $applied_applicant->disability_reason }}</td>
-            </tr>
-        
-    @endif
+             @endif
     </table>
    
 
