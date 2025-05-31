@@ -16,12 +16,13 @@
 <div class="auth-wrapper align-items-stretch aut-bg-img">
     <div class="flex-grow-1">
         <div class="auth-side-form">
-             <div style="text-align: center;">
+            
+            <form method="post" action="{{ route('otp-for-reprint') }}">
+                @csrf
+                 <div style="text-align: center;">
                         <img src="{{ asset('new-logo.png') }}" alt=""
                              style=" width: 150px; height: 180px; object-fit: cover;">
                     </div>
-            <form method="post" action="{{ route('otp-for-reprint') }}">
-                @csrf
                 <div class="auth-content">
                     @if ($errors->any())
                         <div class="alert alert-danger">
@@ -32,7 +33,7 @@
                             </ul>
                         </div>
                     @endif
-                    <h3 class="mb-4 f-w-400">OTP VERIFICATION</h3>
+                    {{-- <h3 class="mb-4 f-w-400">OTP VERIFICATION</h3> --}}
                     <div class="form-group mb-4">
                         <label class="floating-label" for="otp">OTP Verification</label>
                         <input type="text" name="otp" id="otp"

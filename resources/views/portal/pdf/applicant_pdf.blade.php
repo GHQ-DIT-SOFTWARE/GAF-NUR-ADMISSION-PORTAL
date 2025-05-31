@@ -178,22 +178,16 @@
                 {{ implode(', ', $languages ?? []) }}
             </td>
         </tr>
-    </table>
-    @if (!is_null($applied_applicant->disability_reason))
-    <table class="table table-bordered" style="width: 100%; margin-bottom: 15px;">
-        <thead>
+         @if (!is_null($applied_applicant->disability_reason))
+    
             <tr>
-                <th colspan="2" style="text-align: left;">Disability Details</th>
+                <th>Disability Reason</th>
+                <td colspan="3">{{ $applied_applicant->disability_reason }}</td>
             </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td style="width: 30%;"><strong>Disability Reason</strong></td>
-                <td>{{ $applied_applicant->disability_reason }}</td>
-            </tr>
-        </tbody>
+        
+    @endif
     </table>
-@endif
+   
 
     <br><br>
     <div class="section-title">BECE Results</div>
@@ -265,10 +259,12 @@
            <td>{{ strtoupper(\Carbon\Carbon::parse($applied_applicant->bece_year_completion)->format('d F Y')) }}</td>
         </tr>
     </table>
+    <br>
 
     @if (!is_null($applied_applicant->disqualification_reason))
-        <div class="section-title">Disqualification</div>
-        <p><strong>Reason:</strong> {{ $applied_applicant->disqualification_reason }}</p>
+        <div class=""><strong>Disqualification Reason(s):</strong> {{ $applied_applicant->disqualification_reason }}</div>
+        
+        {{-- <p><strong>Reason:</strong> {{ $applied_applicant->disqualification_reason }}</p> --}}
     @endif
     <div class="watermark">GAFCONM Admissions Office</div>
 </div>

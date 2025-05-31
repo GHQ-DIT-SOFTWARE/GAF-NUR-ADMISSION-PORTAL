@@ -18,6 +18,10 @@
         <div class="auth-side-form">
             <form method="post" action="{{ route('otp-for-initial-login') }}">
                 @csrf
+                <div style="text-align: center;">
+                        <img src="{{ asset('new-logo.png') }}" alt=""
+                             style=" width: 150px; height: 180px; object-fit: cover;">
+                    </div>
                 <div class="auth-content">
                     @if ($errors->any())
                         <div class="alert alert-danger">
@@ -28,7 +32,7 @@
                             </ul>
                         </div>
                     @endif
-                    <h3 class="mb-4 f-w-400">OTP VERIFICATION</h3>
+                    <h4 class="mb-4 f-w-100">Enter the one-time password sent to your phone number</h4>
                     <div class="form-group mb-4">
                         <label class="floating-label" for="otp">OTP Verification</label>
                         <input type="text" name="otp" id="otp"

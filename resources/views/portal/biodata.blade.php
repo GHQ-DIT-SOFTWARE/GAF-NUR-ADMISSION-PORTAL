@@ -194,7 +194,7 @@
                                                             </div>
                                                         </div>
 
-
+                                                        <br>
                                                         <div class="form-group row">
                                                             <label for="b-t-name" class="col-sm-2 col-form-label">Marital
                                                                 Status</label>
@@ -259,7 +259,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-
+                                                        <br>
 
                                                         <div class="form-group row">
                                                             <label for="b-t-name"
@@ -277,7 +277,7 @@
 
                                                             <label for="b-t-name" class="col-sm-2 col-form-label">Email
                                                                 Address</label>
-                                                            <div class="col-sm-3">
+                                                            <div class="col-sm-2">
                                                                 <input type="text" class="form-control required"
                                                                     id="email" name="email"
                                                                     value="{{ old('email', $applied_applicant->email) }}">
@@ -285,8 +285,8 @@
                                                                     <span class="text-danger">{{ $message }}</span>
                                                                 @enderror
                                                             </div>
-                                                                <label for="b-t-name" class="col-sm-3 col-form-label">Upload Birth Certificate</label>
-                                                                <div class="col-sm-3">
+                                                                <label for="b-t-name" class="col-sm-2 col-form-label">Upload Birth Certificate</label>
+                                                                <div class="col-sm-2">
                                                                     <div
                                                                         class="file btn waves-effect waves-light btn-outline-primary mt-3 file-btn">
                                                                         <i class="feather icon-paperclip"></i> Add
@@ -312,6 +312,7 @@
                                                                 </div>
 
                                                         </div>
+                                                        <br>
                                                         <div class="form-group row">
                                                             <label for="b-t-name"
                                                                 class="col-sm-2 col-form-label">Residential Address</label>
@@ -335,7 +336,7 @@
                                                                 @enderror
                                                             </div>
                                                         </div>
-
+                                                        <br><br>
                                                         <div class="form-group row">
                                                             <label for="languages" class="col-sm-2 col-form-label">Language(s) Spoken</label>
                                                             <div class="col-sm-5">
@@ -353,8 +354,8 @@
                                                             </div>
                                                             <input type="hidden" id="hidden_disability_reason" name="disability_reason" value="{{ old('disability_reason', $applied_applicant->disability_reason ?? '') }}">
                                                             <!-- Disability Status Dropdown -->
-                                                            <label for="b-t-name" class="col-sm-2 col-form-label">Do you have a disability?</label>
-                                                            <div class="col-sm-2">
+                                                            <label for="b-t-name" class="col-sm-2 col-form-label">Do you have any disability?</label>
+                                                            <div class="col-sm-1">
                                                                 <select class="form-control required" id="disability_status" name="disability_status">
                                                                     <option value="">Choose option</option>
                                                                     <option value="YES" {{ old('disability_status', $applied_applicant->disability_status) == 'YES' ? 'selected' : '' }}>YES</option>
@@ -366,7 +367,7 @@
                                                             </div>
 
                                                             <!-- Edit Reason Button (Only visible when a reason is set) -->
-                                                            <div id="edit_reason_section" class="mt-2" style="display: none;">
+                                                            <div class="col-sm-2" id="edit_reason_section" class="mt-2" style="display: none;">
                                                                 <button type="button" id="edit_reason" class="btn btn-sm btn-primary">Edit Disability Reason</button>
                                                             </div>
                                                         </div>
@@ -397,7 +398,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary" id="saveDisabilityReason">Save</button>
+                                <button type="button" class="btn btn-primary" id="saveDisabilityReason" >Save</button>
                             </div>
                         </div>
                     </div>

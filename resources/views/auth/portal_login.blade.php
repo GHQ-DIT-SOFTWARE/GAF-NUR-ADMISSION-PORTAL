@@ -22,15 +22,7 @@
                  <div style="text-align: center;">
                         <img src="{{ asset('new-logo.png') }}" alt=""
                              style=" width: 150px; height: 180px; object-fit: cover;">
-                              @if($errors->any())
-            <div class="alert alert-danger">
-                  <ul>
-                     @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                  </ul>
-                 </div>
-           @endif
+                              
                     </div>
                 <div class=" auth-content">
                     <div class="form-group mb-3">
@@ -73,7 +65,7 @@
                 </div>
                  <div class="form-group mb-4">
                         <select class="form-control" id="entrance_type" name="entrance_type" required>
-                            <option value="">ENTRANCE TYPE</option>
+                            <option value="">TYPE OF APPLICATION</option>
                              <option value="REGULAR">REGULAR</option>
                               <option value="TOP UP">TOP UP</option>
                         </select>
